@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>typz</groupId>
+  <artifactId>typz</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>typz-all</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+ 	 <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+     <jdk.version>1.6</jdk.version>
+     <spring.version>4.2.3.RELEASE</spring.version>
+     <spring.security.version>3.2.8.RELEASE</spring.security.version>
+     <spring-session.version>1.2.0.RC2</spring-session.version>
+     <jstl.version>1.2</jstl.version>
+     <log4j.version>1.2.17</log4j.version>
+     <flywaydb.version>4.0</flywaydb.version>
+     <hibernate.version>4.3.11.Final</hibernate.version>
+	 <jackson.version>2.5.0</jackson.version>
+	 <ehcache.version>2.9.0</ehcache.version>
+	 <commons-beanutils.version>1.9.2</commons-beanutils.version>
+	 <commons-codec.version>1.10</commons-codec.version>
+	 <rs-api.version>2.0.1</rs-api.version>
+	 <commons-lang.version>3.4</commons-lang.version>
+	 <orika.version>1.4.6</orika.version>
+	 <commons-dbcp.version>1.4</commons-dbcp.version>
+	 <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
+	 <commons-io.version>2.4</commons-io.version>
+	 
+	 <servlet.version>3.0.1</servlet.version>
+     <jsp.version>2.1</jsp.version>
+     
+     <commons-fileupload.version>1.3.1</commons-fileupload.version>
+     
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <modules>
+  	<module>typz-base</module>
+  	<module>typz-web</module>
+    <module>typz-sso</module>
+    <module>typz-flyway</module>
+  </modules>
+</project>
