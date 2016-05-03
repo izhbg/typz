@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
+    xmlns:security="http://www.springframework.org/schema/security"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans   
+            http://www.springframework.org/schema/beans/spring-beans-3.2.xsd  
+            http://www.springframework.org/schema/security   
+            http://www.springframework.org/schema/security/spring-security-3.2.xsd">  
+       
+    <security:http auto-config="true" use-expressions="true" access-denied-page="/auth/denied.izhbg" >  
+         <!-- 不要过滤图片等静态资源 -->    
+        <security:intercept-url pattern="/**/*.jpg" access="permitAll"/>
+        <security:intercept-url pattern="/**/*.png" access="permitAll"/>
+        <security:intercept-url pattern="/**/*.gif" access="permitAll"/>
+        <security:intercept-url pattern="/**/*.css" access="permitAll"/>
+        <security:intercept-url pattern="/**/*.js" access="permitAll"/>
+        <!-- 登录页面和忘记密码页面不过滤  -->  
+        <security:intercept-url pattern="/auth/login.izhbg" access="permitAll"/>  
+        <!-- 登录配置 -->   
+        <security:form-login  
+                login-page="/auth/login.izhbg"   
+                authentication-failure-url="/auth/login.izhbg?error=true"   
+                default-target-url="/main/common.izhbg"/>  
+        <!-- 退出配置 -->       
+        <security:logout   
+                invalidate-session="true"   
+                logout-success-url="/auth/login.izhbg"   
+                logout-url="/auth/logout.izhbg"/>  
+        
+       <!-- "记住我"功能，采用持久化策略（将用户的登录信息存放在数据库表中） -->  
+       <security:remember-me data-source-ref="dataSource"
+       			 		     token-validity-seconds="1209600"
+       			 		     remember-me-parameter="remember-me" />
+       
+       <!-- session处理 --> 
+       <security:session-management session-authentication-strategy-ref="concurrentSessionControlStrategy" />
+       
+       <!-- 增加一个自定义的filter，放在FILTER_SECURITY_INTERCEPTOR之前， 实现用户、角色、权限、资源的数据库管理。  -->
+       <security:custom-filter ref="filterSecurityInterceptor" before="FILTER_SECURITY_INTERCEPTOR"/>
+       
+       <security:custom-filter ref="concurrencyFilter" position="CONCURRENT_SESSION_FILTER"/>  
+         
+    </security:http>  
+    <!-- 一个自定义的filter，必须包含authenticationManager, accessDecisionManager,securityMetadataSource三个属性。  -->  
+    <bean id="filterSecurityInterceptor" class="com.izhbg.typz.sso.security.MyFilterSecurityInterceptor">
+    	<property name="authenticationManager" ref="authenticationManager"/>
+    	<property name="accessDecisionManager" ref="myAccessDecisionManager"/>
+    	<property name="securityMetadataSource" ref="mySecurityMetadataSource"/>
+    </bean>
+    <bean id="myAccessDecisionManager" class="com.izhbg.typz.sso.security.MyAccessDecisionManager"/>
+    <bean id="mySecurityMetadataSource" class="com.izhbg.typz.sso.security.service.MyInvocationSecurityMetadataSourceService"/>
+    
+    <!-- 指定一个自定义的authentication-manager :customUserDetailsService -->  
+    <security:authentication-manager alias="authenticationManager">  
+            <security:authentication-provider user-service-ref="customUserDetailsService">  
+                    <security:password-encoder ref="passwordEncoder">
+                    	<!-- <security:salt-source user-property="username"/> 盐值-->
+                    </security:password-encoder>  
+            </security:authentication-provider>  
+    </security:authentication-manager>  
+	<!-- 从数据库加载UserDetails的UserDetailsService -->
+    <bean id="customUserDetailsService" class="com.izhbg.typz.sso.security.service.CustomUserDetailsService">
+    	 <property name="userCache" ref="userCache"/>
+    </bean>
+    <!-- 密码加密器 -->
+	<bean id="passwordEncoder" class="com.izhbg.typz.sso.util.PasswordEncoderFactoryBean">
+		<property name="type" value="${security.passwordencoder.type}"/>
+		<property name="salt" value="${security.passwordencoder.salt}"/><!-- 盐值 -->
+	</bean>
+   <!-- 又一个密码加密器？ -->
+	<bean id="customPasswordEncoder" factory-bean="&amp;passwordEncoder" factory-method="getCustomPasswordEncoder"/>
+    
+    <!-- session 处理 -->
+    <bean id="concurrentSessionControlStrategy"  
+	    class="org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">  
+	    <constructor-arg name="sessionRegistry" ref="sessionRegistry" />  
+	    <property name="maximumSessions" value="1"></property>  
+	</bean>  
+	  
+	<bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
+	<bean id="concurrencyFilter" class="org.springframework.security.web.session.ConcurrentSessionFilter">  
+	    <constructor-arg name="sessionRegistry" ref="sessionRegistry" />  
+	    <constructor-arg name="expiredUrl" value="/sessionOut.jsp" />  
+	</bean>    
+	 <!-- 启用用户的缓存功能  -->
+	<bean id="userCache"
+		class="org.springframework.security.core.userdetails.cache.EhCacheBasedUserCache">
+		<property name="cache" ref="userEhCache" />
+	</bean>
+
+	<bean id="userEhCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+		<property name="cacheName" value="userCache" />
+		<property name="cacheManager" ref="cacheManager" />
+	</bean>
+
+	<bean id="cacheManager"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" />
+	
+	  <!-- spring security自带的与权限有关的数据读写Jdbc模板  -->  
+	 <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">  
+	  <property name="dataSource" ref="dataSource" />  
+	 </bean>
+      
+</beans>

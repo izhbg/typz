@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<!-- 自动初始化数据库 -->
+	<bean id="databaseMigrator" class="com.izhbg.typz.dbmigrate.DatabaseMigrator">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="enabled" value="${dbmigrate.enabled}"/>
+		<property name="clean" value="${dbmigrate.clean}"/>
+	</bean>
+
+</beans>
