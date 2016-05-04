@@ -39,7 +39,7 @@
 									</a>                 
 								</div>
 							</div>
-						</c:if>	
+						</c:if>	 
 						<c:if test="${fn:length(item.children) ne 0}">
 							<c:forEach items="${item.children}" var="item2">
 								<c:if test="${item2.sqbj eq 2}">
