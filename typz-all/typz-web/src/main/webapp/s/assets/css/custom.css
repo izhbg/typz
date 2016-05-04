@@ -1,7 +1,7 @@
 ﻿html, body, div, span, input, p,h1, h2, h3, h4, h5, h6, blockquote, a, abbr, acronym, address, strong, b, u, i, center,dl, dt, dd, ol, ul,td,tr
 {
     font-family:"Microsoft Yahei","微软雅黑","宋体", "Simsun", "Open Sans";
-    text-shadow: 1px 1px 1px #F7F7F7;
+    text-shadow: 0px 0px 1px #F7F7F7;
 }
 h1, .h1{font-size: 25px;}
 label { cursor:auto}

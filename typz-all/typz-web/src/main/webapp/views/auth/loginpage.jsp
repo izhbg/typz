@@ -71,7 +71,7 @@
 		</form>
 	</div>
 	<!-- script -->
-	<script src="${ctx}/s/assets/plugins/jquery-1.10.2.min.js" type="text/javascript"></script>
+	<script src="${ctx}/s/assets/plugins/jquery/1.11.3/jquery.min.js" type="text/javascript"></script>
 	<script type="text/javascript" src="${ctx}/s/assets/plugins/jquery-validation/jquery.validate.js"></script>
 	<script src="${ctx}/s/assets/scripts/login-soft.js" type="text/javascript"></script> 
 	

@@ -7,13 +7,18 @@
             http://www.springframework.org/schema/security   
             http://www.springframework.org/schema/security/spring-security-3.2.xsd">  
        
-    <security:http auto-config="true" use-expressions="true" access-denied-page="/auth/denied.izhbg" >  
+    <security:http auto-config="true" use-expressions="true" access-denied-page="/common/403.jsp" >  
          <!-- 不要过滤图片等静态资源 -->    
         <security:intercept-url pattern="/**/*.jpg" access="permitAll"/>
         <security:intercept-url pattern="/**/*.png" access="permitAll"/>
         <security:intercept-url pattern="/**/*.gif" access="permitAll"/>
         <security:intercept-url pattern="/**/*.css" access="permitAll"/>
         <security:intercept-url pattern="/**/*.js" access="permitAll"/>
+        
+        <security:intercept-url pattern="/common/401.jsp" access="permitAll"/>
+        <security:intercept-url pattern="/common/403.jsp" access="permitAll"/>
+        <security:intercept-url pattern="/common/404.jsp" access="permitAll"/>
+        <security:intercept-url pattern="/common/500.jsp" access="permitAll"/>
         <!-- 登录页面和忘记密码页面不过滤  -->  
         <security:intercept-url pattern="/auth/login.izhbg" access="permitAll"/>  
         <!-- 登录配置 -->   
@@ -33,7 +38,7 @@
        			 		     remember-me-parameter="remember-me" />
        
        <!-- session处理 --> 
-       <security:session-management session-authentication-strategy-ref="concurrentSessionControlStrategy" />
+       <security:session-management session-authentication-strategy-ref="concurrentSessionControlStrategy" invalid-session-url="/auth/login.izhbg" session-authentication-error-url="/auth/login.izhbg" />
        
        <!-- 增加一个自定义的filter，放在FILTER_SECURITY_INTERCEPTOR之前， 实现用户、角色、权限、资源的数据库管理。  -->
        <security:custom-filter ref="filterSecurityInterceptor" before="FILTER_SECURITY_INTERCEPTOR"/>

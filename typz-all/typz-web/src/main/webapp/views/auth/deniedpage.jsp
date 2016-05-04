@@ -9,6 +9,7 @@
 <body>  
     <h1>你的权限不够!</h1>  
     <p>只有拥有Admin权限才能访问!</p>  
-    <a href="/typz-web/auth/logout">退出登录</a>  
+    <a href="/typz-web/auth/logout.izhbg">退出登录</a>  
+    <a href="/typz-web/main/common.izhbg">返回主页</a>  
 </body>  
 </html>

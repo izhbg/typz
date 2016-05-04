@@ -23,21 +23,6 @@
 					<br>
 					<br>
 				</li>
-				<li class="">
-					<a href="javascript:;">
-					<i class="fa fa-cogs"></i> 
-					<span class="title">后台管理</span>
-					<span class="arrow "></span>
-					</a>
-					<ul class="sub-menu">
-					  	<li><a href="${ctx}/user/user-list.izhbg"><span class="badge badge-roundless badge-important">new</span>用户管理</a></li>
-					  	<li><a href="${ctx}/role/role-list.izhbg"><span class="badge badge-roundless badge-important">new</span>角色管理</a></li>
-					  	<li><a href="${ctx}/post/post-list.izhbg"><span class="badge badge-roundless badge-important">new</span>岗位管理</a></li>
-					  	<li><a href="${ctx}/org/org-list.izhbg"><span class="badge badge-roundless badge-important">new</span>机构管理</a></li>
-					  	<li><a href="${ctx}/fun/fun-list.izhbg"><span class="badge badge-roundless badge-important">new</span>功能管理</a></li>
-					  	<li><a href="${ctx}/sys/sys-list.izhbg"><span class="badge badge-roundless badge-important">new</span>应用管理</a></li>
-					</ul>
-				</li>
 				<c:forEach items="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.treeNode.children}" var="item">
 					<c:if test="${fn:length(item.children) eq 0}">
 						<li class="start <c:if test="${sessionScope.currentTopMenu==item.code}">active</c:if>  "> 

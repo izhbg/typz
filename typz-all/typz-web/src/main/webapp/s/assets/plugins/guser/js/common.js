@@ -236,12 +236,10 @@ function funCheck(chkName,div){
 
 function checkSelect(chkName, div){
 	var bRet=false; 
-	$("[name='"+chkName+"']").each(function(){
-		if($(this).attr('checked')){
-			bRet=true;
-			return;
-			}
-		});
+	$("input:checkbox[name='"+chkName+"']:checked").each(function(){
+		bRet=true;
+		return;
+	});
 	return bRet;
 }
 function resetForm(div){

@@ -70,5 +70,24 @@
     	<filter-name>characterEncodingFilter</filter-name>
     	<url-pattern>/*</url-pattern>
   	</filter-mapping>
-
+	<error-page>
+        <error-code>401</error-code>
+        <location>/common/401.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>403</error-code>
+        <location>/common/403.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/common/404.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/common/500.jsp</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/common/500.jsp</location>
+    </error-page>
 </web-app>
