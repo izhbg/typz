@@ -1,3 +1,26 @@
-# typz
-基于 spring + springmvc + hibernate + springmvc + bootstrap3.3  后台管理框架。
+#typz（后台管理框架 之 权限管理）
+基于 spring + springmvc + hibernate + springsecurity + bootstrap3.3+mysql 后台管理框架。
+
+模块如下：
+
+1、用户管理
+
+2、机构管理
+
+3、角色管理
+
+4、功能管理
+
+5、资源管理
+
+通过给用户分配角色，角色拥有 功能和资源权限，双重认证后才有权限访问某资源路径。
+
+其中数据库脚本采用 flyway 管理版本，
+
+目前仅支持 mysql 的脚本处理，
+
+#交流群号：462788325
+欢迎加入，
+
+注：系统部分功能参考 lemon 开源OA，比如hibernate的封装处理、flyway管理数据库脚本等等。该程序开源 纯属技术交流与学习，如有涉及侵权等操作麻烦告知，小生会及时处理掉。
 
