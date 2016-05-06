@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	session="false" pageEncoding="UTF-8"%>
-<%@ taglib prefix="ww" uri="webwork"%>
-<ww:bean name="'com.css.dict.DictManNew'" id="dictNew" />
 <link href="pages/admin/css/ucenter.css" rel="stylesheet" type="text/css" />
 <script src="pages/admin/js/common.js" type="text/javascript"></script>
 <script src="pages/admin/js/ucenter.js" type="text/javascript"></script>

@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	session="false" pageEncoding="UTF-8"%>
-<%@ taglib prefix="ww" uri="webwork"%>
-<ww:bean name="'com.css.dict.DictManNew'" id="dictNew" />
 <script>
 function ou_add(jgId){
 	var pars = "jgId=" + jgId + "&" +$("#div_ou").find("#form1").serialize();
