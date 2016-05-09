@@ -665,6 +665,68 @@ function role_del(){
 
 	}
 }
+function resource_del(){
+	if(confirmIsSelectItems()){
+		var str = '<div class="modal fade" id="confirminfo" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">'
+			+'<div class="modal-dialog">'
+			+'<div class="modal-content">'
+			+'<div class="modal-header">'
+			+'<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>'
+			+'<h4 class="modal-title">确认信息</h4>'
+			+'</div>'
+			+'<div class="modal-body">'
+			+'此操作将有如下结果：<br/>1.与删除资源相关联的内容将不可见。<br/>2.被删除的资源不可找回。<br/>你确定要删除这些资源吗？'
+			+'</div>'
+			+'<div class="modal-footer">'
+			+'<button type="button" class="btn blue" id="cconfirmDele" >确定</button>'
+			+'<button type="button" class="btn default" data-dismiss="modal">取消</button>'
+			+'</div>'
+			+'</div>'
+			+'</div>'
+			+'</div>';
+		
+		$("#form1").append(str);
+		$("#cconfirmDele").click(function(){
+			deleteInfo(); 
+		});
+		$("#confirminfo").modal({ 
+	        backdrop: 'static',  
+	        keyboard: false  
+	    }).modal('show');
+
+	}
+}
+function authority_del(){
+	if(confirmIsSelectItems()){
+		var str = '<div class="modal fade" id="confirminfo" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">'
+			+'<div class="modal-dialog">'
+			+'<div class="modal-content">'
+			+'<div class="modal-header">'
+			+'<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>'
+			+'<h4 class="modal-title">确认信息</h4>'
+			+'</div>'
+			+'<div class="modal-body">'
+			+'此操作将有如下结果：<br/>1.与删除权限相关联的内容将不可见。<br/>2.被删除的权限不可找回。<br/>你确定要删除这些权限吗？'
+			+'</div>'
+			+'<div class="modal-footer">'
+			+'<button type="button" class="btn blue" id="cconfirmDele" >确定</button>'
+			+'<button type="button" class="btn default" data-dismiss="modal">取消</button>'
+			+'</div>'
+			+'</div>'
+			+'</div>'
+			+'</div>';
+		
+		$("#form1").append(str);
+		$("#cconfirmDele").click(function(){
+			deleteInfo(); 
+		});
+		$("#confirminfo").modal({ 
+			backdrop: 'static',  
+			keyboard: false  
+		}).modal('show');
+		
+	}
+}
 function org_del2(){
 	if(confirmIsSelectItems()){
 		var str = '<div class="modal fade" id="confirminfo" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">'

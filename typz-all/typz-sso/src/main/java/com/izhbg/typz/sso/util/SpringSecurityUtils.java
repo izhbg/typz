@@ -71,7 +71,18 @@ public class SpringSecurityUtils {
 
         return springSecurityUserAuth.getId();
     }
+    /**
+     * 获取大姑娘前用户的AppId,如果当前用户未登陆则返回null
+     * @return
+     */
+    public static String getCurrentUserAppId(){
+    	SpringSecurityUserAuth springSecurityUserAuth = getCurrentUser();
 
+        if (springSecurityUserAuth == null) {
+            return null;
+        }
+        return springSecurityUserAuth.getAppId();
+    }
     /**
      * 取得当前用户登录IP, 如果当前用户未登录则返回空字符串.
      */

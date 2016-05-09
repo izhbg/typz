@@ -8,5 +8,6 @@ CREATE TABLE `t_xt_resources` (
   ENABLED         int(11),  
   ISSYS           int(11),  
   MODULE          VARCHAR(4),  
+  APP_ID          VARCHAR(40),  
   PRIMARY KEY (`RESOURCE_ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

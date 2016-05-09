@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -20,7 +21,8 @@ public class TXtGnjsAuthorities
 	@Column(name="authority_id")
 	private String authorityId;
 	private Integer enabled;
-	
+	@Transient
+	private TXtAuthorities authorities;
 	public String getId()
 	{
 		return id;
@@ -52,6 +54,14 @@ public class TXtGnjsAuthorities
 	public void setEnabled(Integer enabled)
 	{
 		this.enabled = enabled;
+	}
+	public TXtAuthorities getAuthorities()
+	{
+		return authorities;
+	}
+	public void setAuthorities(TXtAuthorities authorities)
+	{
+		this.authorities = authorities;
 	}
 	
 	

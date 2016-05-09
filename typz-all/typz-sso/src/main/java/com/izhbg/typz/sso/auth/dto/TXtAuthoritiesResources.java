@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 @Entity
@@ -19,6 +20,9 @@ public class TXtAuthoritiesResources
 	@Column(name="resource_id")
 	private String resourceId;
 	private Integer enabled;
+	@Transient
+	private TXtResources resources;
+	
 	public String getId()
 	{
 		return id;
@@ -51,6 +55,13 @@ public class TXtAuthoritiesResources
 	{
 		this.enabled = enabled;
 	}
-	
+	public TXtResources getResources()
+	{
+		return resources;
+	}
+	public void setResources(TXtResources resources)
+	{
+		this.resources = resources;
+	}
 	
 }

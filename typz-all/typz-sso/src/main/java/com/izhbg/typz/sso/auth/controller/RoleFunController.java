@@ -79,14 +79,13 @@ public class RoleFunController {
 		page.setResult(listYh);
 		
 		String result = null;
-		TXtGnjs js = tXtGnjsManager.findUniqueBy("gnjsDm", role.getGnjsDm());//QueryCache.get(TXtGnjs.class, jsDm);
+		TXtGnjs js = tXtGnjsManager.findUniqueBy("gnjsDm", role.getGnjsDm());
 		if(StringHelper.isNotEmpty(js.getAppId())){
 			List<String> list2 = tXtGnzyManager.find("select a.gnDm from TXtGnzy a where  a.sjgnDm='-1'");
 			String root = "";
 			if(list2!=null&&list2.size()>0){
 				root = list2.get(0);
 			}
-			//UserAuthDTO user = (UserAuthDTO)SpringSecurityUtils.getCurrentUser();
 			try {
 				if(StringHelper.isNotEmpty(root)){
 					JSONObject jo = tXtGnzyService.getRootRoleFunc(root);
@@ -97,7 +96,6 @@ public class RoleFunController {
 					}
 				}
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

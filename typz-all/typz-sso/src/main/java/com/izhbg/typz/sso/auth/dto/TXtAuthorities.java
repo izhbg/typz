@@ -22,6 +22,8 @@ public class TXtAuthorities
 	private Integer enabled;
 	private Integer issys;
 	private String module;
+	@Column(name="app_id")
+	private String appId;
 	 
 	public String getAuthorityId()
 	{
@@ -70,6 +72,14 @@ public class TXtAuthorities
 	public void setModule(String module)
 	{
 		this.module = module;
+	}
+	public String getAppId()
+	{
+		return appId;
+	}
+	public void setAppId(String appId)
+	{
+		this.appId = appId;
 	}
 	 
 	 
