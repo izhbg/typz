@@ -6,10 +6,6 @@
 <head>
 <%@include file="/common/meta.jsp"%>
 <%@include file="/common/snew.jsp"%>
-<!--<link href="${ctx}/s/guser/css/ucenter.css" rel="stylesheet" type="text/css" />
-<script src="${ctx }/s/assets/plugins/guser/js/common.js" type="text/javascript"></script>
-<script src="${ctx }/s/assets/plugins/guser/js/ucenter.js" type="text/javascript"></script>
--->
 </head>
 <body class="page-header-fixed"> 
 <jsp:include page="/common/header.jsp"></jsp:include> 
@@ -27,7 +23,7 @@
 						<h3 class="panel-title">功能管理</h3>
 					</div>
 					<div class="panel-body">
-						<select style="width: 100%;" onchange="javascript:location.href='${ctx}/fun/fun-list.izhbg?currentAppId=' + this.value" name="aappId" id="aappId">
+						<select style="width: 100%;" onchange="javascript:location.href='${ctx}/fun/fun_list.izhbg?currentAppId=' + this.value" name="aappId" id="aappId">
 						 <c:forEach items="${systems}" var="item">
 							 <option value="${item.yyId }" <c:if test="${item.yyId eq parameterMap.currentAppId}">selected="selected" </c:if> >${item.chineseName }</option>
 						 </c:forEach>

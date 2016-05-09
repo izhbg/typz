@@ -318,7 +318,7 @@
 		
 	}
 	function returnPage(){
-		window.location.href="${ctx}/fun/fun-list.izhbg?appId=${func.appId}&sjgnDm=${func.sjgnDm }&currentAppId=${currentAppId}";
+		window.location.href="${ctx}/fun/fun_list.izhbg?appId=${func.appId}&sjgnDm=${func.sjgnDm }&currentAppId=${currentAppId}";
 		}
 	function func_addorupd(id){
 		if(id)

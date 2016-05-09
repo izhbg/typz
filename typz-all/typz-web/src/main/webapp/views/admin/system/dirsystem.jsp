@@ -52,7 +52,7 @@
 				<div id="collapse-group" class="collapse <c:if test="${(parameterMap.appName ne null&&parameterMap.appName ne '') || (parameterMap.classification ne null&&parameterMap.classification ne '') || (parameterMap.code ne null&&parameterMap.code ne '') }">in</c:if> ">
 					 <div class="panel panel-default" style="margin-bottom: 0px;"> 
 						<div class="panel-body">
-						 <form id="form1" name="form1" action="${ctx }/sys/sys-list.izhbg" method="post" class="form-horizontal" >
+						 <form id="form1" name="form1" action="${ctx }/sys/sys_list.izhbg" method="post" class="form-horizontal" >
 							<input type="hidden" name="sjjgId" id="sjjgId" value="${parameterMap.sjjgId }"> 
 							<div class="form-body">
 								<div class="row">

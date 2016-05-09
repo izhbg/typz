@@ -51,7 +51,7 @@
 				<div id="collapse-group" class="collapse <c:if test="${(parameterMap.gnMc ne null&&parameterMap.gnMc ne '') || (parameterMap.gnzyDm ne null&&parameterMap.gnzyDm ne '') }">in</c:if> ">
 					 <div class="panel panel-default" style="margin-bottom: 0px;"> 
 						<div class="panel-body">
-						 <form id="form1" name="form1" action="${ctx }/rolFun/roleFun-list.izhbg" method="post" class="form-horizontal" >
+						 <form id="form1" name="form1" action="${ctx }/rolFun/rolefun_list.izhbg" method="post" class="form-horizontal" >
 							<input type="hidden" name="jsDm" id="jsDm" value="${role.gnjsDm}"> 
 							<input type="hidden" name="currentAppId" id="currentAppId" value="${parameterMap.currentAppId}"> 
 							<div class="form-body">

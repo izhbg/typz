@@ -400,7 +400,7 @@
 			
 		}
 		function returnPage(){
-			window.location.href="${ctx}/sys/sys-list.izhbg";
+			window.location.href="${ctx}/sys/sys_list.izhbg";
 			}
 		function subForm(id){
 			if(id)

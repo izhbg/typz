@@ -38,11 +38,19 @@ import com.izhbg.typz.sso.common.TreeNode;
 import com.izhbg.typz.sso.util.SpringSecurityUtils;
 import com.mysql.jdbc.Messages;
 
+/**
+ * 
+* @ClassName: FuncController 
+* @Description: 功能管理
+* @author caixl 
+* @date 2016-5-9 下午5:25:27 
+*
+ */
 @Controller
 @RequestMapping("/fun")
 public class FuncController {
 	
-	private List<String> organs = new ArrayList();
+	private List<String> organs = new ArrayList<String>();
 	private String gnDm,gnMc,sjgnDm,yxBj,appId,currentAppId;//办公系统Id;
 	
 	private TXtGnzyManager tXtGnzyManager ;
@@ -53,8 +61,14 @@ public class FuncController {
 	private TXtYhManager tXtYhManager;
 	
 	
-	
-	@RequestMapping("fun-list")
+	/**
+	 * 功能列表
+	 * @param page
+	 * @param parameterMap
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("fun_list")
 	 public String list(@ModelAttribute  Page page,
 	            @RequestParam Map<String, Object> parameterMap, Model model) {
 		
@@ -68,7 +82,7 @@ public class FuncController {
 		List<TXtYy> tXtYyList = null;
 		TXtYh currentYh = tXtYhManager.findUniqueBy("yhId", SpringSecurityUtils.getCurrentUserId());
 		String hql = "select a.yhId from TXtYh a,TXtGnjs b,TXtYhGnjs c where a.yhId=c.yhId and c.jsDm=b.gnjsDm and a.yhId=? and b.jgId='2'";
-		List list22 = tXtYhManager.find(hql, SpringSecurityUtils.getCurrentUserId());
+		List<String> list22 = tXtYhManager.find(hql, SpringSecurityUtils.getCurrentUserId());
 		if(list22!=null&&list22.size()>0){
 			tXtYyList = tXtYyService.getSystems();
 		}else{
@@ -94,6 +108,7 @@ public class FuncController {
 			}
 		}
 		parameterMap.put("appId", appId);
+		
 		try {
 			StringBuffer sb = new StringBuffer("select a.gnDm from TXtGnzy a  ");
 			sb.append(getWhere())
@@ -107,51 +122,61 @@ public class FuncController {
 					listYh = tXtGnzyManager.findByIdsOrder(list,"gnXh",true);
 				
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}//find(sb.toString(), list.toArray()).list();
-			page.setResult(listYh);
-			String result = null;
-			String root = null;
-			if(StringHelper.isNotEmpty(appId)) {
-				List<String> list2 = tXtGnzyManager.find("select a.gnDm from TXtGnzy a where a.sjgnDm='-1'");// (String) new QueryCache("")
-					//.setParameter("appId", appId).setMaxResults(1).uniqueResultCache();
-				if(list2!=null&&list2.size()>0){
-					root = list2.get(0);
-				}
-				if(StringHelper.isEmpty(root)) {
-					TXtGnzy func = new TXtGnzy();
-					func.setGnDm(IdGenerator.getInstance().getUniqTime()+"");
-					func.setGnMc("系统功能");
-					func.setSjgnDm("-1");
-					func.setAppId(appId);
-					tXtGnzyManager.save(func);
-					root = func.getGnDm();
-				}
-				JSONObject jo = tXtGnzyService.getRootFunc(root);
-				JSONArray ja = tXtJgService.getSubFunc(root,appId);
-				if(ja != null){
-					ja.add(jo);
-					result = ja.toString();
-				}
 			}
-			if(StringHelper.isEmpty(result))
-				result = "[]";
+			page.setResult(listYh);
 			
-			TXtGnzy	tXtJg=tXtGnzyService.getFunc(root);//tXtJgService.getOrgan(root);
-			model.addAttribute("gnMc", tXtJg.getGnMc());
 			model.addAttribute("systems", tXtYyList);
-			model.addAttribute("result", result);
+			model.addAttribute("result", getFunTreeJson());
 			model.addAttribute("page",page);
 			parameterMap.put("currentAppId", currentAppId);
 			model.addAttribute("parameterMap", parameterMap);
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		return "admin/func/dirfunc";
 	 }
+	
+	/**
+	 * 功能列表 json串
+	 * @return
+	 */
+	public String getFunTreeJson(){
+		String result = null;
+		String root = null;
+		if(StringHelper.isNotEmpty(appId)) {
+			List<String> list2 = tXtGnzyManager.find("select a.gnDm from TXtGnzy a where a.sjgnDm='-1'");
+			if(list2!=null&&list2.size()>0){
+				root = list2.get(0);
+			}
+			if(StringHelper.isEmpty(root)) {
+				TXtGnzy func = new TXtGnzy();
+				func.setGnDm(IdGenerator.getInstance().getUniqTime()+"");
+				func.setGnMc("系统功能");
+				func.setSjgnDm("-1");
+				func.setAppId(appId);
+				tXtGnzyManager.save(func);
+				root = func.getGnDm();
+			}
+			JSONObject jo = tXtGnzyService.getRootFunc(root);
+			JSONArray ja = tXtJgService.getSubFunc(root,appId);
+			if(ja != null){
+				ja.add(jo);
+				result = ja.toString();
+			}
+		}
+		if(StringHelper.isEmpty(result))
+			result = "[]";
+	
+		return result;
+	}
+	
+	/**
+	 * 功能子节点
+	 * @param parameterMap
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("fun-item")
 	 public String item( @RequestParam Map<String, Object> parameterMap, Model model) {
 		gnDm= parameterMap.get("gnDm")==null?"":parameterMap.get("gnDm").toString();
@@ -173,9 +198,15 @@ public class FuncController {
 			}
 			model.addAttribute("gnDm", gnDm);
 		}
-		
 		return "admin/func/fun-item";
 	 }
+	/**
+	 * 功能编辑
+	 * @param parameterMap
+	 * @param model
+	 * @param currentAppId
+	 * @return
+	 */
 	@RequestMapping("fun-edit")
 	public String funEdit(@RequestParam Map<String, Object> parameterMap, Model model,String currentAppId) {
 		gnDm= parameterMap.get("gnDm")==null?"":parameterMap.get("gnDm").toString();
@@ -243,6 +274,7 @@ public class FuncController {
 		
 		return "admin/func/getfunc";
 	}
+	
 	@RequestMapping(value="getSubFunc",method=RequestMethod.POST)
 	public @ResponseBody String getSubFunc(@RequestParam Map<String, Object> parameterMap){
 		UserAuthDTO user = (UserAuthDTO)SpringSecurityUtils.getCurrentUser();

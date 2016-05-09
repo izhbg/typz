@@ -36,7 +36,7 @@ public class SystemController {
 	private TXtGnjsManager txtGnjsManager;
 	private TXtGnzyManager txtGnzyManager;
 	
-	@RequestMapping("sys-list")
+	@RequestMapping("sys_list")
 	 public String list(@ModelAttribute  Page page,
 	            @RequestParam Map<String, Object> parameterMap, Model model) {
 		String code= parameterMap.get("code")==null?"":parameterMap.get("code").toString();
@@ -92,7 +92,7 @@ public class SystemController {
 		app.setPassword(simplePasswordEncoder.encode(app.getPassword()));
 		app.setOperateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(new Date()));
 		txtYyManager.save(app);
-		return "redirect:/sys/sys-list.izhbg";
+		return "redirect:/sys/sys_list.izhbg";
 	}
 	@RequestMapping(value="updateSys",method=RequestMethod.POST)
 	public String updateSys(TXtYy app,String[] checkdel, Model model){
@@ -121,7 +121,7 @@ public class SystemController {
 		item.setSortNo(app.getSortNo());
 		item.setYxBj(app.getYxBj());
 		txtYyManager.update(item);
-		return "redirect:/sys/sys-list.izhbg";
+		return "redirect:/sys/sys_list.izhbg";
 		
 	}
 	

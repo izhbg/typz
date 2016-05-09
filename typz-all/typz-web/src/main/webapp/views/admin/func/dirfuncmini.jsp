@@ -38,7 +38,7 @@
 		<div id="collapse-group" class="collapse <c:if test="${(parameterMap.yxBj ne null&&parameterMap.yxBj ne '') || (parameterMap.gnDm ne null&&parameterMap.gnDm ne '') || (parameterMap.gnMc ne null&&parameterMap.gnMc ne '')}">in</c:if> ">
 			 <div class="panel panel-default" style="margin-bottom: 0px;"> 
 				<div class="panel-body">
-				 <form id="form1" name="form1" action="${ctx }/fun/fun-list.izhbg" method="post" class="form-horizontal" >
+				 <form id="form1" name="form1" action="${ctx }/fun/fun_list.izhbg" method="post" class="form-horizontal" >
 					<input type="hidden" name="appId" id="appId" value="${parameterMap.appId }">
 					<input type="hidden" name="currentAppId" id="currentAppId" value="${parameterMap.currentAppId }">
 					<input type="hidden" name="sjgnDm" id="sjgnDm" value="${parameterMap.sjgnDm }">

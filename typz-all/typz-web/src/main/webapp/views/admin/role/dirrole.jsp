@@ -134,7 +134,7 @@
 							<td nowrap>
 									<a href="${ctx }/role/role-edit.izhbg?gnjsDm=${item.gnjsDm }&currentAppId=${parameterMap.appId}">编辑</a>
 								&nbsp; 
-									<a href="${ctx }/rolFun/roleFun-list.izhbg?jsDm=${item.gnjsDm }&currentAppId=${parameterMap.appId}" title="授权功能">授权功能</a>
+									<a href="${ctx }/rolFun/rolefun_list.izhbg?jsDm=${item.gnjsDm }&currentAppId=${parameterMap.appId}" title="授权功能">授权功能</a>
 								&nbsp;
 									<a href="${ctx }/role_authorities/role_authorities_list.izhbg?jsDm=${item.gnjsDm }&currentAppId=${parameterMap.appId}" title="资源权限">资源权限</a>
 							</td>
