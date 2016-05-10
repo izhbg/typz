@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.izhbg.typz.base.page.Page;
 import com.izhbg.typz.base.util.IdGenerator;
+import com.izhbg.typz.sso.annotation.SystemControllerLog;
 import com.izhbg.typz.sso.auth.dto.TXtGnzy;
 import com.izhbg.typz.sso.auth.dto.TXtYy;
 import com.izhbg.typz.sso.auth.manager.TXtGnjsManager;
@@ -49,6 +50,7 @@ public class SystemController {
 	 }
 	
 	@RequestMapping("sys-edit")
+	@SystemControllerLog(description = "编辑应用")
 	public String sysEdit(@RequestParam Map<String, Object> parameterMap, Model model) {
 		String yyId= parameterMap.get("yyId")==null?"":parameterMap.get("yyId").toString();
 		TXtYy app = null;
@@ -79,6 +81,7 @@ public class SystemController {
 		return result;
 	}
 	@RequestMapping(value="addSystem",method=RequestMethod.POST)
+	@SystemControllerLog(description = "添加应用")
 	public String addSystem(TXtYy app,String[] checkdel, Model model){
 		if(StringHelper.isEmpty(app.getAppName())
 				||StringHelper.isEmpty(app.getCode())){
@@ -95,6 +98,7 @@ public class SystemController {
 		return "redirect:/sys/sys_list.izhbg";
 	}
 	@RequestMapping(value="updateSys",method=RequestMethod.POST)
+	@SystemControllerLog(description = "更新应用")
 	public String updateSys(TXtYy app,String[] checkdel, Model model){
 		
 		if(StringHelper.isEmpty(app.getYyId())
@@ -126,6 +130,7 @@ public class SystemController {
 	}
 	
 	@RequestMapping(value="deleteSys",method=RequestMethod.POST)
+	@SystemControllerLog(description = "删除应用")
 	public @ResponseBody  String deleteSys(String[] checkdel){
 		String result="";
 		try{
@@ -166,6 +171,7 @@ public class SystemController {
 		return result;
 	}
 	@RequestMapping(value="updStatus",method=RequestMethod.POST)
+	@SystemControllerLog(description = "更新应用状态")
 	public @ResponseBody  String updStatus(String[] checkdel,String type){
 		String result="";
 		try {

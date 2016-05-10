@@ -31,6 +31,7 @@ import com.izhbg.typz.base.page.Page;
 import com.izhbg.typz.base.util.Ajax;
 import com.izhbg.typz.base.util.Constants;
 import com.izhbg.typz.base.util.IdGenerator;
+import com.izhbg.typz.sso.annotation.SystemControllerLog;
 import com.izhbg.typz.sso.auth.UserAuthDTO;
 import com.izhbg.typz.sso.auth.dto.TXtJg;
 import com.izhbg.typz.sso.auth.dto.TXtJgYh;
@@ -170,6 +171,7 @@ public class UserController {
 		return "admin/guser/dirguser";
 	 }
 	@RequestMapping("user-edit")
+	@SystemControllerLog(description = "编辑用户")
 	public String userEdit(@RequestParam Map<String, Object> parameterMap, Model model) {
 		yhId= parameterMap.get("yhId")==null?"":parameterMap.get("yhId").toString();
 		sjjgId= parameterMap.get("sjjgId")==null?"":parameterMap.get("sjjgId").toString();
@@ -301,6 +303,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="addGUser",method=RequestMethod.POST)
+	@SystemControllerLog(description = "添加用户")
 	public String addGUser(TXtYh user,String[] checkdel, Model model,String currentAppId){
 		if(StringHelper.isEmpty(user.getYhDm())
 				||StringHelper.isEmpty(user.getYhMc())
@@ -346,6 +349,7 @@ public class UserController {
 		
 	}
 	@RequestMapping(value="updateGUser",method=RequestMethod.POST)
+	@SystemControllerLog(description = "更新用户")
 	public String updateGUser(TXtYh user,String checkdel, Model model,String currentAppId){
 		if(StringHelper.isEmpty(user.getYhId())
 				||StringHelper.isEmpty(user.getYhDm())
@@ -407,6 +411,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="deleteGuser",method=RequestMethod.POST)
+	@SystemControllerLog(description = "删除用户")
 	public @ResponseBody  String deleteGuser(TXtYh user,String[] checkdel, String sjjgId){
 		String result="";
 		try{
@@ -443,6 +448,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="removeGuserFromGroup",method=RequestMethod.POST)
+	@SystemControllerLog(description = "从组织机构移除用户")
 	public @ResponseBody  String removeGuserFromGroup(TXtYh user,String[] checkdel, String jgId){
 		String result="";
 		try{
@@ -477,6 +483,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="updPassword",method=RequestMethod.POST)
+	@SystemControllerLog(description = "重置用户密码")
 	public @ResponseBody  String updPassword(TXtYh user,String[] checkdel, String sjjgId){
 		String result="";
 		try {
@@ -502,6 +509,7 @@ public class UserController {
 		return result;
 	}
 	@RequestMapping(value="updGUserStatus",method=RequestMethod.POST)
+	@SystemControllerLog(description = "更改用户状态")
 	public @ResponseBody  String updGUserStatus(TXtYh user,String[] checkdel, String sjjgId){
 		String result="";
 		try {
@@ -530,6 +538,7 @@ public class UserController {
 	}
 	
 	@RequestMapping("/updateUserInfo.izhbg")
+	@SystemControllerLog(description = "修改用户信息")
 	@ResponseBody
 	public String updateUserInfo(HttpServletRequest request, HttpServletResponse response ,HttpSession session) throws Exception {
 		String userMail = request.getParameter("user");

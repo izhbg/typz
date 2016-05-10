@@ -4,6 +4,8 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.izhbg.typz.sso.annotation.SystemControllerLog;
 /**
  * 
 * @ClassName: LoginController 
@@ -21,8 +23,8 @@ public class MainController {
      * 跳转到commonpage页面 
      *  
      * @return 
-     */  
-    @RequestMapping(value = "/common", method = RequestMethod.GET)  
+     */
+    @RequestMapping(value = "/common", method={RequestMethod.GET,RequestMethod.POST})  
     public String getCommonPage() {  
         logger.debug("Received request to show common page");  
         return "main/commonpage";  
@@ -33,7 +35,7 @@ public class MainController {
      *  
      * @return 
      */  
-    @RequestMapping(value = "/admin", method = RequestMethod.GET)  
+    @RequestMapping(value = "/admin", method={RequestMethod.GET,RequestMethod.POST})  
     public String getAadminPage() {  
         logger.debug("Received request to show admin page");  
         return "main/adminpage";  

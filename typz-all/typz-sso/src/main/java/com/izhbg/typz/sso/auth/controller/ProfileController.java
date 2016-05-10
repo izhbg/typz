@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.izhbg.typz.base.mapper.BeanMapper;
 import com.izhbg.typz.base.spring.MessageHelper;
 import com.izhbg.typz.base.util.IdGenerator;
+import com.izhbg.typz.sso.annotation.SystemControllerLog;
 import com.izhbg.typz.sso.auth.dto.TXtJgYh;
 import com.izhbg.typz.sso.auth.dto.TXtYh;
 import com.izhbg.typz.sso.auth.manager.TXtJgManager;
@@ -65,6 +66,7 @@ public class ProfileController {
         return "redirect:/user/profile-list.izhbg";
     }
     @RequestMapping("profile-sysconfig")
+    @SystemControllerLog(description = "个人权限设置")
     public String sysconfig(Model model) {
     	StringBuffer sb = new StringBuffer();
     	//读取日志的配置

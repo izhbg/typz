@@ -26,6 +26,7 @@ import com.izhbg.typz.base.util.Ajax;
 import com.izhbg.typz.base.util.Constants;
 import com.izhbg.typz.base.util.IdGenerator;
 import com.izhbg.typz.base.util.JSONParam;
+import com.izhbg.typz.sso.annotation.SystemControllerLog;
 import com.izhbg.typz.sso.auth.UserAuthDTO;
 import com.izhbg.typz.sso.auth.dto.TXtJg;
 import com.izhbg.typz.sso.auth.dto.TXtJgYh;
@@ -187,6 +188,7 @@ public class OrgUserController {
 		return result.substring(1, result.length()-1);
 	}
 	@RequestMapping(value="addOrgUser",method=RequestMethod.POST)
+	@SystemControllerLog(description = "组织机构授权用户")
 	public @ResponseBody String addOrgUser(String jgId,String[] checkdel2){
 		if(checkdel2 == null || checkdel2.length < 1 
 				|| StringHelper.isEmpty(jgId)){
@@ -224,6 +226,7 @@ public class OrgUserController {
 		return result;
 	}
 	@RequestMapping(value="delOrgUser",method=RequestMethod.POST)
+	@SystemControllerLog(description = "删除组织机构授权用户")
 	public @ResponseBody  String delPostUser(String[] checkdel){
 		String result="";
 		try{

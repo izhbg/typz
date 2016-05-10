@@ -25,7 +25,7 @@
         <security:form-login  
                 login-page="/auth/login.izhbg"   
                 authentication-failure-url="/auth/login.izhbg?error=true"   
-                default-target-url="/main/common.izhbg"/>  
+                authentication-success-handler-ref="authenticationSuccessHandler"/>  
         <!-- 退出配置 -->       
         <security:logout   
                 invalidate-session="true"   
@@ -46,6 +46,10 @@
        <security:custom-filter ref="concurrencyFilter" position="CONCURRENT_SESSION_FILTER"/>  
          
     </security:http>  
+    <bean id="authenticationSuccessHandler" class="com.izhbg.typz.sso.security.handler.SimpleLoginSuccessHandler">  
+	    <property name="defaultTargetUrl" value="/main/common.izhbg"></property>  
+	    <property name="forwardToDestination" value="false"></property>  
+	</bean>  
     <!-- 一个自定义的filter，必须包含authenticationManager, accessDecisionManager,securityMetadataSource三个属性。  -->  
     <bean id="filterSecurityInterceptor" class="com.izhbg.typz.sso.security.MyFilterSecurityInterceptor">
     	<property name="authenticationManager" ref="authenticationManager"/>

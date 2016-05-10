@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.izhbg.typz.base.page.Page;
 import com.izhbg.typz.base.util.Ajax;
 import com.izhbg.typz.base.util.Constants;
+import com.izhbg.typz.sso.annotation.SystemControllerLog;
 import com.izhbg.typz.sso.auth.dto.TXtGnjs;
 import com.izhbg.typz.sso.auth.dto.TXtYh;
 import com.izhbg.typz.sso.auth.dto.TXtYhGnjs;
@@ -103,6 +104,7 @@ public class UserRolesController {
 		return "admin/guser/dirguserrole";
 	}
 	@RequestMapping(value="addUserRloe",method=RequestMethod.POST)
+	@SystemControllerLog(description = "用户授权角色")
 	public @ResponseBody String addUserRloe(String yhId,String[] checkdel){
 		if(checkdel == null || checkdel.length < 1 
 				|| StringHelper.isEmpty(yhId)){
@@ -124,6 +126,7 @@ public class UserRolesController {
 		return "sucess";
 	}
 	@RequestMapping(value="delUserRloe",method=RequestMethod.POST)
+	@SystemControllerLog(description = "删除用户角色")
 	public @ResponseBody  String delUserRloe(String[] checkdel){
 		String result="";
 		try{

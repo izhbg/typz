@@ -8,3 +8,5 @@ INSERT INTO `t_xt_gnzy` VALUES ('funmanager', '功能管理', null, 'houtanguanl
 INSERT INTO `t_xt_gnzy` VALUES ('appmanager', '应用管理', null, 'houtanguanli', '', '6', '1', '1', '', '', '', 'sys/sys_list.izhbg', '1');
 INSERT INTO `t_xt_gnzy` VALUES ('ziyuanguanli', '资源管理', null, 'houtanguanli', '', '7', '1', '1', '', '', '', 'resources/resources_list.izhbg', '1');
 INSERT INTO `t_xt_gnzy` VALUES ('quanxianguanli', '权限管理', null, 'houtanguanli', '', '8', '1', '1', '', '', '', 'authorities/authorities_list.izhbg', '1');
+INSERT INTO `t_xt_gnzy` VALUES ('shenjirizhi', '审计日志', null, 'c78657w5m0vg781mw5m1', '', '2', '1', '1', '', '', 'fa-cogs', '', '1');
+INSERT INTO `t_xt_gnzy` VALUES ('shenjirizhi2', '审计日志', null, 'shenjirizhi', '', '2', '1', '1', '', '', '', 'audit/audit_list.izhbg', '1');

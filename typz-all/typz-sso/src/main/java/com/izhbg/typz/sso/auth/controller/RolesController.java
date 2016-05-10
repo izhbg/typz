@@ -22,6 +22,7 @@ import com.izhbg.typz.base.page.Page;
 import com.izhbg.typz.base.util.Ajax;
 import com.izhbg.typz.base.util.Constants;
 import com.izhbg.typz.base.util.IdGenerator;
+import com.izhbg.typz.sso.annotation.SystemControllerLog;
 import com.izhbg.typz.sso.auth.UserAuthDTO;
 import com.izhbg.typz.sso.auth.dto.TXtGnjs;
 import com.izhbg.typz.sso.auth.dto.TXtGnjsZy;
@@ -107,6 +108,7 @@ public class RolesController {
 		return "admin/role/dirrole";
 	}
 	@RequestMapping("role-edit")
+	@SystemControllerLog(description = "编辑角色")
 	public String roleEdit(String gnjsDm, Model model,
             @RequestParam Map<String, Object> parameterMap) {
 		try {
@@ -189,6 +191,7 @@ public class RolesController {
 		return result;
 	}
 	@RequestMapping(value="addRole",method=RequestMethod.POST)
+	@SystemControllerLog(description = "添加角色")
 	public String addRole(TXtGnjs role, Model model,@RequestParam String appId2){
 		if(StringHelper.isEmpty(role.getCode())
 				||StringHelper.isEmpty(role.getGnjsMc())){
@@ -198,7 +201,9 @@ public class RolesController {
 			tXtGnjsManager.save(role);
 		return "redirect:/role/role-list.izhbg?appId="+appId2;
 	}
+	
 	@RequestMapping(value="updRole",method=RequestMethod.POST)
+	@SystemControllerLog(description = "更新角色")
 	public String updRole(TXtGnjs role, Model model,@RequestParam String appId2){
 		if(StringHelper.isEmpty(role.getGnjsDm())
 				||StringHelper.isEmpty(role.getCode())
@@ -209,6 +214,7 @@ public class RolesController {
 		return "redirect:/role/role-list.izhbg?appId="+appId2;
 	}
 	@RequestMapping(value="deleteRole",method=RequestMethod.POST)
+	@SystemControllerLog(description = "删除角色")
 	public @ResponseBody  String deleteRole(String[] checkdel){
 		String result="";
 		try{
@@ -232,6 +238,7 @@ public class RolesController {
 		return result;
 	}
 	@RequestMapping(value="updRoleStatus",method=RequestMethod.POST)
+	@SystemControllerLog(description = "更新角色状态")
 	public @ResponseBody  String updRoleStatus(String[] checkdel){
 		String result="";
 		try {

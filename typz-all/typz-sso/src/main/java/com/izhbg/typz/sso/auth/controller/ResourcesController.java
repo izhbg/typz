@@ -20,6 +20,7 @@ import com.izhbg.typz.base.page.Page;
 import com.izhbg.typz.base.util.Ajax;
 import com.izhbg.typz.base.util.Constants;
 import com.izhbg.typz.base.util.IdGenerator;
+import com.izhbg.typz.sso.annotation.SystemControllerLog;
 import com.izhbg.typz.sso.auth.dto.TXtGnjs;
 import com.izhbg.typz.sso.auth.dto.TXtGnjsZy;
 import com.izhbg.typz.sso.auth.dto.TXtResources;
@@ -77,6 +78,7 @@ public class ResourcesController
 	 * @return
 	 */
 	@RequestMapping("resources_edit")
+	@SystemControllerLog(description = "编辑资源")
 	public String roleEdit(String resourceId, 
 						   Model model,
 						   @RequestParam Map<String, Object> parameterMap) {
@@ -103,6 +105,7 @@ public class ResourcesController
 	 * @return
 	 */
 	@RequestMapping(value="resources_addORupdate",method=RequestMethod.POST)
+	@SystemControllerLog(description = "添加或更新资源")
 	public String addRole(TXtResources tXtResources, Model model){
 		
 		if(StringHelper.isEmpty(tXtResources.getResourceName())
@@ -127,6 +130,7 @@ public class ResourcesController
 	 * @return
 	 */
 	@RequestMapping(value="resources_dell",method=RequestMethod.POST)
+	@SystemControllerLog(description = "删除资源")
 	public @ResponseBody  String deleteResources(String[] checkdel){
 		String result="";
 		try{
@@ -151,6 +155,7 @@ public class ResourcesController
 	 * @return
 	 */
 	@RequestMapping(value="resources_updStatus",method=RequestMethod.POST)
+	@SystemControllerLog(description = "更新资源状态")
 	public @ResponseBody  String updRoleStatus(String[] checkdel){
 		String result="";
 		try {

@@ -24,6 +24,7 @@ import com.izhbg.typz.base.page.Page;
 import com.izhbg.typz.base.util.Ajax;
 import com.izhbg.typz.base.util.Constants;
 import com.izhbg.typz.base.util.IdGenerator;
+import com.izhbg.typz.sso.annotation.SystemControllerLog;
 import com.izhbg.typz.sso.auth.UserAuthDTO;
 import com.izhbg.typz.sso.auth.dto.TXtGnzy;
 import com.izhbg.typz.sso.auth.dto.TXtYh;
@@ -208,6 +209,7 @@ public class FuncController {
 	 * @return
 	 */
 	@RequestMapping("fun-edit")
+	@SystemControllerLog(description = "编辑功能节点")
 	public String funEdit(@RequestParam Map<String, Object> parameterMap, Model model,String currentAppId) {
 		gnDm= parameterMap.get("gnDm")==null?"":parameterMap.get("gnDm").toString();
 		if(StringHelper.isEmpty(appId)){
@@ -330,6 +332,7 @@ public class FuncController {
 		}
 		return result;
 	}
+	@SystemControllerLog(description = "添加功能节点")
 	@RequestMapping(value="addFun",method=RequestMethod.POST)
 	public String addFun(TXtGnzy func,String[] checkdel, Model model){
 		if(StringHelper.isEmpty(func.getGnDm())
@@ -348,6 +351,7 @@ public class FuncController {
 		tXtGnzyManager.save(func);
 		return "redirect:/fun/fun-list.izhbg?sjgnDm="+func.getSjgnDm()+"&appId="+appId;
 	}
+	@SystemControllerLog(description = "更新功能节点")
 	@RequestMapping(value="updateFun",method=RequestMethod.POST)
 	public String updateOrg(TXtGnzy func,String[] checkdel, Model model,String currentAppId){
 		
@@ -363,6 +367,7 @@ public class FuncController {
 	}
 	
 	@RequestMapping(value="deleteFun",method=RequestMethod.POST)
+	@SystemControllerLog(description = "删除功能节点")
 	public @ResponseBody  String deleteFun(String[] checkdel){
 		String result="";
 		try{
@@ -379,6 +384,7 @@ public class FuncController {
 		return result;
 	}
 	@RequestMapping(value="updFunStatus",method=RequestMethod.POST)
+	@SystemControllerLog(description = "更新功能节点状态")
 	public @ResponseBody  String updFunStatus(String[] checkdel){
 		String result="";
 		try {

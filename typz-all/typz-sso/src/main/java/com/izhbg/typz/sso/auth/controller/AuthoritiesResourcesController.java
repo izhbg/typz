@@ -23,6 +23,7 @@ import com.izhbg.typz.base.page.Page;
 import com.izhbg.typz.base.util.Ajax;
 import com.izhbg.typz.base.util.Constants;
 import com.izhbg.typz.base.util.IdGenerator;
+import com.izhbg.typz.sso.annotation.SystemControllerLog;
 import com.izhbg.typz.sso.auth.dto.TXtAuthorities;
 import com.izhbg.typz.sso.auth.dto.TXtAuthoritiesResources;
 import com.izhbg.typz.sso.auth.dto.TXtGnjsZy;
@@ -85,6 +86,7 @@ public class AuthoritiesResourcesController
 	 * @return
 	 */
 	@RequestMapping(value="authorities_resources_add",method=RequestMethod.POST)
+	@SystemControllerLog(description = "授权资源权限")
 	public @ResponseBody String authoritiesResourcesAdd(String authorityId,String[] checkdel){
 		if(checkdel == null || checkdel.length < 1 
 				|| StringHelper.isEmpty(authorityId)){
@@ -109,6 +111,7 @@ public class AuthoritiesResourcesController
 	 * @return
 	 */
 	@RequestMapping(value="authorities_resources_dell",method=RequestMethod.POST)
+	@SystemControllerLog(description = "删除资源权限授权关系")
 	public @ResponseBody  String authoritiesResourcesDell(String[] checkdel){
 		String result="";
 		try{

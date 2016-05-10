@@ -2,17 +2,22 @@
 <beans xmlns="http://www.springframework.org/schema/beans"  
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
     xmlns:context="http://www.springframework.org/schema/context"  
-    xmlns:mvc="http://www.springframework.org/schema/mvc"  
+    xmlns:mvc="http://www.springframework.org/schema/mvc" 
+    xmlns:aop="http://www.springframework.org/schema/aop" 
     xsi:schemaLocation="http://www.springframework.org/schema/beans   
             http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
             http://www.springframework.org/schema/context  
             http://www.springframework.org/schema/context/spring-context-3.0.xsd  
             http://www.springframework.org/schema/mvc   
-            http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">  
+            http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+            http://www.springframework.org/schema/aop 
+        	http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">  
    
     <!-- 激活spring的注解. -->  
-    <context:annotation-config />  
-   
+    <context:annotation-config /> 
+    <!-- 启动对@AspectJ注解的支持 -->   
+   	<aop:aspectj-autoproxy/> 
+   	 
     <!-- 扫描注解组件并且自动的注入spring beans中.   
     例如,他会扫描@Controller 和@Service下的文件.所以确保此base-package设置正确. -->  
     	<!-- 扫描除了Controller以外的注解 -->

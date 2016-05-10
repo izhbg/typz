@@ -26,6 +26,7 @@ import com.izhbg.typz.base.page.Page;
 import com.izhbg.typz.base.util.Ajax;
 import com.izhbg.typz.base.util.Constants;
 import com.izhbg.typz.base.util.IdGenerator;
+import com.izhbg.typz.sso.annotation.SystemControllerLog;
 import com.izhbg.typz.sso.auth.UserAuthDTO;
 import com.izhbg.typz.sso.auth.dto.TXtJg;
 import com.izhbg.typz.sso.auth.dto.TXtYh;
@@ -153,6 +154,7 @@ public class OrganController {
 		return "admin/organ/dirorganaction";
 	 }
 	@RequestMapping("org-edit")
+	@SystemControllerLog(description = "编辑组织机构")
 	public String orgEdit(@RequestParam Map<String, Object> parameterMap, Model model) {
 		jgId= parameterMap.get("jgId")==null?"":parameterMap.get("jgId").toString();
 		sjjgId= parameterMap.get("sjjgId")==null?"":parameterMap.get("sjjgId").toString();
@@ -289,6 +291,7 @@ public class OrganController {
 		return result;
 	}
 	@RequestMapping(value="addOrgan",method=RequestMethod.POST)
+	@SystemControllerLog(description = "添加组织机构")
 	public String addOrgan(TXtJg organ,String[] checkdel, Model model,String currentAppId){
 		if(StringHelper.isEmpty(organ.getJgDm()) 
 				|| StringHelper.isEmpty(organ.getJgMc())){
@@ -304,7 +307,9 @@ public class OrganController {
 		tXtJgManager.save(organ);
 		return "redirect:/org/org-list.izhbg?sjjgId="+organ.getSjjgId()+"&currentAppId="+currentAppId;
 	}
+	
 	@RequestMapping(value="updateOrg",method=RequestMethod.POST)
+	@SystemControllerLog(description = "更新组织机构")
 	public String updateOrg(TXtJg organ,String[] checkdel, Model model,String currentAppId){
 		if(StringHelper.isEmpty(organ.getJgId()) 
 				|| StringHelper.isEmpty(organ.getJgDm()) 
@@ -328,6 +333,7 @@ public class OrganController {
 	}
 	
 	@RequestMapping(value="deleteOrg",method=RequestMethod.POST)
+	@SystemControllerLog(description = "删除组织机构")
 	public @ResponseBody  String deleteOrg(String[] checkdel, String sjjgId){
 		String result="";
 		try{
@@ -351,6 +357,7 @@ public class OrganController {
 		return result;
 	}
 	@RequestMapping(value="updOrgStatus",method=RequestMethod.POST)
+	@SystemControllerLog(description = "更新组织机构状态")
 	public @ResponseBody  String updOrgStatus(String[] checkdel, String sjjgId){
 		String result="";
 		try {

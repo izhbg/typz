@@ -20,6 +20,7 @@ import com.izhbg.typz.base.page.Page;
 import com.izhbg.typz.base.util.Ajax;
 import com.izhbg.typz.base.util.Constants;
 import com.izhbg.typz.base.util.IdGenerator;
+import com.izhbg.typz.sso.annotation.SystemControllerLog;
 import com.izhbg.typz.sso.auth.dto.TXtAuthorities;
 import com.izhbg.typz.sso.auth.dto.TXtYh;
 import com.izhbg.typz.sso.auth.manager.TXtAuthoritiesManager;
@@ -75,6 +76,7 @@ public class AuthoritiesController
 	 * @return
 	 */
 	@RequestMapping("authorities_edit")
+	@SystemControllerLog(description = "编辑资源权限")    
 	public String roleEdit(String authorityId, 
 						   Model model,
 						   @RequestParam Map<String, Object> parameterMap) {
@@ -101,6 +103,7 @@ public class AuthoritiesController
 	 * @return
 	 */
 	@RequestMapping(value="authorities_addORupdate",method=RequestMethod.POST)
+	@SystemControllerLog(description = "添加或更新资源权限")
 	public String addRole(TXtAuthorities tXtauthorities, Model model){
 		
 		if(StringHelper.isEmpty(tXtauthorities.getAuthorityName())
@@ -125,6 +128,7 @@ public class AuthoritiesController
 	 * @return
 	 */
 	@RequestMapping(value="authorities_dell",method=RequestMethod.POST)
+	@SystemControllerLog(description = "删除资源权限")
 	public @ResponseBody  String deleteauthorities(String[] checkdel){
 		String result="";
 		try{
@@ -149,6 +153,7 @@ public class AuthoritiesController
 	 * @return
 	 */
 	@RequestMapping(value="authorities_updStatus",method=RequestMethod.POST)
+	@SystemControllerLog(description = "更新资源权限状态")
 	public @ResponseBody  String updRoleStatus(String[] checkdel){
 		String result="";
 		try {

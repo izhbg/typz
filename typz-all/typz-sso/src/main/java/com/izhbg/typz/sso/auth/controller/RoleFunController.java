@@ -24,6 +24,7 @@ import com.izhbg.typz.base.page.Page;
 import com.izhbg.typz.base.util.Ajax;
 import com.izhbg.typz.base.util.Constants;
 import com.izhbg.typz.base.util.IdGenerator;
+import com.izhbg.typz.sso.annotation.SystemControllerLog;
 import com.izhbg.typz.sso.auth.UserAuthDTO;
 import com.izhbg.typz.sso.auth.dto.TXtGnjs;
 import com.izhbg.typz.sso.auth.dto.TXtGnjsZy;
@@ -186,6 +187,7 @@ public class RoleFunController {
 		return result;
 	}
 	@RequestMapping(value="addRoleFunc",method=RequestMethod.POST)
+	@SystemControllerLog(description = "角色授权功能")
 	public @ResponseBody String addRoleFunc(String jsDm,String[] checkdel,String[] isRead,String[] isCreate,String[] isUpdate,String[] isDelete,String[] isAll){
 		if(checkdel == null || checkdel.length < 1 
 				|| StringHelper.isEmpty(jsDm)){
@@ -212,6 +214,7 @@ public class RoleFunController {
 		return "sucess";
 	}
 	@RequestMapping(value="delRoleFunc",method=RequestMethod.POST)
+	@SystemControllerLog(description = "删除角色授权的功能")
 	public @ResponseBody  String delRoleFunc(String[] checkdel){
 		String result="";
 		try{
@@ -231,6 +234,7 @@ public class RoleFunController {
 		return result;
 	}
 	@RequestMapping(value="changState",method=RequestMethod.POST)
+	@SystemControllerLog(description = "修改角色功能权限")
 	public @ResponseBody  String changState(String categery,String uuid){
 		String result="";
 		try{
