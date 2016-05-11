@@ -349,7 +349,7 @@ public class FuncController {
 			}
 		}
 		tXtGnzyManager.save(func);
-		return "redirect:/fun/fun-list.izhbg?sjgnDm="+func.getSjgnDm()+"&appId="+appId;
+		return "redirect:/fun/fun_list.izhbg?sjgnDm="+func.getSjgnDm()+"&appId="+appId;
 	}
 	@SystemControllerLog(description = "更新功能节点")
 	@RequestMapping(value="updateFun",method=RequestMethod.POST)
@@ -362,7 +362,7 @@ public class FuncController {
 			return null;
 		}
 		tXtGnzyManager.update(func);
-		return "redirect:/fun/fun-list.izhbg?sjgnDm="+func.getSjgnDm()+"&appId="+appId+"&currentAppId="+currentAppId;
+		return "redirect:/fun/fun_list.izhbg?sjgnDm="+func.getSjgnDm()+"&appId="+appId+"&currentAppId="+currentAppId;
 		
 	}
 	

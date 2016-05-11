@@ -21,6 +21,7 @@ import com.izhbg.typz.base.util.CommonUtil;
 import com.izhbg.typz.base.util.IdGenerator;
 import com.izhbg.typz.base.util.StringUtils;
 import com.izhbg.typz.sso.annotation.SystemControllerLog;
+import com.izhbg.typz.sso.audit.component.AuditLogQueue;
 import com.izhbg.typz.sso.audit.dto.AuditLog;
 import com.izhbg.typz.sso.audit.manager.AuditLogManager;
 import com.izhbg.typz.sso.util.SpringContextWrapper;
@@ -36,7 +37,7 @@ public class SimpleLoginSuccessHandler implements AuthenticationSuccessHandler,I
       
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();  
       
-    private  AuditLogManager auditLogManager = (AuditLogManager) SpringContextWrapper.getBean("auditLogManager");
+    private  AuditLogQueue auditLogQueue = (AuditLogQueue) SpringContextWrapper.getBean("auditLogQueue");
       
     /* (non-Javadoc) 
      * @see org.springframework.security.web.authentication.AuthenticationSuccessHandler#onAuthenticationSuccess(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.springframework.security.core.Authentication) 
@@ -80,7 +81,7 @@ public class SimpleLoginSuccessHandler implements AuthenticationSuccessHandler,I
         log.setCreateDate(new Date());  
         log.setAppId(SpringSecurityUtils.getCurrentUserAppId());
         //保存数据库    
-        auditLogManager.save(log);   
+        auditLogQueue.add(log);   
         System.out.println("=====前置通知结束=====");   
     }
       

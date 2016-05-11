@@ -61,8 +61,10 @@
 				</div>
 			</div>
 			<div class="form-actions">
+				
 				<label class="checkbox">
-				<input id="_spring_security_remember_me" name="remember-me" type="checkbox"/> 记住
+					&nbsp;&nbsp;<input id="_spring_security_remember_me" name="remember-me" type="checkbox" style="margin-left: 0px;"/> 记住<br><br>
+					默认账户：yuewuxing/123456  test/123456
 				</label>
 				<button type="submit" class="btn blue pull-right">
 				<spring:message code='core.login.submit' text='提交'/>  <i class="m-icon-swapright m-icon-white"></i>

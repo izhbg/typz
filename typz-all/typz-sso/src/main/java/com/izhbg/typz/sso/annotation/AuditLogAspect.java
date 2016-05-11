@@ -18,7 +18,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.izhbg.typz.base.util.CommonUtil;
 import com.izhbg.typz.base.util.IdGenerator;
+import com.izhbg.typz.sso.audit.component.AuditLogQueue;
 import com.izhbg.typz.sso.audit.dto.AuditLog;
 import com.izhbg.typz.sso.audit.manager.AuditLogManager;
 import com.izhbg.typz.sso.util.SpringSecurityUtils;
@@ -34,7 +36,7 @@ import com.izhbg.typz.sso.util.SpringSecurityUtils;
 @Component
 public class AuditLogAspect
 {
-	 private  AuditLogManager auditLogManager;
+	 private  AuditLogQueue auditLogQueue;
 	//本地异常日志记录对象    
      private  static  final Logger logger = Logger.getLogger(AuditLogManager.class); 
      
@@ -53,7 +55,7 @@ public class AuditLogAspect
     	 HttpSession session = request.getSession();    
     	 //读取session中的用户    
     	 //请求的IP    
-    	 String ip = request.getRemoteAddr();
+    	 String ip = CommonUtil.getIpAddress(request);
     	//获取用户请求方法的参数并序列化为JSON格式字符串    
          String params = "";    
           if (joinPoint.getArgs() !=  null && joinPoint.getArgs().length > 0) {    
@@ -82,7 +84,7 @@ public class AuditLogAspect
 	        log.setCreateDate(new Date());    
 	        log.setAppId(SpringSecurityUtils.getCurrentUserAppId());
 	        //保存数据库    
-	        auditLogManager.save(log);   
+	        auditLogQueue.add(log);   
 	        System.out.println("=====前置通知结束=====");    
 	    }  catch (Exception e) {    
 	        //记录本地异常日志    
@@ -153,10 +155,11 @@ public class AuditLogAspect
 		return description;
 	}
 	@Resource
-	public void setAuditLogManager(AuditLogManager auditLogManager)
-	{
-		this.auditLogManager = auditLogManager;
-	} 
+	public void setAuditLogQueue(AuditLogQueue auditLogQueue) {
+		this.auditLogQueue = auditLogQueue;
+	}
+	
+	
 	
 	
 

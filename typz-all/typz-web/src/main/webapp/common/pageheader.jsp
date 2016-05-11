@@ -3,7 +3,7 @@
 <%@include file="/taglibs.jsp"%>
 	<ul class="page-breadcrumb breadcrumb breadcrumbs" style="margin-bottom: 0px;padding:10px 26px;border-bottom:1px solid #e1e1e1;-webkit-box-shadow:1px 0 3px #eee,inset 0 0 3px #fff;box-shadow:1px 0 3px #eee,inset 0 0 3px #fff;background-color: #fafafa;">  
 		<li>
-			<a href="#"  onclick="setMenuState4('2222','${ctx}/dashboard/dashboard.izhbg')" style="font-size: 20px;font-weight: 500;color: #d84c31;"><i class="fa fa-home"></i>首页</a> 
+			<a href="#"  onclick="setMenuState4('2222','${ctx}/main/common.izhbg')" style="font-size: 20px;font-weight: 500;color: #d84c31;"><i class="fa fa-home"></i>首页</a> 
 		</li>
 		<li>
 			<a href="#" style="font-size: 20px;font-weight: 500;color: #d84c31;">${sessionScope.currentTopMenuName}</a> 

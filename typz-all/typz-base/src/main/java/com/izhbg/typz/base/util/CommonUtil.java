@@ -30,7 +30,10 @@ public class CommonUtil
         }    
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {    
             ip = request.getHeader("HTTP_X_FORWARDED_FOR");    
-        }    
+        } 
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {    
+            ip = request.getHeader("X-real-ip");    
+        } 
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {    
             ip = request.getRemoteAddr();    
         }    
