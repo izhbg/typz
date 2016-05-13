@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>typz</artifactId>
+    <groupId>typz</groupId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>typz-database</artifactId>
+  <name>typz-database</name>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <dependencies>
+  
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <!-- import base -->
+  	<dependency>
+  		<groupId>typz</groupId>
+  		<artifactId>typz-base</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+ 	<!-- import flyway -->
+  	<dependency>
+  		<groupId>typz</groupId>
+  		<artifactId>typz-flyway</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<!-- import sso -->
+  	<dependency>
+  		<groupId>typz</groupId>
+  		<artifactId>typz-sso</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+    
+    
+    <!-- servlet -->
+     <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>${servlet.version}</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+</project>

@@ -50,5 +50,6 @@
   	<module>typz-web</module>
     <module>typz-sso</module>
     <module>typz-flyway</module>
+    <module>typz-database</module>
   </modules>
 </project>

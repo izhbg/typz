@@ -1,6 +1,14 @@
 package com.izhbg.typz.base.util;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+import com.izhbg.typz.base.commondto.TreeObject;
+
 
 /**
  * 
@@ -39,4 +47,31 @@ public class CommonUtil
         }    
         return ip;    
     }
+	/**
+	 * 拼凑树结构json
+	 * @param tlist
+	 * @param ischecked
+	 * @param pid
+	 * @return
+	 */
+	public static String getTreeJson(List<TreeObject> tlist) {
+		JSONObject one = new JSONObject();
+		one.put("id", "-1");
+		one.put("name", "节点数");
+		one.put("pId", "");
+		one.put("isParent", true);
+		one.put("nocheck", true);
+		one.put("open", true);
+		JSONObject node = null;
+		JSONArray jaTree = new JSONArray();
+		for(TreeObject resource:tlist){
+			node = new JSONObject();
+			node.put("id", resource.getId());
+			node.put("name", resource.getName());
+			node.put("pId", resource.getPid());
+			jaTree.add(node);
+		}
+		jaTree.add(one);
+		return jaTree.toString();
+	}
 }

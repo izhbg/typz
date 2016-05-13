@@ -30,6 +30,12 @@
   		<artifactId>typz-sso</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
+  	<!-- import database -->
+  	<dependency>
+  		<groupId>typz</groupId>
+  		<artifactId>typz-database</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
   	
   
   

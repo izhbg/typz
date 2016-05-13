@@ -23,5 +23,13 @@
 	<bean id="idGenerator" class="com.izhbg.typz.base.id.SnowFlakeIdGenerator">
 		<constructor-arg value="${node.id}"/>
 	</bean>
-
+    
+    <!-- selectData -->
+    <bean id="selectDataDao" class="com.izhbg.typz.database.sql.dao.imp.SelectDataDaoImpl">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<!-- baseDao -->
+	<bean id="baseDao" class="com.izhbg.typz.database.sql.dao.imp.BaseDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
 </beans>
