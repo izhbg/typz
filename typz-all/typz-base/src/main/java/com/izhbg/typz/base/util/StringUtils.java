@@ -78,4 +78,11 @@ public class StringUtils {
 
         return text;
     }
+    
+    public static String getString(Object obj){
+    	if(obj==null)
+    		return "";
+    	else
+    		return obj+"";
+    }
 }

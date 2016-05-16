@@ -103,10 +103,10 @@ function addHoverDom(treeId, treeNode) {
     if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
     
     var addStr = "<span class='button remove' id='removeBtn_" + treeNode.tId
-            + "' title='add node' onfocus='this.blur();'></span>";
+            + "' title='删除该节点' onfocus='this.blur();'></span>";
 
-    addStr += "<span class='button add' id='addBtn_" + treeNode.tId + "'></span>";
-    addStr += "<span class='button edit' id='editBtn_" + treeNode.tId + "'></span>";
+    addStr += "<span title='添加节点' class='button add' id='addBtn_" + treeNode.tId + "'></span>";
+    addStr += "<span class='button edit' title='编辑该节点' id='editBtn_" + treeNode.tId + "'></span>";
     sObj.after(addStr);
     
     var btn_add = $("#addBtn_"+treeNode.tId);

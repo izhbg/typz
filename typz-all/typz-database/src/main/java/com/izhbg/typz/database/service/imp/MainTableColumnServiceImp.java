@@ -1,5 +1,6 @@
 package com.izhbg.typz.database.service.imp;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,7 +93,17 @@ public class MainTableColumnServiceImp implements MainTableColumnService {
 			this.deleteByMainTableColumnId(mainTableColumn.getColumnid() + "");
 		}
 	}
-
+	@Override
+	public void deleteByMainTableColumnIds(String[] maintablecolumnids)
+			throws Exception {
+		if(maintablecolumnids==null)
+			throw new ServiceException("参数为空,批量删除列信息失败");
+		List<String> list = new ArrayList<String>();
+		for(String str:maintablecolumnids)
+			list.add(str);
+		List<MainTableColumn> mainTableColumns = mainTableColumnManager.findByIds(list);
+		mainTableColumnManager.removeAll(mainTableColumns);
+	}
 	@Override
 	public void add(MainTableColumn mainTableColumn) throws Exception {
 		if (mainTableColumn == null)
@@ -206,5 +217,4 @@ public class MainTableColumnServiceImp implements MainTableColumnService {
 	public void setBaseService(BaseService baseService) {
 		this.baseService = baseService;
 	}
-
 }
