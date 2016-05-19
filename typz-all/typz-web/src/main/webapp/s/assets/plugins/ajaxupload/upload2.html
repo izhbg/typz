@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>上传</title>
+<script type="text/javascript" src="jquery-1.7.min.js"></script>
+<script type="text/javascript" src="ajaxupload.3.6.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	new AjaxUpload('#upload_button1', {
+		action: '../../user/uploadUserImg2.action',
+		name: 'uploadFile',
+		data: {
+			para1: 'abc',
+			para2: '123'
+		},
+		autoSubmit: true,
+		responseType: 'xml',
+		onSubmit: function(filename, ext) {
+			if (!(ext && /^(jpg|png|jpeg|gif)$/.test(ext))) {
+				alert('未允许上传的文件格式!');
+				return false;
+			}
+		},
+		onComplete: function(filename, data) {
+		
+		//alert(data);
+		//var code = data.getElementsByTagName('code')[0].firstChild.data;
+		//var desc = data.getElementsByTagName('desc')[0].firstChild.data;
+		//alert(desc);
+		//alert(data.msg);
+		alert(filename);
+		}
+	});
+});
+
+</script>
+<style type="text/css">
+body { margin:0px; font-size:12px;}
+#upload_button1 { width:100px; height:50px; background-color:#CEE7FF; text-align:center; line-height:50px; cursor:pointer;}
+</style>
+</head>
+<body>
+<div id="upload_button1">上传附档</div>
+<a href="javascript:test()">上传附档</a>
+</body>
+</html>

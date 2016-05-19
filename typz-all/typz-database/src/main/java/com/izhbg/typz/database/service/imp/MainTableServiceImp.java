@@ -96,6 +96,13 @@ public class MainTableServiceImp implements MainTableService{
 		}
 		return maintable2;
 	}
+	@Override
+	public List<MainTable> findByMainTableName(String mainTableName)
+			throws Exception {
+		if(StringHelper.isEmpty(mainTableName))
+			throw new ServiceException("参数为空,获取主表失败");
+		return mainTableManager.findBy("tableName", mainTableName);
+	}
 	@Resource
 	public void setMainTableManager(MainTableManager mainTableManager) {
 		this.mainTableManager = mainTableManager;
@@ -113,9 +120,5 @@ public class MainTableServiceImp implements MainTableService{
 			throw new ServiceException("参数为空，获取主表失败");
 		return mainTableManager.findUniqueBy("tableid", Long.parseLong(maintableId));
 	}
-
-	
-	
-	
 
 }

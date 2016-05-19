@@ -75,7 +75,7 @@ public class MainTableDataServiceImp implements MainTableDataService{
 			viewpanel.setCname(mainTableColumn.getColumnCName());
 			viewpanel.setType(mainTableColumn.getPropertyType());
 			viewpanel.setMainTableColumn(mainTableColumn);
-			if (mainTableColumn.getPropertyType().equals("2") || mainTableColumn.getPropertyType().equals("4")) {
+			if (mainTableColumn.getPropertyType().equals("2") || mainTableColumn.getPropertyType().equals("4")||mainTableColumn.getPropertyType().equals("3")) {
 				List extlist = SqlUtil.getExtList(mainTableColumn, null);
 				viewpanel.setLists(extlist);
 			} else if (mainTableColumn.getPropertyType().equals("8")) {
@@ -132,7 +132,7 @@ public class MainTableDataServiceImp implements MainTableDataService{
 			querypanel.setCname(mainTableColumn.getColumnCName());
 			querypanel.setType(mainTableColumn.getPropertyType());
 			querypanel.setMainTableColumn(mainTableColumn);
-			if (mainTableColumn.getPropertyType().equals("2") || mainTableColumn.getPropertyType().equals("4")) {
+			if (mainTableColumn.getPropertyType().equals("2") || mainTableColumn.getPropertyType().equals("4")|| mainTableColumn.getPropertyType().equals("3")) {
 				extlist = SqlUtil.getExtList(mainTableColumn, null);
 				querypanel.setLists(extlist);
 			}
@@ -199,7 +199,7 @@ public class MainTableDataServiceImp implements MainTableDataService{
 			querypanel.setCname(mainTableColumn.getColumnCName());
 			querypanel.setType(mainTableColumn.getPropertyType());
 			querypanel.setMainTableColumn(mainTableColumn);
-			if (mainTableColumn.getPropertyType().equals("2") || mainTableColumn.getPropertyType().equals("4")) {
+			if (mainTableColumn.getPropertyType().equals("2") || mainTableColumn.getPropertyType().equals("4")|| mainTableColumn.getPropertyType().equals("3")) {
 				List extlist = SqlUtil.getExtList(mainTableColumn, null);
 				querypanel.setLists(extlist);
 			}
@@ -320,7 +320,7 @@ public class MainTableDataServiceImp implements MainTableDataService{
 			querypanel.setType(mainTableColumn.getPropertyType());
 			querypanel.setMainTableColumn(mainTableColumn);
 			//2--下拉列表，4--单选框
-			if (mainTableColumn.getPropertyType().equals("2") || mainTableColumn.getPropertyType().equals("4")) {
+			if (mainTableColumn.getPropertyType().equals("2") || mainTableColumn.getPropertyType().equals("4")|| mainTableColumn.getPropertyType().equals("3")) {
 				List extlist = SqlUtil.getExtList(mainTableColumn, null);
 				querypanel.setLists(extlist);
 			}

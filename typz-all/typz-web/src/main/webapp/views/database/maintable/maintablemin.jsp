@@ -114,7 +114,7 @@
 					<a 
 						href="${ctx}/maintable/maintable_detail.izhbg?maintableid=${item.tableid}" title="${item.tableCName}（${item.tableName}）">修改</a>|
 					<a 
-						href="${ctx}/maintabledata/maintabledata_pagelist.izhbg?tableName=${item.tableName}">预览</a>
+						href="${ctx}/maintabledata/maintabledata_pagelist.izhbg?tableName=${item.tableName}">预览表格</a>
 			        </td>
 			      </tr>
 			      </c:forEach>

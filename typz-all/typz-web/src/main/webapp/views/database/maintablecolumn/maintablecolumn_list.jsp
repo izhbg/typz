@@ -32,7 +32,7 @@
 			  <a href="javascript:location.href='${ctx}/maintablecolumn/edit_miantablecolumn.izhbg?maintableid=${maintable.tableid }'" class="btn btn-sm default"><i class="fa fa-plus-square"></i>新增</a> 
 			  <a href="javascript:location.href='${ctx}/maintablecolumn/load_miantablecolumn.izhbg?maintableid=${maintable.tableid }'" class="btn btn-sm default"><i class="fa fa-plus-square"></i>加载字段信息</a> 
 			  <a href="javascript:location.href='${ctx}/maintablecolumn/maintablecolumn_set.izhbg?maintableid=${maintable.tableid}'" class="btn btn-sm default"><i class="fa fa-plus-square"></i>设置字段的状态</a> 
-			  <a href="javascript:location.href='${ctx}/maintablechart/maintablechart_list.izhbg?maintableid=${maintable.tableid}'" class="btn btn-sm default"><i class="fa fa-plus-square"></i>设置图形报表</a> 
+			  <%-- <a href="javascript:location.href='${ctx}/maintablechart/maintablechart_list.izhbg?maintableid=${maintable.tableid}'" class="btn btn-sm default"><i class="fa fa-plus-square"></i>设置图形报表</a> --%> 
 			  <a class="btn default btn-sm" href="javascript:location.href='${ctx}/maintable/maintable_list.izhbg'" ><i class="m-icon-swapdown m-icon-blank"></i>返回</a>
 			</div>
 			<!-- Table -->

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.izhbg.typz.base.common.service.ControllerException;
 import com.izhbg.typz.database.dto.MainTable;
 import com.izhbg.typz.database.dto.MainTableChart;
 import com.izhbg.typz.database.dto.MainTableColumn;
@@ -71,6 +72,20 @@ public class MainTableChartController {
 										@RequestParam("maintableid") String maintableid) throws Exception {
 		mainTableChartService.delete(chartid);
 		return "redirect:/maintablechart/maintablechart_list.izhbg?maintableid="+maintableid;
+	}
+	
+	public String query_chart(@RequestParam("tableName") String tableName,
+							  @RequestParam("chartType") String chartType)throws Exception{
+		List<MainTable> mainTables = mainTableService.findByMainTableName(tableName);
+		if(mainTables==null||mainTables.size()>0)
+			throw new ControllerException("主表配置异常，请重新配置");
+		MainTable mainTable = mainTables.get(0);
+		List<MainTableChart> listchart = mainTableChartService.findByMainTableId(mainTable.getTableid()+"");
+		if(listchart==null||listchart.size()==0)
+			throw new ControllerException("图表报表未配置，请配置");
+		//chartType :1 线性 2 柱状  3饼图
+		
+		return "";
 	}
 	@Resource
 	public void setMainTableService(MainTableService mainTableService) {
