@@ -71,7 +71,7 @@ public class FuncController {
 	 */
 	@RequestMapping("fun_list")
 	 public String list(@ModelAttribute  Page page,
-	            @RequestParam Map<String, Object> parameterMap, Model model) {
+	            @RequestParam Map<String, Object> parameterMap, Model model)throws Exception {
 		
 		gnDm= parameterMap.get("gnDm")==null?"":parameterMap.get("gnDm").toString();
 		gnMc= parameterMap.get("gnMc")==null?"":parameterMap.get("gnMc").toString();
@@ -85,7 +85,7 @@ public class FuncController {
 		String hql = "select a.yhId from TXtYh a,TXtGnjs b,TXtYhGnjs c where a.yhId=c.yhId and c.jsDm=b.gnjsDm and a.yhId=? and b.jgId='2'";
 		List<String> list22 = tXtYhManager.find(hql, SpringSecurityUtils.getCurrentUserId());
 		if(list22!=null&&list22.size()>0){
-			tXtYyList = tXtYyService.getSystems();
+			tXtYyList = tXtYyService.queryAll();
 		}else{
 			TXtYy txtyy = tXtYyService.getSystem(currentYh.getAppId());
 			if(txtyy!=null){
@@ -476,8 +476,8 @@ public class FuncController {
 		if(StringHelper.isNotEmpty(currentAppId))
 			sb.append(" and (a.appId = :appId or a.gnLx=2) ");
 		
-	/*	else
-			sb.append(" order by a.gnDm ");*/
+		else
+			sb.append(" order by a.gnDm ");
 		return sb.toString();
 	}
 	

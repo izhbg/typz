@@ -33,7 +33,9 @@ label { cursor:auto}
 /**form样式*/
 .panel-body{background-color: white;}
 .form-body{max-width: 900px;margin: 0 auto;padding-top: 50px;padding-bottom: 30px;}
-.myform-group{border-bottom: 1px solid #eeecec;}
-.myform-label{float: left;margin: 7px 0;padding: 7px 10px;min-height: 36px;width: 130px;box-sizing:border-box;font-size: 14px;border-right: 1px solid #efefef;color: #9da1c4;}
+.form-group{padding-bottom: 7px;}
+.myform-group,.form-group{border-bottom: 1px solid #eeecec;}
+.myform-label{width: 130px;}
+.myform-label,.control-label{float: left;margin: 7px 0;padding: 7px 10px;min-height: 36px;box-sizing:border-box;font-size: 14px;border-right: 1px solid #efefef;color: #9da1c4;}
 .myform-input{float: left;width: 750px;box-sizing:border-box;font-size: 14px;min-height: 50px;display: block;padding:7px 7px 0;}
-.form-control{border: 1px solid #d5d5d5;box-shadow:inset 0 1px 2px rgba(0,0,0,.1)}
+.form-control{border: 1px solid #d5d5d5;}

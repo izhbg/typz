@@ -43,7 +43,6 @@
 </body>
 </html>
 <script>
-//$(window).resize(div_user);
 var user_setting = {
 		data : {
 			simpleData : {
