@@ -57,7 +57,7 @@ public class CommonUtil
 	public static String getTreeJson(List<TreeObject> tlist) {
 		JSONObject one = new JSONObject();
 		one.put("id", "-1");
-		one.put("name", "节点数");
+		one.put("name", "节点树");
 		one.put("pId", "");
 		one.put("isParent", true);
 		one.put("nocheck", true);
