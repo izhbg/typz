@@ -49,7 +49,7 @@ public class UserRolesController {
 	
 	@RequestMapping("user-role-list")
 	 public String list(@ModelAttribute  Page page,
-	            @RequestParam Map<String, Object> parameterMap, Model model) {
+	            @RequestParam Map<String, Object> parameterMap, Model model) throws Exception{
 		yhId = parameterMap.get("yhId")==null?"":parameterMap.get("yhId").toString();
 		code = parameterMap.get("code")==null?"":parameterMap.get("code").toString();
 		gnjsMc = parameterMap.get("gnjsMc")==null?"":parameterMap.get("gnjsMc").toString();
@@ -83,18 +83,7 @@ public class UserRolesController {
 		page.setResult(listYh);
 		
 		
-		String result = "[]";
-		if(StringHelper.isNotEmpty(yhId)){
-			try {
-				JSONObject jo = tXtJgService.getRootGUserRole();
-				JSONArray ja = tXtGnjsService.getSubGUserRole(yhId, user.getAppId());
-				ja.add(jo);
-				result = ja.toString();
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		String result = tXtJgService.getJgsJSON(currentAppId);
 		model.addAttribute("page", page);
 		model.addAttribute("result", result);
 		model.addAttribute("user", user);

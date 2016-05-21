@@ -1,4 +1,4 @@
-package com.izhbg.typz.sso.auth.controller;
+/*package com.izhbg.typz.sso.auth.controller;
 
 import java.util.List;
 import java.util.Map;
@@ -60,8 +60,8 @@ public class ProfileController {
             txtYhManager.update(dest);
             //userService.updateUser(dest, userRepoId, parameters);
         } 
-      /*  messageHelper.addFlashMessage(null, "core.success.save",
-                "保存成功");*/
+        messageHelper.addFlashMessage(null, "core.success.save",
+                "保存成功");
 
         return "redirect:/user/profile-list.izhbg";
     }
@@ -162,3 +162,4 @@ public class ProfileController {
 	}
     
 }
+*/

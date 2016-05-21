@@ -45,7 +45,7 @@ public class RoleFunController {
 	private TXtGnzyManager tXtGnzyManager;
 	private TXtGnzyService tXtGnzyService;
 	
-	@RequestMapping("roleFun-list")
+	@RequestMapping("roleFun_list")
 	 public String list(@ModelAttribute  Page page,
 	            @RequestParam Map<String, Object> parameterMap, Model model) {
 		
@@ -108,7 +108,7 @@ public class RoleFunController {
 		model.addAttribute("page", page);
 		model.addAttribute("parameterMap", parameterMap);
 		
-		return "admin/role/dirrolefunc";
+		return "admin/role/roleFun_list";
 	}
 	@RequestMapping("roleDoc-edit")
 	 public String roleDocEdit(@RequestParam Map<String, Object> parameterMap, Model model) {

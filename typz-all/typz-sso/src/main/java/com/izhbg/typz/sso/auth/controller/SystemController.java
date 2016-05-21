@@ -1,4 +1,4 @@
-package com.izhbg.typz.sso.auth.controller;
+/*package com.izhbg.typz.sso.auth.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -250,3 +250,4 @@ public class SystemController {
 	
 	
 }
+*/
