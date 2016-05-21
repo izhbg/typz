@@ -1,4 +1,4 @@
-package com.izhbg.typz.sso.auth.controller;
+/*package com.izhbg.typz.sso.auth.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -309,3 +309,4 @@ public class RoleFunController {
 	
 
 }
+*/
