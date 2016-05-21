@@ -55,4 +55,11 @@ public interface MainTableService {
 	 * @throws Exception
 	 */
 	public MainTable copy(String targetId,String formname) throws Exception;
+	/**
+	 * 根据mainTableName获取miantable
+	 * @param mainTableName
+	 * @return
+	 * @throws Exception
+	 */
+	public List<MainTable> findByMainTableName(String mainTableName) throws Exception;
 }

@@ -35,6 +35,12 @@ public interface MainTableColumnService {
 	 */
 	public void deleteByMainTableId(String mainTableId) throws Exception;
 	/**
+	 * 批量删除列信息
+	 * @param maintablecolumnids
+	 * @throws Exception
+	 */
+	public void deleteByMainTableColumnIds(String[] maintablecolumnids) throws Exception;
+	/**
 	 * 加载主表列信息
 	 * @param mainTableId
 	 * @throws Exception
