@@ -134,7 +134,7 @@
 							<td nowrap>
 									<a href="${ctx }/role/role-edit.izhbg?gnjsDm=${item.gnjsDm }&currentAppId=${parameterMap.appId}">编辑</a>
 								&nbsp; 
-									<a href="${ctx }/rolFun/roleFun-list.izhbg?jsDm=${item.gnjsDm }&currentAppId=${parameterMap.appId}" title="授权功能">授权功能</a>
+									<a href="${ctx }/rolFun/roleFun_list.izhbg?jsDm=${item.gnjsDm }&currentAppId=${parameterMap.appId}" title="授权功能">授权功能</a>
 								&nbsp;
 									<a href="${ctx }/role_authorities/role_authorities_list.izhbg?jsDm=${item.gnjsDm }&currentAppId=${parameterMap.appId}" title="资源权限">资源权限</a>
 							</td>
@@ -208,9 +208,16 @@ $(function() {
 
 function deleteInfo(){
 	var pars = $("#form1").serialize()+"&"+$("input:checkbox[name=checkdel]:checked").serialize();
-		$.post("${ctx }/role/deleteRole.izhbg", pars, function(data){
-			$("#form1").submit();
-		},"json");
+	$.ajax({
+		type: "POST",
+	    url: "${ctx }/role/deleteRole.izhbg",
+	    data: pars,
+	    dataType:"html",
+		cache: false,
+		success: function(data){
+	    	$("#form1").submit();
+		}
+		});
 }
 function changeUserState(){
 	$.ajax({

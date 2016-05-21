@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.map.ListOrderedMap;
+import org.hibernate.annotations.common.util.StringHelper;
 
 import com.izhbg.typz.base.util.DateUtil;
 import com.izhbg.typz.base.util.PropertiesCommonUtil;
@@ -428,7 +429,6 @@ public class SqlUtil {
 								selectsql += "and tables." + qp.getName()
 										+ " like '%" + qp.getValue() + "%'";
 							}
-							// selectsql+="and tables."+qp.getName()+" like '%"+qp.getValue()+"%'";
 						}
 					}
 				}
@@ -668,22 +668,14 @@ public class SqlUtil {
 		} else if (databasetype.indexOf("sqlserver") >= 0) {
 			sql = getServerSql(viewList, queryList, maintable);
 		}
-		UserAuthDTO user = (UserAuthDTO) SpringSecurityUtils.getCurrentUser();
-		sql = sql.replaceAll("@CurrentUserName",
-				SpringSecurityUtils.getCurrentUsername());
-		sql = sql.replaceAll("@CurrentUserId",
-				SpringSecurityUtils.getCurrentUserId());
-		sql = sql.replaceAll("@CurrentAppId", user.getAppId());
-		sql = sql.replaceAll("@CurrentDepId", user.getDepId());
-		sql = sql.replaceAll("@CurrentDepName", user.getDepName());
 		return sql;
 	}
 
-	public static List getExtList(MainTableColumn maintablecolumn, String value)
+	public static List<Map<String,Object>> getExtList(MainTableColumn maintablecolumn, String value)
 			throws Exception {
 		SelectDataService selectDataService = (SelectDataService) SpringContextWrapper
 				.getBean("selectDataService");
-		List list = null;
+		List<Map<String,Object>> list = null;
 		if (maintablecolumn.getPropertyType().equals("8")) {
 			if (value != null) {
 				String[] ids = value.split(",");
@@ -695,9 +687,9 @@ public class SqlUtil {
 					sql = sqls[0];
 					sql = "select * from (" + sql + ") tables where tables."
 							+ "id='" + id + "'";
-					List list1 = selectDataService.getData(sql);
+					List<Map<String,Object>> list1 = selectDataService.getData(sql);
 					if (list1 != null && list1.size() > 0) {
-						Map map = (Map) list1.get(0);
+						Map<String,Object> map =  list1.get(0);
 						rid += map.get("id") + ",";
 						rname += map.get("name") + ",";
 					}
@@ -710,8 +702,8 @@ public class SqlUtil {
 						&& rname.length() == rname.lastIndexOf(",") + 1) {
 					rname = rname.substring(0, rname.length() - 1);
 				}
-				list = new ArrayList();
-				Map rmap = new HashMap();
+				list = new ArrayList<Map<String,Object>>();
+				Map<String,Object> rmap = new HashMap<String,Object>();
 				rmap.put("id", rid);
 				rmap.put("name", rname);
 				list.add(rmap);
@@ -724,11 +716,11 @@ public class SqlUtil {
 				String sql = maintablecolumn.getTypeSql();
 				sql = sql.substring(1, sql.length());
 				String[] sqls = sql.split(",");
-				list = new ArrayList();
+				list = new ArrayList<Map<String,Object>>();
 				if (sqls[0].length() > 0) {
 					for (String subsql : sqls) {
 						String[] sql1 = subsql.split(":");
-						Map map = new HashMap();
+						Map<String,Object> map = new HashMap<String,Object>();
 						map.put("id", sql1[0]);
 						map.put("name", sql1[1]);
 						list.add(map);
@@ -737,16 +729,11 @@ public class SqlUtil {
 
 			} else {
 				String sql = maintablecolumn.getTypeSql();
-				UserAuthDTO user = (UserAuthDTO) SpringSecurityUtils
-						.getCurrentUser();
-				sql = sql.replaceAll("@CurrentUserName",
-						SpringSecurityUtils.getCurrentUsername());
-				sql = sql.replaceAll("@CurrentUserId",
-						SpringSecurityUtils.getCurrentUserId());
-				sql = sql.replaceAll("@CurrentAppId", user.getAppId());
-				sql = sql.replaceAll("@CurrentDepId", user.getDepId());
-				sql = sql.replaceAll("@CurrentDepName", user.getDepName());
-				list = selectDataService.getData(sql);
+				if(StringHelper.isNotEmpty(sql))
+				{
+					sql=filterAuth(sql);
+					list = selectDataService.getData(sql);
+				}
 			}
 		}
 
@@ -1501,6 +1488,20 @@ public class SqlUtil {
 		} else if (databasetype.indexOf("sqlserver") >= 0) {
 			sql = getServerSql(viewList, queryList, maintable);
 		}
+		return sql;
+	}
+	/**
+	 * 过滤 sql中的的权限
+	 * @param sql
+	 * @return
+	 */
+	public static String filterAuth(String sql){
+		UserAuthDTO user = (UserAuthDTO)SpringSecurityUtils.getCurrentUser();
+		sql = sql.replaceAll("@CurrentUserName", SpringSecurityUtils.getCurrentUsername());
+		sql = sql.replaceAll("@CurrentUserId", SpringSecurityUtils.getCurrentUserId());
+		sql = sql.replaceAll("@CurrentAppId", user.getAppId());
+		sql = sql.replaceAll("@CurrentDepId", user.getDepId());
+		sql = sql.replaceAll("@CurrentDepName", user.getDepName());
 		return sql;
 	}
 }

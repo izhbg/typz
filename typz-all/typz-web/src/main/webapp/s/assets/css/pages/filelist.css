@@ -1,0 +1,20 @@
+.mod_files{list-style:none;margin-bottom: 10px;padding: 0px;}
+.mod_files li{padding: 5px 0 5px 40px;display: list-item;text-align: -webkit-match-parent;}
+.mod_files li .mod_att{float: left;margin-left: -40px;height: 36px;line-height: 36px;}
+.mod_files li .mod_att i{font-size: 36px;}
+.mod_att .att_img{color: #ffba01;}
+.mod_att .att_csv, .mod_att .att_doc, .mod_att .att_img, .mod_att .att_mm, .mod_att .att_none, .mod_att .att_pdf, .mod_att .att_ppt, .mod_att .att_rar, .mod_att .att_txt, .mod_att .att_xls, .mod_att .att_xmind{
+	text-align: center;
+	font-weight:400!important;
+	text-decoration:none!important;
+	-webkit-text-stroke-width:.22px;
+	position: relative;
+	top: 0;
+}
+.mod_files li .title{display: inline-block;}
+.mod_files li .title .del{float: right;margin: 4px 0 0 20px;font-size: 12px;color: #9f9f9f;cursor: pointer;}
+.mod_files li .title .del i{text-align:center;font-weight:400!important;text-decoration:none!important;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;-webkit-text-stroke-width:.22px;position:relative;font-family:hbicon;color:#9f9f9f}
+.mod_files li .title .del em{margin-left: 3px;font-style: normal;}
+.mod_files li .info{font-size:12px;color:#9f9f9f}
+.mod_files li .info em,.mod_files li .info span{margin-right:5px}
+.mod_att i{margin-top: 13px;}

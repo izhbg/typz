@@ -7,7 +7,7 @@
 <!--  字体 -->
 <link href="${ctx}/s/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
 <!-- 全局-->
-<link href="${ctx}/s/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="${ctx}/s/assets/plugins/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"/>
 <link href="${ctx}/s/assets/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
 <link href="${ctx}/s/assets/css/style-metronic.css" rel="stylesheet" type="text/css"/>
 <link href="${ctx}/s/assets/css/style.css" rel="stylesheet" type="text/css"/>

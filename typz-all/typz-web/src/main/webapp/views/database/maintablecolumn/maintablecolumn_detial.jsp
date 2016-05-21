@@ -121,21 +121,21 @@
 									         <option value="2" <c:if test="${maintablecolumn.propertyType eq 2 }">selected</c:if> >下拉列表</option>
 									         <option value="3" <c:if test="${maintablecolumn.propertyType eq 3 }">selected</c:if> >复选框</option>
 									         <option value="4" <c:if test="${maintablecolumn.propertyType eq 4 }">selected</c:if> >单选框</option>
-									         <option value="5" <c:if test="${maintablecolumn.propertyType eq 5 }">selected</c:if> >时间(yyyy-mm-dd hh:mi:ss)</option>
+									        <%--  <option value="5" <c:if test="${maintablecolumn.propertyType eq 5 }">selected</c:if> >时间(yyyy-mm-dd hh:mi:ss)</option> --%>
 									         <option value="10" <c:if test="${maintablecolumn.propertyType eq 10 }">selected</c:if> >日期(yyyy-mm-dd)</option>
-									         <option value="17" <c:if test="${maintablecolumn.propertyType eq 17 }">selected</c:if> >时间(hh:mi)</option>
+									       <%--   <option value="17" <c:if test="${maintablecolumn.propertyType eq 17 }">selected</c:if> >时间(hh:mi)</option>
 									         <option value="18" <c:if test="${maintablecolumn.propertyType eq 18 }">selected</c:if> >月份(yyyy-mm)</option>
-									         <option value="19" <c:if test="${maintablecolumn.propertyType eq 19 }">selected</c:if> >年(yyyy)</option>
+									         <option value="19" <c:if test="${maintablecolumn.propertyType eq 19 }">selected</c:if> >年(yyyy)</option> --%>
 									         <option value="6" <c:if test="${maintablecolumn.propertyType eq 6 }">selected</c:if> >隐藏域</option>
-									         <option value="7" <c:if test="${maintablecolumn.propertyType eq 7 }">selected</c:if> >扩展字段</option>
-									         <option value="8" <c:if test="${maintablecolumn.propertyType eq 8 }">selected</c:if> >弹出选择</option>
+									        <%--  <option value="7" <c:if test="${maintablecolumn.propertyType eq 7 }">selected</c:if> >扩展字段</option> --%>
+									        <%--  <option value="8" <c:if test="${maintablecolumn.propertyType eq 8 }">selected</c:if> >弹出选择</option> --%>
 									         <option value="9" <c:if test="${maintablecolumn.propertyType eq 9 }">selected</c:if> >文本域</option>
 									         <option value="11" <c:if test="${maintablecolumn.propertyType eq 11 }">selected</c:if> >密码</option>
 									         <option value="12" <c:if test="${maintablecolumn.propertyType eq 12 }">selected</c:if> >文件上传</option>
-											<option value="13" <c:if test="${maintablecolumn.propertyType eq 13 }">selected</c:if> >iframe</option>
-											<option value="14" <c:if test="${maintablecolumn.propertyType eq 14 }">selected</c:if> >属性列表</option>
-											<option value="15" <c:if test="${maintablecolumn.propertyType eq 15 }">selected</c:if> >UEeditor</option>
-											<option value="16" <c:if test="${maintablecolumn.propertyType eq 16 }">selected</c:if> >地区选择</option>
+											<%-- <option value="13" <c:if test="${maintablecolumn.propertyType eq 13 }">selected</c:if> >iframe</option>
+											<option value="14" <c:if test="${maintablecolumn.propertyType eq 14 }">selected</c:if> >属性列表</option> --%>
+											<option value="15" <c:if test="${maintablecolumn.propertyType eq 15 }">selected</c:if> >富文本</option>
+											<%-- <option value="16" <c:if test="${maintablecolumn.propertyType eq 16 }">selected</c:if> >地区选择</option> --%>
 									      	 </select> 
 										</div>
 									</div>
