@@ -22,6 +22,24 @@ import com.izhbg.typz.sso.auth.manager.TXtYyManager;
 *
  */
 public interface TXtYyService {
+    	/**
+    	 * 添加应用信息
+    	 * @param tXtYy
+    	 * @throws Exception
+    	 */
+    	public void add(TXtYy tXtYy) throws Exception;
+    	/**
+    	 * 更新应用信息
+    	 * @param tXtYy
+    	 * @throws Exception
+    	 */
+    	public void update(TXtYy tXtYy) throws Exception;
+    	/**
+    	 * 批量删除
+    	 * @param ids
+    	 * @throws Exception
+    	 */
+    	public void deleteByIds(String[] ids) throws Exception;
 	/**
 	 * 获取当前应用信息
 	 * @param appId
@@ -35,4 +53,28 @@ public interface TXtYyService {
 	 * @throws Exception
 	 */
 	public List<TXtYy> queryAll() throws Exception;
+	/**
+	 * 根据code获取
+	 * @param code
+	 * @return
+	 * @throws Exception
+	 */
+	public TXtYy getByCode(String code) throws Exception;
+	/**
+	 * 分页查询
+	 * @param page
+	 * @param code
+	 * @param appName
+	 * @param classification
+	 * @return
+	 */
+	public  Page page(Page page, String code, String appName, String classification);
+	/**
+	 * 更新状态
+	 * @param ids
+	 * @param defaultPas
+	 * @throws Exception
+	 */
+	public void updateStatus(String[] ids,String defaultPas,String type)throws Exception;
+	
 }

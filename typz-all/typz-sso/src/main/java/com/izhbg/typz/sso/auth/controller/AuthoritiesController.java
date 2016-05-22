@@ -25,6 +25,7 @@ import com.izhbg.typz.sso.auth.dto.TXtAuthorities;
 import com.izhbg.typz.sso.auth.dto.TXtYh;
 import com.izhbg.typz.sso.auth.manager.TXtAuthoritiesManager;
 import com.izhbg.typz.sso.auth.manager.TXtYhManager;
+import com.izhbg.typz.sso.auth.service.AuthoritiesService;
 import com.izhbg.typz.sso.util.SpringSecurityUtils;
 import com.mysql.jdbc.Messages;
 
@@ -40,10 +41,8 @@ import com.mysql.jdbc.Messages;
 @RequestMapping("/authorities")
 public class AuthoritiesController
 {
-	private TXtYhManager tXtYhManager;
 	
-	private TXtAuthoritiesManager tXtAuthoritiesManager;
-	
+    private AuthoritiesService authoritiesService;
 	/**
 	 * 权限列表
 	 * @param page
@@ -53,18 +52,9 @@ public class AuthoritiesController
 	 */
 	@RequestMapping("authorities_list")
 	 public String list(@ModelAttribute  Page page,
-	            @RequestParam Map<String, Object> parameterMap, Model model) {
-		
+	            @RequestParam Map<String, Object> parameterMap, Model model) throws Exception {
 		String appId = SpringSecurityUtils.getCurrentUserAppId();
-		
-		StringBuffer str = new StringBuffer(" from TXtAuthorities where appId=:appId");
-		
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("appId", appId);
-		
-		page = tXtAuthoritiesManager.pagedQuery(str.toString(), page.getPageNo(), page.getPageSize(), params);
-		
-		model.addAttribute("page", page);
+		model.addAttribute("page", authoritiesService.queryPageList(page, appId));
 		model.addAttribute("parameterMap", parameterMap);
 		return "admin/authorities/authorities_list";
 	}
@@ -84,7 +74,7 @@ public class AuthoritiesController
 			
 			TXtAuthorities tXtAuthorities = null;
 			if(StringHelper.isNotEmpty(authorityId)){
-				tXtAuthorities = tXtAuthoritiesManager.findUniqueBy("authorityId", authorityId);
+				tXtAuthorities = authoritiesService.queryById(authorityId);
 			}else{
 				tXtAuthorities = new TXtAuthorities();
 			}
@@ -104,7 +94,7 @@ public class AuthoritiesController
 	 */
 	@RequestMapping(value="authorities_addORupdate",method=RequestMethod.POST)
 	@SystemControllerLog(description = "添加或更新资源权限")
-	public String addRole(TXtAuthorities tXtauthorities, Model model){
+	public String addRole(TXtAuthorities tXtauthorities, Model model) throws Exception{
 		
 		if(StringHelper.isEmpty(tXtauthorities.getAuthorityName())
 				||StringHelper.isEmpty(tXtauthorities.getAuthorityDesc())){
@@ -114,10 +104,10 @@ public class AuthoritiesController
 		if(StringHelper.isEmpty(tXtauthorities.getAuthorityId())){
 			tXtauthorities.setAuthorityId(IdGenerator.getInstance().getUniqTime()+"");
 			tXtauthorities.setAppId(SpringSecurityUtils.getCurrentUserAppId());
-			tXtAuthoritiesManager.save(tXtauthorities);
+			authoritiesService.add(tXtauthorities);
 		}else{
 			tXtauthorities.setAppId(SpringSecurityUtils.getCurrentUserAppId());
-			tXtAuthoritiesManager.update(tXtauthorities);
+			authoritiesService.update(tXtauthorities);
 		}
 		
 		return "redirect:/authorities/authorities_list.izhbg";
@@ -129,22 +119,13 @@ public class AuthoritiesController
 	 */
 	@RequestMapping(value="authorities_dell",method=RequestMethod.POST)
 	@SystemControllerLog(description = "删除资源权限")
-	public @ResponseBody  String deleteauthorities(String[] checkdel){
+	public @ResponseBody  String deleteauthorities(String[] checkdel) throws Exception{
 		String result="";
-		try{
-			if(checkdel == null || checkdel.length < 1){
-				result = Ajax.JSONResult(Constants.RESULT_CODE_ERROR, Messages.getString("systemMsg.fieldEmpty"));	
-			}
-			List<String> lst = new ArrayList<String>();
-			for(String s : checkdel) 
-				lst.add(s);
-			List<TXtAuthorities> items = tXtAuthoritiesManager.findByIds(lst);
-			
-			for(Object o : items)
-				tXtAuthoritiesManager.remove(o);
-			result = "sucess";
-		} catch (Exception ex) {
+		if(checkdel == null || checkdel.length < 1){
+			result = Ajax.JSONResult(Constants.RESULT_CODE_ERROR, Messages.getString("systemMsg.fieldEmpty"));	
 		}
+		authoritiesService.deleteByIds(checkdel);
+		result = "sucess";
 		return result;
 	}
 	/**
@@ -161,19 +142,7 @@ public class AuthoritiesController
 			if (checkdel == null || checkdel.length < 1) {
 				result = Ajax.JSONResult(Constants.RESULT_CODE_ERROR, Messages.getString("systemMsg.fieldEmpty"));
 			}
-			List lst = new ArrayList();
-			for(String s : checkdel) 
-				lst.add(s);
-			List<TXtAuthorities> itemLst = (List<TXtAuthorities>)tXtAuthoritiesManager.findByIds(lst); 
-			
-			for(TXtAuthorities item : itemLst ){
-				if(item.getEnabled()!=null&&item.getEnabled()==2){
-					item.setEnabled(1);
-				}else{
-					item.setEnabled(2);
-				}
-				tXtAuthoritiesManager.update(item);
-			}
+			authoritiesService.updateStatus(checkdel);
 			result = "sucess";
 		} catch (Exception ex) {
 			
@@ -181,17 +150,11 @@ public class AuthoritiesController
 		
 		return result;
 	}
+	@Resource
+	public void setAuthoritiesService(AuthoritiesService authoritiesService) {
+	    this.authoritiesService = authoritiesService;
+	}
 	
-	@Resource	
-	public void settXtYhManager(TXtYhManager tXtYhManager)
-	{
-		this.tXtYhManager = tXtYhManager;
-	}
-	@Resource	
-	public void settXtauthoritiesManager(TXtAuthoritiesManager tXtauthoritiesManager)
-	{
-		this.tXtAuthoritiesManager = tXtauthoritiesManager;
-	}
 	
 	
 

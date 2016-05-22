@@ -278,6 +278,16 @@ public class TXtGnzyServiceImp implements TXtGnzyService {
     public void settXtGnjsZyManager(TXtGnjsZyManager tXtGnjsZyManager) {
         this.tXtGnjsZyManager = tXtGnjsZyManager;
     }
+
+    @Override
+    public String getRootGnjsDm(String appId) throws Exception {
+	List<String> list2 = tXtGnzyManager.find("select a.gnDm from TXtGnzy a where a.appId=? and a.sjgnDm='-1'", appId);
+	String root = "";
+	if(list2!=null&&list2.size()>0){
+		root = list2.get(0);
+	}
+	return root;
+    }
     
     
 }

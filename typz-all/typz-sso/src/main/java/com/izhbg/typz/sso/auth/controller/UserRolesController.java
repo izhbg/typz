@@ -27,164 +27,85 @@ import com.izhbg.typz.sso.annotation.SystemControllerLog;
 import com.izhbg.typz.sso.auth.dto.TXtGnjs;
 import com.izhbg.typz.sso.auth.dto.TXtYh;
 import com.izhbg.typz.sso.auth.dto.TXtYhGnjs;
+import com.izhbg.typz.sso.auth.dto.UserRoleQuery;
 import com.izhbg.typz.sso.auth.manager.TXtGnjsManager;
 import com.izhbg.typz.sso.auth.manager.TXtYhGnjsManager;
 import com.izhbg.typz.sso.auth.manager.TXtYhManager;
 import com.izhbg.typz.sso.auth.service.TXtGnjsService;
 import com.izhbg.typz.sso.auth.service.TXtJgService;
+import com.izhbg.typz.sso.auth.service.TXtYhService;
+import com.izhbg.typz.sso.auth.service.UserRolesService;
+import com.izhbg.typz.sso.util.SpringSecurityUtils;
 import com.mysql.jdbc.Messages;
 
 @Controller
 @RequestMapping("/user-role")
 public class UserRolesController {
-	private String yhId,code,gnjsMc,jgId,yyId = Constants.APP_DEFAULT;
-	
-	private TXtYhManager xtYhManager;
-	private TXtGnjsManager xtGnjsManager;
-	private TXtYhGnjsManager xtYhGnjsManager;
 	private TXtJgService tXtJgService;
 	private TXtGnjsService tXtGnjsService;
+	private UserRolesService userRolesService;
+	private TXtYhService tXtYhService;
 	
 	
 	
 	@RequestMapping("user-role-list")
 	 public String list(@ModelAttribute  Page page,
-	            @RequestParam Map<String, Object> parameterMap, Model model) throws Exception{
-		yhId = parameterMap.get("yhId")==null?"":parameterMap.get("yhId").toString();
-		code = parameterMap.get("code")==null?"":parameterMap.get("code").toString();
-		gnjsMc = parameterMap.get("gnjsMc")==null?"":parameterMap.get("gnjsMc").toString();
-		yyId = parameterMap.get("yyId")==null?Constants.APP_DEFAULT:parameterMap.get("yyId").toString();
-		jgId = parameterMap.get("jgId")==null?"":parameterMap.get("jgId").toString();
-		String currentAppId = parameterMap.get("currentAppId")==null?"":parameterMap.get("currentAppId").toString();
-		
-		TXtYh user = null;
-		if(StringHelper.isNotEmpty(yhId))
-			user = xtYhManager.findUniqueBy("yhId", yhId);//QueryCache.get(TXtYh.class, yhId);
-		StringBuffer sb = new StringBuffer("select a.uuid from TXtYhGnjs a ,TXtGnjs b where a.jsDm=b.gnjsDm  ");
-		sb.append(getWhere());
-		sb.append(getOrder(page));
-		
-		page = xtYhGnjsManager.pagedQuery(sb.toString(), page.getPageNo(), page.getPageSize(), setWhere());
-		
-		List<String> list = (List)page.getResult();
-		List<TXtYhGnjs> listYh=null;
-		try {
-			if(list!=null&&list.size()>0)
-				listYh = xtYhGnjsManager.findByIds(list);
-			if(listYh!=null)
-			for(TXtYhGnjs o : listYh) {
-				TXtGnjs gnjs = xtGnjsManager.findUniqueBy("gnjsDm", o.getJsDm());//QueryCache.get(TXtGnzy.class, o.getGnzyDm()); 
-				o.setGnjs(gnjs);
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}//find(sb.toString(), list.toArray()).list();
-		page.setResult(listYh);
-		
-		
-		String result = tXtJgService.getJgsJSON(currentAppId);
-		model.addAttribute("page", page);
+	            @ModelAttribute UserRoleQuery userRoleQuery, Model model) throws Exception{
+		if(StringHelper.isEmpty(userRoleQuery.getCurrentAppId()))
+		    userRoleQuery.setCurrentAppId(SpringSecurityUtils.getCurrentUserAppId());
+		if(StringHelper.isEmpty(userRoleQuery.getYhId()))
+		    userRoleQuery.setYhId(SpringSecurityUtils.getCurrentUserId());
+		TXtYh user = tXtYhService.findByYhId(userRoleQuery.getYhId());
+		String result = userRolesService.getJsJson(userRoleQuery.getYhId(), userRoleQuery.getCurrentAppId());
+		model.addAttribute("page", userRolesService.queryPageList(page, userRoleQuery));
 		model.addAttribute("result", result);
 		model.addAttribute("user", user);
-		model.addAttribute("parameterMap", parameterMap);
-		model.addAttribute("currentAppId", currentAppId);
+		model.addAttribute("parameterMap", userRoleQuery);
+		model.addAttribute("currentAppId", userRoleQuery.getCurrentAppId());
 		
 		return "admin/guser/dirguserrole";
 	}
 	@RequestMapping(value="addUserRloe",method=RequestMethod.POST)
 	@SystemControllerLog(description = "用户授权角色")
-	public @ResponseBody String addUserRloe(String yhId,String[] checkdel){
+	public @ResponseBody String addUserRloe(String yhId,String[] checkdel)throws Exception{
 		if(checkdel == null || checkdel.length < 1 
 				|| StringHelper.isEmpty(yhId)){
 			return null;		
 		}
-		
-		TXtYhGnjs item;
-		for(String id : checkdel){
-			List uid = xtYhGnjsManager.find("select a.uuid from TXtYhGnjs a where a.jsDm=? and a.yhId=?", id,yhId);//new QueryCache()
-				//.setParameter("jsDm", id).setParameter("yhId", yhId).setMaxResults(1).uniqueResult();
-			if(uid == null||uid.size()<1) {
-				item = new TXtYhGnjs();
-				item.setJsDm(id);
-				item.setYhId(yhId);
-				item.setUuid(com.izhbg.typz.base.util.IdGenerator.getInstance().getUniqTime()+"");
-				xtYhGnjsManager.save(item);
-			}
-		}
+		userRolesService.add(yhId, checkdel);
 		return "sucess";
 	}
 	@RequestMapping(value="delUserRloe",method=RequestMethod.POST)
 	@SystemControllerLog(description = "删除用户角色")
-	public @ResponseBody  String delUserRloe(String[] checkdel){
+	public @ResponseBody  String delUserRloe(String[] checkdel) throws Exception{
 		String result="";
-		try{
-			if(checkdel == null || checkdel.length < 1){
-				result = Ajax.JSONResult(Constants.RESULT_CODE_ERROR, Messages.getString("systemMsg.fieldEmpty"));	
-				return null;		
-			}
-			List lst = new ArrayList();
-			for(String s : checkdel) 
-				lst.add(s);
-			List<TXtYhGnjs> items = xtYhGnjsManager.findByIds(lst);//QueryCache.idToObj(TXtYhGnjs.class, lst);
-			
-			if(items != null)
-				for(TXtYhGnjs o : items) {
-					xtYhGnjsManager.remove(o);
-				}
-			result = "sucess";
-		} catch (Exception ex) {
+		if(checkdel == null || checkdel.length < 1){
+			result = Ajax.JSONResult(Constants.RESULT_CODE_ERROR, Messages.getString("systemMsg.fieldEmpty"));	
+			return null;		
 		}
+		userRolesService.deleteByIds(checkdel);
+		result = "sucess";
 		return result;
 	}
-
-	public String getOrder(Page page) {
-		return StringHelper.isNotEmpty(page.getOrderBy()) ? " order by "+page.getOrderBy() +" "+ page.getOrder() : " order by a.uuid ";
+	@Resource
+	public void settXtJgService(TXtJgService tXtJgService) {
+	    this.tXtJgService = tXtJgService;
 	}
-	public String getWhere() {
-		StringBuffer sb = new StringBuffer(" ");
-		if(StringHelper.isNotEmpty(yhId))
-			sb.append(" and a.yhId = :yhId ");
-		if(StringHelper.isNotEmpty(code))
-			sb.append(" and b.code like :code ");
-		if(StringHelper.isNotEmpty(gnjsMc))
-			sb.append(" and b.gnjsMc like :gnjsMc ");
-		return sb.toString();
+	@Resource
+	public void settXtGnjsService(TXtGnjsService tXtGnjsService) {
+	    this.tXtGnjsService = tXtGnjsService;
+	}
+	@Resource
+	public void setUserRolesService(UserRolesService userRolesService) {
+	    this.userRolesService = userRolesService;
+	}
+	@Resource
+	public void settXtYhService(TXtYhService tXtYhService) {
+	    this.tXtYhService = tXtYhService;
 	}
 	
-	public Map<String, Object> setWhere() {
-		Map<String, Object> params = new HashMap<String, Object>();
-		if(StringHelper.isNotEmpty(yhId)) 
-			params.put("yhId", yhId.trim());
-		if(StringHelper.isNotEmpty(code))
-			params.put("code", "%" + code.trim() + "%");
-		if(StringHelper.isNotEmpty(gnjsMc))
-			params.put("gnjsMc", "%" + gnjsMc.trim() + "%");
-		
-		return params;
-			
-	}
+	
 
-	@Resource
-	public void setXtYhManager(TXtYhManager xtYhManager) {
-		this.xtYhManager = xtYhManager;
-	}
-	@Resource
-	public void setXtGnjsManager(TXtGnjsManager xtGnjsManager) {
-		this.xtGnjsManager = xtGnjsManager;
-	}
-	@Resource
-	public void setXtYhGnjsManager(TXtYhGnjsManager xtYhGnjsManager) {
-		this.xtYhGnjsManager = xtYhGnjsManager;
-	}
-	@Resource
-	public void setTXtJgService(TXtJgService xtJgService) {
-		tXtJgService = xtJgService;
-	}
-	@Resource
-	public void setTXtGnjsService(TXtGnjsService xtGnjsService) {
-		tXtGnjsService = xtGnjsService;
-	}
 	
 	
 	

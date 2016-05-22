@@ -67,4 +67,11 @@ public interface TXtGnzyService {
      * @throws Exception
      */
     public void updFunStatus(String[] gnDms) throws Exception;
+    /**
+     * 获取根节点
+     * @param appId
+     * @return
+     * @throws Exception
+     */
+    public String getRootGnjsDm(String appId) throws Exception;
 }

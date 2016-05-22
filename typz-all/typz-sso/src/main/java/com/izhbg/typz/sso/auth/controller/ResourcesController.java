@@ -27,6 +27,7 @@ import com.izhbg.typz.sso.auth.dto.TXtResources;
 import com.izhbg.typz.sso.auth.dto.TXtYh;
 import com.izhbg.typz.sso.auth.manager.TXtResourcesManager;
 import com.izhbg.typz.sso.auth.manager.TXtYhManager;
+import com.izhbg.typz.sso.auth.service.ResourcesService;
 import com.izhbg.typz.sso.util.SpringSecurityUtils;
 import com.mysql.jdbc.Messages;
 
@@ -42,10 +43,8 @@ import com.mysql.jdbc.Messages;
 @RequestMapping("/resources")
 public class ResourcesController
 {
-	private TXtYhManager tXtYhManager;
-	
-	private TXtResourcesManager tXtResourcesManager;
-	
+
+    	private ResourcesService resourcesService;
 	/**
 	 * 资源列表
 	 * @param page
@@ -55,18 +54,9 @@ public class ResourcesController
 	 */
 	@RequestMapping("resources_list")
 	 public String list(@ModelAttribute  Page page,
-	            @RequestParam Map<String, Object> parameterMap, Model model) {
-		
+	            @RequestParam Map<String, Object> parameterMap, Model model)throws Exception {
 		String appId = SpringSecurityUtils.getCurrentUserAppId();
-		
-		StringBuffer str = new StringBuffer(" from TXtResources where appId=:appId");
-		
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("appId", appId);
-		
-		page = tXtResourcesManager.pagedQuery(str.toString(), page.getPageNo(), page.getPageSize(), params);
-		
-		model.addAttribute("page", page);
+		model.addAttribute("page", resourcesService.queryPageList(page, appId));
 		model.addAttribute("parameterMap", parameterMap);
 		return "admin/resources/resources_list";
 	}
@@ -86,7 +76,7 @@ public class ResourcesController
 			
 			TXtResources tXtResources = null;
 			if(StringHelper.isNotEmpty(resourceId)){
-				tXtResources = tXtResourcesManager.findUniqueBy("resourceId", resourceId);
+				tXtResources = resourcesService.queryById(resourceId);
 			}else{
 				tXtResources = new TXtResources();
 			}
@@ -106,7 +96,7 @@ public class ResourcesController
 	 */
 	@RequestMapping(value="resources_addORupdate",method=RequestMethod.POST)
 	@SystemControllerLog(description = "添加或更新资源")
-	public String addRole(TXtResources tXtResources, Model model){
+	public String addRole(TXtResources tXtResources, Model model) throws Exception{
 		
 		if(StringHelper.isEmpty(tXtResources.getResourceName())
 				||StringHelper.isEmpty(tXtResources.getResourceString())){
@@ -116,10 +106,10 @@ public class ResourcesController
 		if(StringHelper.isEmpty(tXtResources.getResourceId())){
 			tXtResources.setResourceId(IdGenerator.getInstance().getUniqTime()+"");
 			tXtResources.setAppId(SpringSecurityUtils.getCurrentUserAppId());
-			tXtResourcesManager.save(tXtResources);
+			resourcesService.add(tXtResources);
 		}else{
 			tXtResources.setAppId(SpringSecurityUtils.getCurrentUserAppId());
-			tXtResourcesManager.update(tXtResources);
+			resourcesService.update(tXtResources);
 		}
 		
 		return "redirect:/resources/resources_list.izhbg";
@@ -131,22 +121,13 @@ public class ResourcesController
 	 */
 	@RequestMapping(value="resources_dell",method=RequestMethod.POST)
 	@SystemControllerLog(description = "删除资源")
-	public @ResponseBody  String deleteResources(String[] checkdel){
+	public @ResponseBody  String deleteResources(String[] checkdel) throws Exception{
 		String result="";
-		try{
-			if(checkdel == null || checkdel.length < 1){
-				result = Ajax.JSONResult(Constants.RESULT_CODE_ERROR, Messages.getString("systemMsg.fieldEmpty"));	
-			}
-			List<String> lst = new ArrayList<String>();
-			for(String s : checkdel) 
-				lst.add(s);
-			List<TXtResources> items = tXtResourcesManager.findByIds(lst);
-			
-			for(Object o : items)
-				tXtResourcesManager.remove(o);
-			result = "sucess";
-		} catch (Exception ex) {
+		if(checkdel == null || checkdel.length < 1){
+			result = Ajax.JSONResult(Constants.RESULT_CODE_ERROR, Messages.getString("systemMsg.fieldEmpty"));	
 		}
+		resourcesService.deleteByIds(checkdel);
+		result = "sucess";
 		return result;
 	}
 	/**
@@ -156,44 +137,20 @@ public class ResourcesController
 	 */
 	@RequestMapping(value="resources_updStatus",method=RequestMethod.POST)
 	@SystemControllerLog(description = "更新资源状态")
-	public @ResponseBody  String updRoleStatus(String[] checkdel){
+	public @ResponseBody  String updRoleStatus(String[] checkdel) throws Exception{
 		String result="";
-		try {
-			
-			if (checkdel == null || checkdel.length < 1) {
-				result = Ajax.JSONResult(Constants.RESULT_CODE_ERROR, Messages.getString("systemMsg.fieldEmpty"));
-			}
-			List lst = new ArrayList();
-			for(String s : checkdel) 
-				lst.add(s);
-			List<TXtResources> itemLst = (List<TXtResources>)tXtResourcesManager.findByIds(lst); 
-			
-			for(TXtResources item : itemLst ){
-				if(item.getEnabled()!=null&&item.getEnabled()==2){
-					item.setEnabled(1);
-				}else{
-					item.setEnabled(2);
-				}
-				tXtResourcesManager.update(item);
-			}
-			result = "sucess";
-		} catch (Exception ex) {
-			
+		if (checkdel == null || checkdel.length < 1) {
+			result = Ajax.JSONResult(Constants.RESULT_CODE_ERROR, Messages.getString("systemMsg.fieldEmpty"));
 		}
-		
+		resourcesService.updateStatus(checkdel);
+		result = "sucess";
 		return result;
 	}
+	@Resource
+	public void setResourcesService(ResourcesService resourcesService) {
+	    this.resourcesService = resourcesService;
+	}
 	
-	@Resource	
-	public void settXtYhManager(TXtYhManager tXtYhManager)
-	{
-		this.tXtYhManager = tXtYhManager;
-	}
-	@Resource	
-	public void settXtResourcesManager(TXtResourcesManager tXtResourcesManager)
-	{
-		this.tXtResourcesManager = tXtResourcesManager;
-	}
 	
 	
 

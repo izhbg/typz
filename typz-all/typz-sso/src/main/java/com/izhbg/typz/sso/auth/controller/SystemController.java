@@ -1,4 +1,4 @@
-/*package com.izhbg.typz.sso.auth.controller;
+package com.izhbg.typz.sso.auth.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.izhbg.typz.base.common.service.ControllerException;
 import com.izhbg.typz.base.page.Page;
 import com.izhbg.typz.base.util.IdGenerator;
+import com.izhbg.typz.base.util.StringUtils;
 import com.izhbg.typz.sso.annotation.SystemControllerLog;
 import com.izhbg.typz.sso.auth.dto.TXtGnzy;
 import com.izhbg.typz.sso.auth.dto.TXtYy;
@@ -32,10 +34,7 @@ import com.izhbg.typz.sso.util.SimplePasswordEncoder;
 @RequestMapping("/sys")
 public class SystemController {
 	private TXtYyService tXtYyService;
-	private TXtYyManager txtYyManager;
 	private SimplePasswordEncoder simplePasswordEncoder;
-	private TXtGnjsManager txtGnjsManager;
-	private TXtGnzyManager txtGnzyManager;
 	
 	@RequestMapping("sys_list")
 	 public String list(@ModelAttribute  Page page,
@@ -51,197 +50,81 @@ public class SystemController {
 	
 	@RequestMapping("sys-edit")
 	@SystemControllerLog(description = "编辑应用")
-	public String sysEdit(@RequestParam Map<String, Object> parameterMap, Model model) {
-		String yyId= parameterMap.get("yyId")==null?"":parameterMap.get("yyId").toString();
-		TXtYy app = null;
-		try {
-			if(StringHelper.isNotEmpty(yyId)){
-				app = txtYyManager.findUniqueBy("yyId", yyId);//QueryCache.get(TXtGnzy.class, gnDm);
-			}
-			model.addAttribute("app", app);
-		} catch (Exception ex) {
-		}
+	public String sysEdit(@RequestParam Map<String, Object> parameterMap, Model model)throws Exception {
+		String yyId= StringUtils.getString(parameterMap.get("yyId"));
+		if(StringHelper.isNotEmpty(yyId))
+		    model.addAttribute("app", tXtYyService.getSystem(yyId));
 		return "admin/system/getsystem";
 	}
 	@RequestMapping(value="validateCode",method=RequestMethod.POST)
-	public @ResponseBody String validateCode(@RequestParam String code){
+	public @ResponseBody String validateCode(@RequestParam String code) throws Exception{
 		
 		String result = "yes";
-		if(code!=null){
-			try {
-				List<TXtYy> yhs = txtYyManager.findBy("code", code);
-				if(yhs!=null&&yhs.size()>0){
-					result = "no";
-				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		if(StringHelper.isEmpty(code))
+		    throw new ControllerException("参数为空,验证失败");
+		TXtYy yy = tXtYyService.getByCode(code);
+		if(yy!=null)
+		    result = "no";
 		return result;
 	}
 	@RequestMapping(value="addSystem",method=RequestMethod.POST)
 	@SystemControllerLog(description = "添加应用")
-	public String addSystem(TXtYy app,String[] checkdel, Model model){
+	public String addSystem(TXtYy app,String[] checkdel, Model model) throws Exception{
 		if(StringHelper.isEmpty(app.getAppName())
-				||StringHelper.isEmpty(app.getCode())){
-			return null;
-		}
-		List liste = txtYyManager.findBy("code", app.getCode());
-		if(liste != null&&liste.size()>0){
-			return null;
-		}
+				||StringHelper.isEmpty(app.getCode()))
+		    throw new ControllerException("参数为空,添加应用信息失败");
+		TXtYy tXtYy = tXtYyService.getByCode(app.getCode());
+		if(tXtYy != null)
+		    throw new ControllerException("系统编码已存在，添加失败");
 		app.setYyId(IdGenerator.getInstance().getUniqTime()+"");
 		app.setPassword(simplePasswordEncoder.encode(app.getPassword()));
 		app.setOperateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(new Date()));
-		txtYyManager.save(app);
+		tXtYyService.add(app);
 		return "redirect:/sys/sys_list.izhbg";
 	}
 	@RequestMapping(value="updateSys",method=RequestMethod.POST)
 	@SystemControllerLog(description = "更新应用")
-	public String updateSys(TXtYy app,String[] checkdel, Model model){
+	public String updateSys(TXtYy app)throws Exception{
 		
 		if(StringHelper.isEmpty(app.getYyId())
 				||StringHelper.isEmpty(app.getAppName())
-				||StringHelper.isEmpty(app.getCode())){
-			return null;
-		}
-		TXtYy item = txtYyManager.findUniqueBy("yyId", app.getYyId());//QueryCache.get(TXtYy.class, app.getYyId());
-		item.setYyId(app.getYyId());
-		item.setAppName(app.getAppName());
-		item.setChineseName(app.getChineseName());
-		item.setDeployUrl(app.getDeployUrl());
-		item.setHomePage(app.getHomePage());
-		item.setDescription(app.getDescription());
-		item.setRespectiveDivisions(app.getRespectiveDivisions());
-		item.setCharger(app.getCharger());
-		item.setContact(app.getContact());
-		item.setLogoMark(app.getLogoMark());
-		item.setCode(app.getCode());
-		item.setShowFlag(app.getShowFlag());
-		item.setLoginFlag(app.getLoginFlag());
-		item.setLoginDisplay(app.getLoginDisplay());
-		item.setClassification(app.getClassification());
-		item.setSortNo(app.getSortNo());
-		item.setYxBj(app.getYxBj());
-		txtYyManager.update(item);
+				||StringHelper.isEmpty(app.getCode()))
+		    throw new ControllerException("参数为空，更新应用信息失败");
+		tXtYyService.update(app);
 		return "redirect:/sys/sys_list.izhbg";
 		
 	}
 	
 	@RequestMapping(value="deleteSys",method=RequestMethod.POST)
 	@SystemControllerLog(description = "删除应用")
-	public @ResponseBody  String deleteSys(String[] checkdel){
+	public @ResponseBody  String deleteSys(String[] checkdel) throws Exception{
 		String result="";
-		try{
-			if(checkdel == null || checkdel.length < 1){
-				result = "请选择你要操作的条目";
-			}
-			for(String s : checkdel) {
-				List ids = txtGnjsManager.findBy("appId", s);//new QueryCache("select a.gnjsDm from TXtGnjs a where a.appId =:appId)")
-					//.setParameter("appId", s).list(); 
-				if(ids != null && ids.size() > 0) {
-					return "请先删除该系统对应的功能角色";
-				}
-			}
-			List lst = new ArrayList();
-			for(String s : checkdel) 
-				lst.add(s);
-			List<TXtYy> items = txtYyManager.findByIds(lst);//QueryCache.idToObj(TXtYy.class, lst);
-			
-			for(Object o : items)
-				txtYyManager.remove(o);
-			
-			List ids2 = null;
-			List<TXtGnzy> objs2 = null;
-			for(String str:checkdel){
-				ids2 = txtGnzyManager.find("select a.gnDm from TXtGnzy a where a.appId =?", str);
-				if(ids2!=null&&ids2.size()>0)
-					objs2 = txtGnzyManager.findByIds(ids2);
-				
-				if(objs2!=null&&objs2.size()>0){
-					for(TXtGnzy o:objs2){
-						txtGnzyManager.remove(o);
-					}
-				}
-			}
-			result = "sucess";
-		} catch (Exception ex) {
+		if(checkdel == null || checkdel.length < 1){
+			result = "请选择你要操作的条目";
 		}
+		tXtYyService.deleteByIds(checkdel);
+		result = "sucess";
 		return result;
 	}
 	@RequestMapping(value="updStatus",method=RequestMethod.POST)
 	@SystemControllerLog(description = "更新应用状态")
-	public @ResponseBody  String updStatus(String[] checkdel,String type){
+	public @ResponseBody  String updStatus(String[] checkdel,String type) throws Exception{
 		String result="";
-		try {
-			if(checkdel == null || checkdel.length < 1||StringHelper.isEmpty(type)){
-				return null;
-			}
-			List lst = new ArrayList();
-			for(String s : checkdel) 
-				lst.add(s);
-			
-			List<TXtYy> itemLst =txtYyManager.findByIds(lst); //(List<TXtYh>) QueryCache.idToObj(TXtYh.class, lst);
-			
-			for(TXtYy item : itemLst ){
-				if("yxBj".equals(type)){
-					if(item.getYxBj()!=null&&item.getYxBj()==2){
-						item.setYxBj(1);
-					}else{
-						item.setYxBj(2);
-					}
-				}else if("password".equals(type)){
-					item.setPassword(simplePasswordEncoder.encode("123456"));
-				}else if("showFlag".equals(type)){
-					if(item.getShowFlag()!=null&&item.getShowFlag().equals("2")){
-						item.setShowFlag("1");
-					}else{
-						item.setShowFlag("2");
-					}
-				} else if("loginFlag".equals(type)){
-					if(item.getLoginFlag()!=null&&item.getLoginFlag().equals("2")){
-						item.setLoginFlag("1");
-					}else{
-						item.setLoginFlag("2");
-					}
-				} else if("loginDisplay".equals(type)){
-					if(item.getLoginDisplay()!=null&&item.getLoginDisplay().equals("2")){
-						item.setLoginDisplay("1");
-					}else{
-						item.setLoginDisplay("2");
-					}
-				 }
-				
-				txtGnzyManager.update(item);
-			}
-			
-			result = "sucess";
-		} catch (Exception ex) {
-		}
-		
+		if(checkdel == null || checkdel.length < 1||StringHelper.isEmpty(type))
+		    throw new ControllerException("参数为空，更新状态失败");
+		tXtYyService.updateStatus(checkdel, simplePasswordEncoder.encode("123456"), type);
+		result = "sucess";
 		return result;
 	}
 	  // ~ ======================================================================
+	
 	@Resource
-	public void setTXtYyService(TXtYyService xtYyService) {
-		tXtYyService = xtYyService;
-	}
-	@Resource
-	public void setTxtYyManager(TXtYyManager txtYyManager) {
-		this.txtYyManager = txtYyManager;
+	public void settXtYyService(TXtYyService tXtYyService) {
+	    this.tXtYyService = tXtYyService;
 	}
 	@Resource
 	public void setSimplePasswordEncoder(SimplePasswordEncoder simplePasswordEncoder) {
-		this.simplePasswordEncoder = simplePasswordEncoder;
-	}
-	@Resource
-	public void setTxtGnjsManager(TXtGnjsManager txtGnjsManager) {
-		this.txtGnjsManager = txtGnjsManager;
-	}
-	@Resource
-	public void setTxtGnzyManager(TXtGnzyManager txtGnzyManager) {
-		this.txtGnzyManager = txtGnzyManager;
+	    this.simplePasswordEncoder = simplePasswordEncoder;
 	}
 	
 
@@ -250,4 +133,3 @@ public class SystemController {
 	
 	
 }
-*/
