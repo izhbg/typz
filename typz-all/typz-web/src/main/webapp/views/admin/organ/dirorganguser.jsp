@@ -213,7 +213,9 @@
 </body>
 <script type="text/javascript" src="${ctx}/s/assets/plugins/guser/js/common.js"></script>  
 <script type="text/javascript" src="${ctx}/s/assets/plugins/guser/js/ucenter.js"></script>  
-
+<script type="text/javascript" src="${ctx}/s/assets/plugins/data-tables/jquery.dataTables.js"></script>
+<script type="text/javascript" src="${ctx}/s/assets/plugins/data-tables/DT_bootstrap.js"></script> 
+<link rel="stylesheet" href="${ctx}/s/assets/plugins/data-tables/DT_bootstrap.css">
 
 
 <script type="text/javascript">
@@ -253,6 +255,7 @@ function  loadCustomerInfo(){
 	if (datatable == null) { //仅第一次检索时初始化Datatable
 		
 		datatable = $('#customerInfo').dataTable( {
+			"pageResize": true,
 			"bAutoWidth": true,					//不自动计算列宽度
 			"aoColumnDefs": [ { "bSortable": false, "aTargets": [ 0 ] }]  ,
 			"aoColumns": [
@@ -349,5 +352,5 @@ function clearForm(){
 
 </script>
 
- <link rel="stylesheet" href="${ctx}/s/assets/plugins/data-tables/DT_bootstrap.css">
+ 
 </html>

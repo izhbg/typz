@@ -35,7 +35,7 @@
 				<a href="javascript:;" onclick="javascript:window.form1.submit()" class="btn btn-sm default" ><i class="fa fa-rotate-right"></i>刷新</a>
 				<a href="#treeDialog" data-toggle="modal" class="btn btn-sm default"  ><i class="fa fa-plus-square"></i>新增</a>
 				<a href="javascript:rf_del()" class="btn btn-sm red" ><span class="glyphicon glyphicon-calendar"></span>删除</a>
-				<a href="${ctx }/authorities/authorities_list.izhbg" class="btn btn-sm default"  ><i class="fa fa-mail-reply-all"></i>返回</a>
+				<a href="${ctx }/role/role-list.izhbg" class="btn btn-sm default"  ><i class="fa fa-mail-reply-all"></i>返回</a>
 				<div class="pull-right">
 					每页显示
 					<select class="m-wrap xsmall"> 
@@ -46,7 +46,7 @@
 					条
 				</div>
 				<form action="${ctx}/role_authorities/role_authorities_list.izhbg" id="form1">
-					<input type="hidden" name="authorityId" value="${tXtAuthorities.authorityId}">
+					<input type="hidden" name="jsDm" value="${gnjs.gnjsDm}">
 				</form>
 			</div>
 			<!-- Table -->
@@ -147,7 +147,7 @@ var config = {
 	    orderBy: '${page.orderBy == null ? "" : page.orderBy}',
 	    order: '${page.order=="ASC"?"DESC":"ASC"}',
 	    params: {
-	        'authorityId':'${parameterMap.authorityId }'
+	        'jsDm':'${gnjs.gnjsDm }'
 	    },
 		selectedItemClass: 'selectedItem',
 		gridFormId: 'form1' 
@@ -169,7 +169,7 @@ var rf_setting = {
 var rf_tree;
 function rf_add(){
 	var nodes = rf_tree.getChangeCheckedNodes();
-	var pars = 'authorityId=${tXtAuthorities.authorityId}';
+	var pars = 'gnjsDm=${gnjs.gnjsDm}';
 	for(var i in nodes){
 		pars += "&checkdel=" + nodes[i].id;
 	}
