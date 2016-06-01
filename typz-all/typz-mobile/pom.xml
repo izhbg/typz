@@ -7,10 +7,12 @@
     <groupId>typz</groupId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>typz-web</artifactId>
-  <packaging>war</packaging>
-  <name>typz-web Maven Webapp</name>
+  <artifactId>typz-mobile</artifactId>
+  <name>typz-mobile</name>
   <url>http://maven.apache.org</url>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
   <dependencies>
   	<!-- import base -->
   	<dependency>
@@ -18,28 +20,10 @@
   		<artifactId>typz-base</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
-  	<!-- import flyway -->
-  	<dependency>
-  		<groupId>typz</groupId>
-  		<artifactId>typz-flyway</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
   	<!-- import sso -->
   	<dependency>
   		<groupId>typz</groupId>
   		<artifactId>typz-sso</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  	<!-- import database -->
-  	<dependency>
-  		<groupId>typz</groupId>
-  		<artifactId>typz-database</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  	<!-- import mobile -->
-  	<dependency>
-  		<groupId>typz</groupId>
-  		<artifactId>typz-mobile</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
   
@@ -51,7 +35,4 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  <build>
-    <finalName>typz-web</finalName>
-  </build>
 </project>

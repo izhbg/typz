@@ -10,6 +10,7 @@ INSERT INTO `t_xt_gnzy` VALUES ('funmanager', '功能管理', '1', 'houtanguanli
 INSERT INTO `t_xt_gnzy` VALUES ('appmanager', '应用管理', '1', 'houtanguanli', null, '6', '1', '2', null, 'green', 'fa-html5', 'sys/sys_list.izhbg', '1');
 INSERT INTO `t_xt_gnzy` VALUES ('ziyuanguanli', '资源管理', '1', 'houtanguanli', null, '7', '1', '2', null, 'red', 'fa-stack-overflow', 'resources/resources_list.izhbg', '1');
 INSERT INTO `t_xt_gnzy` VALUES ('quanxianguanli', '权限管理', '1', 'houtanguanli', null, '8', '1', '2', null, 'yellow', ' fa-unlock-o', 'authorities/authorities_list.izhbg', '1');
+INSERT INTO `t_xt_gnzy` VALUES ('jiekouguize', '接口规则', '1', 'houtanguanli', null, '9', '1', '2', null, 'yellow', ' fa-unlock-o', 'client/client_list.izhbg', '1');
 
 INSERT INTO `t_xt_gnzy` VALUES ('shenjirizhi', '审计日志', '1', 'c78657w5m0vg781mw5m1', null, '2', '1', '1', null, '', 'fa-book', '', '1');
 INSERT INTO `t_xt_gnzy` VALUES ('shenjirizhi2', '审计日志', '1', 'shenjirizhi', null, '2', '1', '2', null, 'red', 'fa-book', 'audit/audit_list.izhbg', '1');

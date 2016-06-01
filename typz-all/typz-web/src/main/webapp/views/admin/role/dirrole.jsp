@@ -137,6 +137,8 @@
 									<a href="${ctx }/rolFun/roleFun_list.izhbg?jsDm=${item.gnjsDm }&currentAppId=${parameterMap.appId}" title="授权功能">授权功能</a>
 								&nbsp;
 									<a href="${ctx }/role_authorities/role_authorities_list.izhbg?jsDm=${item.gnjsDm }&currentAppId=${parameterMap.appId}" title="资源权限">资源权限</a>
+								&nbsp;
+									<a href="${ctx }/role_oauth/role_oauth_list.izhbg?jsDm=${item.gnjsDm }&currentAppId=${parameterMap.appId}" title="接口规则">接口规则</a>
 							</td>
 							<td>${item.code}
 							</td>

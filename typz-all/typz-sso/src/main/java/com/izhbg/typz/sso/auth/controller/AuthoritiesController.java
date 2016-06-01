@@ -96,8 +96,7 @@ public class AuthoritiesController
 	@SystemControllerLog(description = "添加或更新资源权限")
 	public String addRole(TXtAuthorities tXtauthorities, Model model) throws Exception{
 		
-		if(StringHelper.isEmpty(tXtauthorities.getAuthorityName())
-				||StringHelper.isEmpty(tXtauthorities.getAuthorityDesc())){
+		if(StringHelper.isEmpty(tXtauthorities.getAuthorityName())){
 			return null;
 		}
 		

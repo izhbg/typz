@@ -300,12 +300,15 @@ function rf_add(){
 	var nodes = rf_tree.getChangeCheckedNodes();
 	var pars = 'jsDm=${role.gnjsDm}';
 	for(var i in nodes){
-		pars += "&checkdel=" + nodes[i].id;
-		pars +="&isRead="+$("#"+nodes[i].id+"_isRead").val();
-		pars +="&isCreate="+$("#"+nodes[i].id+"_isCreate").val();
-		pars +="&isUpdate="+$("#"+nodes[i].id+"_isUpdate").val();
-		pars +="&isDelete="+$("#"+nodes[i].id+"_isDelete").val();
-		pars +="&isAll="+$("#"+nodes[i].id+"_isAll").val();
+		if(nodes[i].isParent==false){
+			pars += "&checkdel=" + nodes[i].id;
+			pars +="&isRead="+$("#"+nodes[i].id+"_isRead").val();
+			pars +="&isCreate="+$("#"+nodes[i].id+"_isCreate").val();
+			pars +="&isUpdate="+$("#"+nodes[i].id+"_isUpdate").val();
+			pars +="&isDelete="+$("#"+nodes[i].id+"_isDelete").val();
+			pars +="&isAll="+$("#"+nodes[i].id+"_isAll").val();
+		}
+		
 	}
 	$.ajax({
 		type: "POST",

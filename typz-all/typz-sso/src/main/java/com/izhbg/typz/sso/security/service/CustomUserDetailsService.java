@@ -2,25 +2,17 @@ package com.izhbg.typz.sso.security.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-
-import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.GrantedAuthorityImpl;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserCache;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.izhbg.typz.sso.auth.SpringSecurityUserAuth;
-import com.izhbg.typz.sso.auth.UserAuthDTO;
 import com.izhbg.typz.sso.auth.dao.UserDao;
-import com.izhbg.typz.sso.auth.dto.TXtYh;
 
 /**
  * 
@@ -61,6 +53,7 @@ public class CustomUserDetailsService implements UserDetailsService
 		}
 		return user;
 	}
+	
 	//设置用户缓存功能。  
     public void setUserCache(UserCache userCache) {  
         this.userCache = userCache;  

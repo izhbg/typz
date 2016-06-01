@@ -48,6 +48,12 @@
         <artifactId>spring-security-taglibs</artifactId>
         <version>${spring.security.version}</version>
       </dependency>
+      <!-- spring Security Auth2 -->
+       <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+            <version>${spring.security.oauth.version}</version>
+        </dependency>	  
       
        <!-- servlet -->
        <dependency>
@@ -62,5 +68,20 @@
         <version>${jsp.version}</version>
         <scope>provided</scope>
       </dependency>
+      <dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.3.3</version>
+            <optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>compile</scope>
+			<optional>true</optional>
+		</dependency>
+      
   </dependencies>
 </project>
