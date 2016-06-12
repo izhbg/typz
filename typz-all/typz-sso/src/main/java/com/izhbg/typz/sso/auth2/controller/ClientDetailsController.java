@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.izhbg.typz.sso.annotation.SystemControllerLog;
 import com.izhbg.typz.sso.auth2.dto.OauthClientDetailsDto;
 import com.izhbg.typz.sso.auth2.dto.OauthClientDetailsDtoValidator;
 import com.izhbg.typz.sso.auth2.service.OauthService;
@@ -68,6 +69,7 @@ public class ClientDetailsController {
     * Submit register client
     * */
     @RequestMapping(value = "register_client", method = RequestMethod.POST)
+    @SystemControllerLog(description = "添加接口策略")
     public String submitRegisterClient(@ModelAttribute("formDto") OauthClientDetailsDto formDto, BindingResult result) {
         clientDetailsDtoValidator.validate(formDto, result);
         if (result.hasErrors()) {

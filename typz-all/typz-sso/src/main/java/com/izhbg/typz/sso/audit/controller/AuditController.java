@@ -30,7 +30,7 @@ public class AuditController
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping("audit_list")
+	 @RequestMapping("audit_list")
 	 public String list(@ModelAttribute  Page page,
 	            @RequestParam Map<String, Object> parameterMap, Model model) {
 		

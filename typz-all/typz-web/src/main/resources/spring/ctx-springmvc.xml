@@ -16,7 +16,7 @@
 	<context:component-scan base-package="com.izhbg.typz" use-default-filters="false">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
-
+	 
 	<mvc:annotation-driven conversion-service="conversionService" >
 		<mvc:message-converters register-defaults="true">
 			<!-- 将StringHttpMessageConverter的默认编码设为UTF-8 -->
@@ -25,9 +25,35 @@
 			</bean>
   		</mvc:message-converters>
 	</mvc:annotation-driven>
-
+	<!-- Freemarker配置 -->  
+	<bean id="freemarkerConfig"  
+	      class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">  
+	    <property name="templateLoaderPath" value="/cms/templates/" />  
+	    <property name="freemarkerSettings">  
+	        <props>  
+	            <prop key="template_update_delay">0</prop>  
+	            <prop key="default_encoding">UTF-8</prop>  
+	            <prop key="number_format">0.##########</prop>  
+	            <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>  
+	            <prop key="classic_compatible">true</prop>  
+	            <prop key="template_exception_handler">ignore</prop>  
+	        </props>  
+	    </property>  
+	</bean>  
+	
+	
+	<!-- 定义HTML文件的位置 -->
+	 <bean id="htmlviewResolver"  
+        class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
+        <property name="viewClass" value="com.izhbg.typz.common.springmvc.view.HtmlResourceView"/>
+        <property name="order" value="0" />
+        <property name="prefix" value="/cms/"/>
+        <property name="suffix" value=".html" />  
+        <property name="contentType" value="text/html;charset=UTF-8"></property>  
+    </bean>
 	<!-- 定义JSP文件的位置 -->
-	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	<bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="order" value="1" />
 		<property name="prefix" value="/views/"/>
 		<property name="suffix" value=".jsp"/>
 	</bean>
@@ -37,7 +63,7 @@
 	<mvc:default-servlet-handler/>
 
 	<!-- 定义无需Controller的url<->view直接映射 -->
-	<mvc:view-controller path="/" view-name="index.jsp"/>
+	<mvc:view-controller path="/" view-name="/cms/index.izhbg"/>
 
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="defaultEncoding" value="utf-8"/>

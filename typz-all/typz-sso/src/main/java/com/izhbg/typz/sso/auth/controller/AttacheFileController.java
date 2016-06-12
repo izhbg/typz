@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.izhbg.typz.base.common.service.ControllerException;
 import com.izhbg.typz.base.util.IdGenerator;
+import com.izhbg.typz.sso.annotation.SystemControllerLog;
 import com.izhbg.typz.sso.auth.UserAuthDTO;
 import com.izhbg.typz.sso.auth.dto.TXtAttachFile;
 import com.izhbg.typz.sso.auth.service.TXtAttachFileService;
@@ -49,6 +50,7 @@ public class AttacheFileController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/upload", method={RequestMethod.GET, RequestMethod.POST})
+	@SystemControllerLog(description = "上传附件")
 	public String uploadFileAttach(	HttpServletRequest request,
 									HttpServletResponse response,
 									@RequestParam("uploadFile") MultipartFile uploadFile,
@@ -132,6 +134,7 @@ public class AttacheFileController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/updateAttachName", method={RequestMethod.GET, RequestMethod.POST})
+	@SystemControllerLog(description = "更新附件名称")
 	public String updateAttachName(@RequestParam("attacheId") String attacheId,
 								   @RequestParam("attacheName") String attacheName,
 								   HttpServletResponse response) throws Exception {
@@ -162,6 +165,7 @@ public class AttacheFileController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/downloadFile", method={RequestMethod.GET, RequestMethod.POST})
+	@SystemControllerLog(description = "下载附件")
 	public String downloadFile(HttpServletRequest request,
 							   HttpServletResponse response,
 							   @RequestParam("attachId") String attachId) throws Exception {
@@ -221,6 +225,7 @@ public class AttacheFileController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/deleteFile", method={RequestMethod.GET, RequestMethod.POST})
+	@SystemControllerLog(description = "删除附件")
 	public String deleteFile(HttpServletRequest request,
 							 HttpServletResponse response,
 							 @RequestParam("attachId") String attachId) throws Exception {

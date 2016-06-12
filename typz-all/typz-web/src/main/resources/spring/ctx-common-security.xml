@@ -95,7 +95,6 @@
     </oauth2:authorization-server>
     
      
-                
     <!-- spring security 配置 -->   
     <security:http auto-config="true" create-session="never" use-expressions="true" access-denied-page="/common/403.jsp" >  
          <!-- 不要过滤图片等静态资源 -->    
@@ -109,6 +108,8 @@
         <security:intercept-url pattern="/common/403.jsp" access="permitAll"/>
         <security:intercept-url pattern="/common/404.jsp" access="permitAll"/>
         <security:intercept-url pattern="/common/500.jsp" access="permitAll"/>
+        <!-- cms 相关不过滤 -->
+        <security:intercept-url pattern="/cms/**" access="permitAll"/>
         <!-- 登录页面和忘记密码页面不过滤  -->  
         <security:intercept-url pattern="/auth/login.izhbg" access="permitAll"/>  
         <!-- 登录配置 -->   

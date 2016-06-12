@@ -7,50 +7,29 @@
     <groupId>typz</groupId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>typz-web</artifactId>
-  <packaging>war</packaging>
-  <name>typz-web Maven Webapp</name>
+  <artifactId>typz-cms</artifactId>
+  <name>typz-cms</name>
   <url>http://maven.apache.org</url>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
   <dependencies>
+  	
   	<!-- import base -->
   	<dependency>
   		<groupId>typz</groupId>
   		<artifactId>typz-base</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
-  	<!-- import flyway -->
-  	<dependency>
-  		<groupId>typz</groupId>
-  		<artifactId>typz-flyway</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  	<!-- import sso -->
-  	<dependency>
-  		<groupId>typz</groupId>
-  		<artifactId>typz-sso</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  	<!-- import database -->
-  	<dependency>
-  		<groupId>typz</groupId>
-  		<artifactId>typz-database</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  	<!-- import mobile -->
-  	<dependency>
-  		<groupId>typz</groupId>
-  		<artifactId>typz-mobile</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  	<!-- import cms -->
-  	<dependency>
-  		<groupId>typz</groupId>
-  		<artifactId>typz-cms</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  
-  
-  	<!-- servlet -->
+  	
+  	<!-- freemarker -->
+	<dependency>
+	    <groupId>freemarker</groupId>
+	    <artifactId>freemarker</artifactId>
+	    <version>2.3.9</version>
+	</dependency>
+	
+	<!-- servlet -->
 	<dependency>
         <groupId>javax.servlet</groupId>
         <artifactId>javax.servlet-api</artifactId>
@@ -63,7 +42,14 @@
        <version>${jsp.version}</version>
        <scope>provided</scope>
 	</dependency>
-	
+	<dependency>
+       <groupId>javax.servlet</groupId>
+       <artifactId>jstl</artifactId>
+       <version>${jstl.version}</version>
+     </dependency> 
+      	
+      	
+      	
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -71,7 +57,4 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  <build>
-    <finalName>typz-web</finalName>
-  </build>
 </project>

@@ -53,5 +53,6 @@
     <module>typz-flyway</module>
     <module>typz-database</module>
     <module>typz-mobile</module>
+    <module>typz-cms</module>
   </modules>
 </project>
