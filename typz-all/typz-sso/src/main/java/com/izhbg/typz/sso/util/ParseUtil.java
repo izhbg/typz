@@ -19,6 +19,9 @@ import java.util.regex.Pattern;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.izhbg.typz.base.util.JsonUtil;
+import com.izhbg.typz.sso.auth.SpringSecurityUserAuth;
+
 /**
  * @author Administrator TODO To change the template for this generated type
  *         comment go to Window - Preferences - Java - Code Style - Code
@@ -332,9 +335,4 @@ public class ParseUtil {
 			return "";
 		}
 	}*/
-	public static void main(String[] args) {
-		try {
-		} catch (Exception e) {
-		}
-	}
 }

@@ -11,6 +11,8 @@ import org.hibernate.annotations.common.util.StringHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.izhbg.typz.base.common.redis.CacheKey;
+import com.izhbg.typz.base.common.redis.Cacheable;
 import com.izhbg.typz.base.common.service.ServiceException;
 import com.izhbg.typz.base.mapper.BeanMapper;
 import com.izhbg.typz.base.page.Page;

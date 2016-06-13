@@ -36,6 +36,7 @@
             classpath*:spring/ctx-common-hibernate.xml,
             classpath*:spring/ctx-common-flyway.xml,
             classpath*:spring/ctx-common-security.xml
+            classpath*:spring/ctx-common-redis.xml
         </param-value>
     </context-param>
      

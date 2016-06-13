@@ -50,7 +50,7 @@ public class AuditLogAspect
      } 
      
      @Before("controllerAspect()")    
-     public  void doBefore(JoinPoint joinPoint) { //@TODO 异步线程处理 
+     public  void doBefore(JoinPoint joinPoint) { //@ TODO 异步线程处理 
     	 HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
     	 HttpSession session = request.getSession();    
     	 //读取session中的用户    
