@@ -225,6 +225,18 @@
         <version>${commons-fileupload.version}</version>
       </dependency>
       
+      <!-- redis -->
+        
+	 <dependency>   
+	    <groupId>redis.clients</groupId>   
+	    <artifactId>jedis</artifactId>   
+	    <version>${redis.version}</version>   
+	 </dependency>  
+     <dependency>    
+	    <groupId>org.springframework.data</groupId>    
+	    <artifactId>spring-data-redis</artifactId>    
+	    <version>${spring-data-redis.version}</version>    
+	</dependency> 
    </dependencies>
    <build>
        <plugins>

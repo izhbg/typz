@@ -4,16 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserCache;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import com.izhbg.typz.base.common.redis.CacheKey;
-import com.izhbg.typz.base.common.redis.Cacheable;
 import com.izhbg.typz.sso.auth.SpringSecurityUserAuth;
 import com.izhbg.typz.sso.auth.dao.UserDao;
 

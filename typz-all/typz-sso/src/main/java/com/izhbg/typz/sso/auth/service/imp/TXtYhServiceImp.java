@@ -11,14 +11,13 @@ import org.hibernate.annotations.common.util.StringHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.izhbg.typz.base.common.redis.CacheKey;
-import com.izhbg.typz.base.common.redis.Cacheable;
+import com.izhbg.typz.base.common.redis.RedisCache;
+import com.izhbg.typz.base.common.redis.RedisEvict;
 import com.izhbg.typz.base.common.service.ServiceException;
 import com.izhbg.typz.base.mapper.BeanMapper;
 import com.izhbg.typz.base.page.Page;
 import com.izhbg.typz.base.util.Constants;
 import com.izhbg.typz.base.util.IdGenerator;
-import com.izhbg.typz.base.util.StringUtils;
 import com.izhbg.typz.sso.auth.dto.TXtJg;
 import com.izhbg.typz.sso.auth.dto.TXtJgYh;
 import com.izhbg.typz.sso.auth.dto.TXtYh;
@@ -30,7 +29,6 @@ import com.izhbg.typz.sso.auth.manager.TXtYhGnjsManager;
 import com.izhbg.typz.sso.auth.manager.TXtYhManager;
 import com.izhbg.typz.sso.auth.service.TXtJgService;
 import com.izhbg.typz.sso.auth.service.TXtYhService;
-import com.izhbg.typz.sso.util.SimplePasswordEncoder;
 import com.izhbg.typz.sso.util.SpringSecurityUtils;
 /**
 * @author caixl 
@@ -84,6 +82,7 @@ public class TXtYhServiceImp implements TXtYhService{
 			}
 	}
 	@Override
+	@RedisEvict(type=TXtYh.class,fieldKey="#yhId")
 	public void delete(String yhId) throws Exception {
 		if(StringHelper.isEmpty(yhId))
 			throw new ServiceException("参数为空，删除用户信息失败");
@@ -101,6 +100,7 @@ public class TXtYhServiceImp implements TXtYhService{
 	}
 	
 	@Override
+	@RedisEvict(type=TXtYh.class,fieldKey="#yhIds")
 	public void deleteByIds(String[] yhIds) throws Exception {
 		if(yhIds==null||yhIds.length<=0)
 			throw new ServiceException("参数为空，删除用户信息失败");
@@ -141,6 +141,7 @@ public class TXtYhServiceImp implements TXtYhService{
 		}
 	}
 	@Override
+	@RedisCache(type=TXtYh.class,fieldKey="#yhId")
 	public TXtYh findByYhId(String yhId) throws Exception {
 		if(StringHelper.isEmpty(yhId))
 			throw new ServiceException("参数为空，获取用户信息失败");

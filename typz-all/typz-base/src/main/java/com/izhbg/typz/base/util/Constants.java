@@ -85,4 +85,6 @@ public final class Constants {
 	//==============================  考券相关参数   ========================================
 	//设置考试认证在本系统中的业务类型编码
 	public static final Integer examTicketTypeId = 4;
+	
+	public static final String DELIMITER = ".";
 	}

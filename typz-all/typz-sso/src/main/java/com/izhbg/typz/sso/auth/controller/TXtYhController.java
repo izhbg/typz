@@ -1,8 +1,6 @@
 package com.izhbg.typz.sso.auth.controller;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,11 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONArray;
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
 
 import org.hibernate.internal.util.StringHelper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -27,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.izhbg.typz.base.common.redis.RedisCache;
+import com.izhbg.typz.base.common.redis.RedisEvict;
 import com.izhbg.typz.base.common.service.ControllerException;
 import com.izhbg.typz.base.common.service.ServiceException;
 import com.izhbg.typz.base.page.Page;
@@ -36,16 +33,9 @@ import com.izhbg.typz.base.util.IdGenerator;
 import com.izhbg.typz.base.util.StringUtils;
 import com.izhbg.typz.sso.annotation.SystemControllerLog;
 import com.izhbg.typz.sso.auth.UserAuthDTO;
-import com.izhbg.typz.sso.auth.dto.TXtJg;
-import com.izhbg.typz.sso.auth.dto.TXtJgYh;
 import com.izhbg.typz.sso.auth.dto.TXtYh;
-import com.izhbg.typz.sso.auth.dto.TXtYhGnjs;
 import com.izhbg.typz.sso.auth.dto.TXtYhQuery;
 import com.izhbg.typz.sso.auth.dto.TXtYy;
-import com.izhbg.typz.sso.auth.manager.TXtJgManager;
-import com.izhbg.typz.sso.auth.manager.TXtJgYhManager;
-import com.izhbg.typz.sso.auth.manager.TXtYhGnjsManager;
-import com.izhbg.typz.sso.auth.manager.TXtYhManager;
 import com.izhbg.typz.sso.auth.service.TXtJgService;
 import com.izhbg.typz.sso.auth.service.TXtYhService;
 import com.izhbg.typz.sso.auth.service.TXtYyService;
@@ -179,7 +169,6 @@ public class TXtYhController {
 		tXtYhService.update(user,checkdel);
 		return "redirect:/user/user-list.izhbg?sjjgId="+user.getJgId()+"&currentAppId="+currentAppId;
 	}
-	
 	@RequestMapping(value="deleteGuser",method=RequestMethod.POST)
 	@SystemControllerLog(description = "删除用户")
 	public @ResponseBody  String deleteGuser(String[] checkdel) throws Exception{
