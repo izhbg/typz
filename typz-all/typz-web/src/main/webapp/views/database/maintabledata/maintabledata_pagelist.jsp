@@ -263,12 +263,12 @@
 																		id="${list.name }_sn" type="text" runat="server"
 																		name="${list.name }_sn" value="${tanchuvalue[1]}"
 																		size="18"
-																		onclick="javascript:openGroupWin1('${ctx}/default/management/security/maintable/gettree.do','${list.cname }','common_send_group','${list.mainTableColumn.columnid }','${list.mainTableColumn.isChecked }','${list.name }_snb');"
+																		onclick="javascript:openGroupWin1('${ctx}/maintablecolumn/maintablecolumn_gettree.izhbg','${list.cname }','common_send_group','${list.mainTableColumn.columnid }','${list.mainTableColumn.isChecked }','${list.name }_snb');"
 																		valueType="${valueType}" mustInput="${mustInput}"
 																		ispost="true" readonly
 																		<c:if test="${isupdate eq 1 and list.mainTableColumn.isUpdate eq 1 }">readonly="readonly"</c:if> />
 																	<span class="input-group-addon add-on"
-																		onclick="openGroupWin1('${ctx}/default/management/security/maintable/gettree.do','${list.cname }','common_send_group','${list.mainTableColumn.columnid }','${list.mainTableColumn.isChecked }','${list.name }_snb')"><i
+																		onclick="openGroupWin1('${ctx}/maintablecolumn/maintablecolumn_gettree.izhbg','${list.cname }','common_send_group','${list.mainTableColumn.columnid }','${list.mainTableColumn.isChecked }','${list.name }_snb')"><i
 																		class="fa fa-search"></i></span>
 																</div>
 															</div>

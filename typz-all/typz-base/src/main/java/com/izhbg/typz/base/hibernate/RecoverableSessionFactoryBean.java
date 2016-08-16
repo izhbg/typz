@@ -44,7 +44,9 @@ public class RecoverableSessionFactoryBean implements FactoryBean,
             SessionFactory sessionFactory = localSessionFactoryBean.getObject();
             sessionFactoryWrapper.setSessionFactory(sessionFactory);
         } catch (Exception ex) {
-            logger.error("", ex);
+        	ex.printStackTrace();
+        	logger.error("", ex);
+            
         }
     }
 

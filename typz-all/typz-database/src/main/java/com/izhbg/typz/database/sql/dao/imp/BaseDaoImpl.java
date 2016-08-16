@@ -16,13 +16,14 @@ import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.izhbg.typz.base.util.DateUtil;
 import com.izhbg.typz.database.sql.dao.BaseDao;
 import com.izhbg.typz.database.uitl.WebUtils;
 
-@Component("baseDao")
+@Repository("baseDao")
 public class BaseDaoImpl extends HibernateTransactionManager implements BaseDao {
 
 	@Transactional(readOnly = true)

@@ -51,14 +51,11 @@
 							<div class="form-group">
 								<label class="col-md-3 control-label">上级功能：</label>
 								<div class="col-md-4">
-									<c:if test="${func.sjgnDm=='-1'}">无</c:if>
-									<c:if test="${func.sjgnDm!='-1'}">
-										<div class="input-group">
-											<input type="hidden" name="sjgnDm" id="uodg_citySel1" value="${func.sjgnDm }" />
-											<input name="citySel" id="uodg_citySel" class="form-control"  value="${sjgnzyname}" onclick="uodg_showMenu()" readonly  />
-											<span class="input-group-addon" onclick="uodg_showMenu(); return false;"><i class="fa fa-link" style="cursor: pointer;"></i></span>
-										</div>
-									</c:if>
+									<div class="input-group">
+										<input type="hidden" name="sjgnDm" id="uodg_citySel1" value="${func.sjgnDm }" />
+										<input name="citySel" id="uodg_citySel" class="form-control"  value="${sjgnzyname}" onclick="uodg_showMenu()" readonly  />
+										<span class="input-group-addon" onclick="uodg_showMenu(); return false;"><i class="fa fa-link" style="cursor: pointer;"></i></span>
+									</div>
 									<div id="uodg_menuContent" class="menuContent col-md-10" style="display:none; position: absolute;z-index: 999;">
 										<ul id="uodg_treeDemo" class="ztree" style="margin-top:0; height: 260px;background:white;border:#e5e7ee solid 1px;overflow-y:scroll;overflow-x:hidden;"></ul>
 									</div>

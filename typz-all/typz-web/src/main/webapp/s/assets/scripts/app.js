@@ -17,7 +17,7 @@ var App = function () {
     // theme layout color set
     var layoutColorCodes = {
         'blue': '#4b8df8',
-        'red': '#e02222',
+        'red': '#d84a38',
         'green': '#35aa47',
         'purple': '#852b99',
         'grey': '#555555',

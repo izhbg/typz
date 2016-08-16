@@ -7,6 +7,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +21,7 @@ import com.izhbg.typz.database.sql.dao.SelectDataDao;
  * @date 2016-5-13 上午9:42:47
  * 
  */
-@Component("selectDataDao")
+@Repository("selectDataDao")
 public class SelectDataDaoImpl extends JdbcDaoSupport implements SelectDataDao {
 
 	@Transactional(readOnly = true)

@@ -23,6 +23,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.izhbg.typz.base.util.ParseUtil;
+import com.izhbg.typz.base.util.StringHelper;
 import com.izhbg.typz.sso.auth.dto.TXtAttachFile;
 
 
@@ -86,7 +88,7 @@ public class FileUploadUtil {
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 		String mDateTime = formatter.format(cal.getTime());
-		String sPath =req.getRealPath("/") + "/upload/";
+		String sPath =req.getSession().getServletContext().getRealPath("/")  + "/upload/";
 		String sFile = mDateTime.substring(0, 4)+"/" +Integer.parseInt(mDateTime.substring(4, 6))+"/" +Integer.parseInt(mDateTime.substring(6, 8));
 		ParseUtil.Mkdir(sPath + sFile);
 		sFile += "/" + mDateTime + "."

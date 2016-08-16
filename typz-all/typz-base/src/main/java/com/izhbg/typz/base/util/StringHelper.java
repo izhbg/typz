@@ -1,5 +1,5 @@
 //$Id: StringHelper.java,v 1.1 2008/02/13 02:40:32 administrator Exp $
-package com.izhbg.typz.sso.util;
+package com.izhbg.typz.base.util;
 
 import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;

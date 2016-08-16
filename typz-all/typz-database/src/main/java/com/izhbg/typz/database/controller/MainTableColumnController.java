@@ -1,6 +1,8 @@
 package com.izhbg.typz.database.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -8,15 +10,22 @@ import javax.servlet.http.HttpServletRequest;
 import org.hibernate.annotations.common.util.StringHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedCaseInsensitiveMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.izhbg.typz.base.common.service.ControllerException;
+import com.izhbg.typz.base.commondto.TreeObject;
+import com.izhbg.typz.base.util.CommonUtil;
+import com.izhbg.typz.base.util.StringUtils;
 import com.izhbg.typz.database.dto.MainTable;
 import com.izhbg.typz.database.dto.MainTableColumn;
 import com.izhbg.typz.database.service.MainTableColumnService;
 import com.izhbg.typz.database.service.MainTableService;
+import com.izhbg.typz.database.sql.service.SelectDataService;
+import com.izhbg.typz.sso.auth.UserAuthDTO;
+import com.izhbg.typz.sso.util.SpringSecurityUtils;
 
 /**
  * 
@@ -32,6 +41,7 @@ public class MainTableColumnController {
 	
 	private MainTableService mainTableService;
 	private MainTableColumnService mainTableColumnService;
+	private SelectDataService selectDataService;
 	/**
 	 * 主表列 列表
 	 * @param maintableid
@@ -136,6 +146,60 @@ public class MainTableColumnController {
 		mainTableColumnService.updateMainTableColumns(request);
 		return "redirect:/maintablecolumn/maintablecolumn_list.izhbg?maintableid="+maintableid; 
 	}
+	/**
+	 * 获取弹出框树结构数据
+	 * @param paameterMap
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/maintablecolumn_gettree", method={RequestMethod.GET, RequestMethod.POST})
+	public String getTree(@RequestParam Map<String,Object> paameterMap,Model model) throws Exception {
+		String columnid = StringUtils.getString(paameterMap.get("columnid"));
+		String id = StringUtils.getString(paameterMap.get("id"));
+		String title = StringUtils.getString(paameterMap.get("title"));
+		String divid = StringUtils.getString(paameterMap.get("divid"));
+		
+		MainTableColumn mtc = mainTableColumnService.findByMainTableColumnId(columnid);
+		String sql = mtc.getTypeSql();
+		String sqls[] = sql.split("#");
+		String pid = "0";
+		sql = sqls[0];
+		String columnName = mtc.getColumnName().toLowerCase();
+		UserAuthDTO user = (UserAuthDTO)SpringSecurityUtils.getCurrentUser();
+		sql = sql.replaceAll("@CurrentUserName", SpringSecurityUtils.getCurrentUsername());
+		sql = sql.replaceAll("@CurrentUserId", SpringSecurityUtils.getCurrentUserId());
+		sql = sql.replaceAll("@CurrentAppId", user.getAppId());
+		sql = sql.replaceAll("@CurrentDepId", user.getDepId());
+		sql = sql.replaceAll("@CurrentDepName", user.getDepName());
+		
+		List<Map<String,Object>> list = selectDataService.getData(sql);
+		List<TreeObject> tlist = new ArrayList<TreeObject>();
+		for (Map<String,Object> map2 : list) {
+			TreeObject to = new TreeObject();
+			to.setId(map2.get("id").toString());
+			to.setName(map2.get("name").toString());
+			to.setPid(map2.get("pid") != null ? (map2.get("pid").toString()).split(",")[0]  : "");
+			to.setIcons(map2.get("icons") != null ? map2.get("icons").toString() : "");
+			to.setCheckType(map2.get("checktype") != null ? map2.get("checktype").toString() : "");
+			to.setIsCheckType(map2.get("ischecktype") != null ? map2.get("ischecktype").toString() : "");
+			tlist.add(to);
+		}
+		String ischecked = "radio";
+		if (mtc.getIsChecked() != null && mtc.getIsChecked().equals("1")) {
+			ischecked = "checkbox";
+		}
+		String json = CommonUtil.getTreeJson(tlist, "1", pid);
+		
+		model.addAttribute("result", json);
+		model.addAttribute("tabIDIDID", id);
+		model.addAttribute("title", title);
+		model.addAttribute("ischecked", ischecked);
+		model.addAttribute("divid", divid);
+		return "database/maintablecolumn/maintablecolumn_gettree";
+	}
+	
+	
 	@Resource
 	public void setMainTableService(MainTableService mainTableService) {
 		this.mainTableService = mainTableService;
@@ -144,6 +208,10 @@ public class MainTableColumnController {
 	public void setMainTableColumnService(
 			MainTableColumnService mainTableColumnService) {
 		this.mainTableColumnService = mainTableColumnService;
+	}
+	@Resource
+	public void setSelectDataService(SelectDataService selectDataService) {
+		this.selectDataService = selectDataService;
 	}
 	
 	

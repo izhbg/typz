@@ -128,7 +128,7 @@
 									         <option value="19" <c:if test="${maintablecolumn.propertyType eq 19 }">selected</c:if> >年(yyyy)</option> --%>
 									         <option value="6" <c:if test="${maintablecolumn.propertyType eq 6 }">selected</c:if> >隐藏域</option>
 									        <%--  <option value="7" <c:if test="${maintablecolumn.propertyType eq 7 }">selected</c:if> >扩展字段</option> --%>
-									        <%--  <option value="8" <c:if test="${maintablecolumn.propertyType eq 8 }">selected</c:if> >弹出选择</option> --%>
+									         <option value="8" <c:if test="${maintablecolumn.propertyType eq 8 }">selected</c:if> >弹出选择</option>
 									         <option value="9" <c:if test="${maintablecolumn.propertyType eq 9 }">selected</c:if> >文本域</option>
 									         <option value="11" <c:if test="${maintablecolumn.propertyType eq 11 }">selected</c:if> >密码</option>
 									         <option value="12" <c:if test="${maintablecolumn.propertyType eq 12 }">selected</c:if> >文件上传</option>

@@ -57,5 +57,6 @@
     <module>typz-database</module>
     <module>typz-mobile</module>
     <module>typz-cms</module>
+    <module>typz-shop</module>
   </modules>
 </project>

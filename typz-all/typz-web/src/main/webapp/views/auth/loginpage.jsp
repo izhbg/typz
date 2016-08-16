@@ -50,14 +50,14 @@
 				<label class="control-label visible-ie8 visible-ie9"><spring:message code="core.login.username" text="账号2"/></label>
 				<div class="input-icon">
 					<i class="fa fa-user"></i>
-					<input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="<spring:message code="core.login.username" text="账号"/>" id="username" name='j_username' value="${sessionScope['SPRING_SECURITY_LAST_USERNAME']}"/>
+					<input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="<spring:message code="core.login.username" text="账号"/>" id="username" name='j_username' value="yuewuxing" <%-- value="${sessionScope['SPRING_SECURITY_LAST_USERNAME']}" --%>/>
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="control-label visible-ie8 visible-ie9"><spring:message code="core.login.password" text="密码"/></label>
 				<div class="input-icon">
 					<i class="fa fa-lock"></i>
-					<input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="<spring:message code="core.login.password" text="密码"/>" id="password"  name="j_password"/>
+					<input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="<spring:message code="core.login.password" text="密码"/>" id="password"  name="j_password" value="123456"/>
 				</div>
 			</div>
 			<div class="form-actions">

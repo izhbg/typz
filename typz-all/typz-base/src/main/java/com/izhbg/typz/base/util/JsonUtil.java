@@ -25,7 +25,20 @@ public class JsonUtil {
 	public static String toJson(Object obj) {
 		return JSON.toJSONString(obj);
 	}
-
+	/**
+	 * 异步返回数据结构
+	 * @param obj 返回内容
+	 * @param result 是否成功 1 成功 0不成功
+	 * @param msg 提示信息
+	 * @return
+	 */
+	public static String toJsonResult(Object obj,Integer result,String msg){
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("result", result);
+		map.put("msg", msg);
+		map.put("content", obj);
+		return JSON.toJSONString(map);
+	}
 	/**
 	 * JSON字符串转换成对象
 	 * 

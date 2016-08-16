@@ -4,7 +4,7 @@
  * TODO To change the template for this generated file go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-package com.izhbg.typz.sso.util;
+package com.izhbg.typz.base.util;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -20,7 +20,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.izhbg.typz.base.util.JsonUtil;
-import com.izhbg.typz.sso.auth.SpringSecurityUserAuth;
 
 /**
  * @author Administrator TODO To change the template for this generated type

@@ -139,12 +139,14 @@ public class FuncController {
 		}
 		TXtYh currentYh = tXtYhService.findByYhId(SpringSecurityUtils.getCurrentUserId());
 		TXtGnzy txtGnzy = tXtGnzyService.queryById(func.getSjgnDm());
+		if(txtGnzy!=null)
+			model.addAttribute("sjgnzyname", txtGnzy.getGnMc());
 		model.addAttribute("txtYy", tXtYyService.queryAll());
 		model.addAttribute("result", tXtGnzyService.getFunTreeJson(currentAppId));
 		model.addAttribute("currentAppId", currentAppId);
 		model.addAttribute("func", func);
 		model.addAttribute("currentYh", currentYh);
-		model.addAttribute("sjgnzyname", txtGnzy.getGnMc());
+		
 		return "admin/func/getfunc";
 	}
 	

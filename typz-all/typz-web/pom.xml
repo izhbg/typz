@@ -48,6 +48,12 @@
   		<artifactId>typz-cms</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
+  	<!-- import shop -->
+  	<dependency>
+  		<groupId>typz</groupId>
+  		<artifactId>typz-shop</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
   
   
   	<!-- servlet -->
