@@ -1,4 +1,4 @@
-package com.izhbg.typz.shop.goods.service;
+package com.izhbg.typz.shop.common.service;
 
 import java.util.List;
 

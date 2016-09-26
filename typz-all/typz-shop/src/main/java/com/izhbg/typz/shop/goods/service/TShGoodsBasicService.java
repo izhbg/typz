@@ -1,6 +1,7 @@
 package com.izhbg.typz.shop.goods.service;
 
 import com.izhbg.typz.base.page.Page;
+import com.izhbg.typz.shop.common.service.BaseService;
 import com.izhbg.typz.shop.goods.dto.TShGoods;
 import com.izhbg.typz.shop.goods.dto.TShGoodsBasic;
 

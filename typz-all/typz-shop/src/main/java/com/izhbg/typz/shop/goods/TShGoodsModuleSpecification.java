@@ -15,7 +15,7 @@ import com.izhbg.typz.dbmigrate.ModuleSpecification;
 @Component
 public class TShGoodsModuleSpecification implements ModuleSpecification 
 {
-	private static final String MODULE_NAME = "shop";
+	private static final String MODULE_NAME = "sh_goods";
     private static final String MODULE_NAME_UPPER = MODULE_NAME.toUpperCase();
     private String type;
     private boolean enabled;

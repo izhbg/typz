@@ -20,11 +20,21 @@
 	</div>
 	<div class="panel-body">
 		<a href="javascript:;" onclick="javascript:window.form1.submit()" class="btn btn-sm default" ><i class="fa fa-rotate-right"></i>刷新</a>
-		<a href="${ctx }/user/user-edit.izhbg?jgId=${parameterMap.sjjgId}&currentAppId=${parameterMap.currentAppId }" id="addDialog" class="btn btn-sm default"  ><i class="fa fa-plus-square"></i>新增</a>
-		<a href="javascript:user_del2()" class="btn btn-sm red" ><span class="glyphicon glyphicon-calendar"></span>删除</a>
-		<a href="javascript:user_del3()" class="btn btn-sm red" ><span class="glyphicon glyphicon-calendar"></span>从组织移除</a>
-		<a class="btn btn-sm default"  type="button" onclick="user_updpd();"><i class="fa fa-circle-o"></i>重置密码</a>
-		<a class="btn btn-sm default"  type="button" onclick="user_updflag();"><i class="fa fa-ban"></i>更改状态</a>
+		<tags:permission gnDm="${sessionScope.gndm }" type="read">
+			<a href="${ctx }/user/user-edit.izhbg?jgId=${parameterMap.sjjgId}&currentAppId=${parameterMap.currentAppId }" id="addDialog" class="btn btn-sm default"  ><i class="fa fa-plus-square"></i>新增</a>
+		</tags:permission>
+		<tags:permission gnDm="${sessionScope.gndm }" type="delete">
+			<a href="javascript:user_del2()" class="btn btn-sm red" ><span class="glyphicon glyphicon-calendar"></span>删除</a>
+		</tags:permission>
+		<tags:permission gnDm="${sessionScope.gndm }" type="delete">
+			<a href="javascript:user_del3()" class="btn btn-sm red" ><span class="glyphicon glyphicon-calendar"></span>从组织移除</a>
+		</tags:permission>
+		<tags:permission gnDm="${sessionScope.gndm }" type="update">
+			<a class="btn btn-sm default"  type="button" onclick="user_updpd();"><i class="fa fa-circle-o"></i>重置密码</a>
+		</tags:permission>
+		<tags:permission gnDm="${sessionScope.gndm }" type="update">
+			<a class="btn btn-sm default"  type="button" onclick="user_updflag();"><i class="fa fa-ban"></i>更改状态</a>
+		</tags:permission>
 		<a class="btn default btn-sm" href="#collapse-group" data-toggle="collapse" data-parent="#m-sidebar"><i class="m-icon-swapdown m-icon-blank"></i>查询</a>
 
 		<div class="pull-right">
@@ -125,7 +135,9 @@
 					<td style="text-align: center;" class="id">
 						<input type="checkbox" name="checkdel" class="selectedItem a-check"  value="${item.yhId}"/></td>
 					<td nowrap>
-							<a href="${ctx }/user/user-edit.izhbg?yhId=${item.yhId }&jgId=${item.jgId }&currentAppId=${parameterMap.currentAppId }">编辑</a>
+							<tags:permission gnDm="${sessionScope.gndm }" type="update">
+								<a href="${ctx }/user/user-edit.izhbg?yhId=${item.yhId }&jgId=${item.jgId }&currentAppId=${parameterMap.currentAppId }">编辑</a>
+							</tags:permission>
 						&nbsp; 
 							<a href="${ctx }/user-role/user-role-list.izhbg?yhId=${item.yhId }&jgId=${parameterMap.sjjgId }&currentAppId=${parameterMap.currentAppId }" title="授权角色">授权角色</a>&nbsp;
 					</td>

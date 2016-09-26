@@ -1,8 +1,8 @@
 CREATE TABLE `t_sh_goods_basic` (
   `id` varchar(50) NOT NULL COMMENT '唯一标示',
-  `shop_basic_id` varchar(50) DEFAULT NULL COMMENT '所属店铺唯一性标示',
+  `store_id` varchar(50) DEFAULT NULL COMMENT '所属店铺唯一性标示',
   `name` varchar(200) DEFAULT NULL COMMENT '名称',
-  `version` int(50) DEFAULT NULL COMMENT '版本号',
+  `version` int(50) NOT NULL COMMENT '版本号',
   `alias_name` varchar(200) DEFAULT NULL COMMENT '别名',
   `brand_id` varchar(50) DEFAULT NULL COMMENT '品牌外键',
   `specifications_id` varchar(50) DEFAULT NULL COMMENT '规格',

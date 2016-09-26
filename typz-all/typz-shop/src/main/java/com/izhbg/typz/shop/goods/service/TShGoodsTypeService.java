@@ -2,6 +2,7 @@ package com.izhbg.typz.shop.goods.service;
 
 import java.util.List;
 
+import com.izhbg.typz.shop.common.service.BaseService;
 import com.izhbg.typz.shop.goods.dto.TShGoodsType;
 /**
  * 
