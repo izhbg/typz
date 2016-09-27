@@ -2,7 +2,12 @@ package com.izhbg.typz.shop.order.dto;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.izhbg.typz.shop.goods.dto.TShGoodsBasic;
+import com.izhbg.typz.shop.store.dto.TShStore;
+
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -19,7 +24,7 @@ public class TShOrder implements Serializable {
 	private String id;
 
 	@Column(name="sc_bj")
-	private byte scBj;
+	private int scBj;
 
 	@Column(name="store_id")
 	private String storeId;
@@ -39,17 +44,13 @@ public class TShOrder implements Serializable {
 	@Transient
 	private String goodsInfo;
 	@Transient
-	private String addressId;
+	private TShOrderAddress tShOrderAddress;
 	@Transient
-	private String addressSelf;
+	private TShOrderDetail tShOrderDetail;
 	@Transient
-	private Integer isDelivery;
+	private List<TShGoodsBasic> tShGoodsList;
 	@Transient
-	private Integer isSelf;
-	@Transient
-	private Integer isSend;
-	@Transient
-	private String tsyq;
+	private TShStore tShStore;
 	
 	public TShOrder() {
 	}
@@ -62,11 +63,11 @@ public class TShOrder implements Serializable {
 		this.id = id;
 	}
 
-	public byte getScBj() {
+	public int getScBj() {
 		return this.scBj;
 	}
 
-	public void setScBj(byte scBj) {
+	public void setScBj(int scBj) {
 		this.scBj = scBj;
 	}
 
@@ -127,5 +128,37 @@ public class TShOrder implements Serializable {
 		this.yhId = yhId;
 	}
 
+	public TShOrderAddress gettShOrderAddress() {
+		return tShOrderAddress;
+	}
+
+	public void settShOrderAddress(TShOrderAddress tShOrderAddress) {
+		this.tShOrderAddress = tShOrderAddress;
+	}
+
+	public TShOrderDetail gettShOrderDetail() {
+		return tShOrderDetail;
+	}
+
+	public void settShOrderDetail(TShOrderDetail tShOrderDetail) {
+		this.tShOrderDetail = tShOrderDetail;
+	}
+
+	public List<TShGoodsBasic> gettShGoodsList() {
+		return tShGoodsList;
+	}
+
+	public void settShGoodsList(List<TShGoodsBasic> tShGoodsList) {
+		this.tShGoodsList = tShGoodsList;
+	}
+
+	public TShStore gettShStore() {
+		return tShStore;
+	}
+
+	public void settShStore(TShStore tShStore) {
+		this.tShStore = tShStore;
+	}
+	
 	
 }
