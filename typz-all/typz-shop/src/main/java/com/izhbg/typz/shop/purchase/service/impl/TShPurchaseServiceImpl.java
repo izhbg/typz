@@ -54,10 +54,10 @@ public class TShPurchaseServiceImpl implements TShPurchaseService{
 			throw new ServiceException("参数为空，添加购物车失败");
 		if(entity.getNum()==0)
 			throw new ServiceException("参数不全，添加购物车失败");
-		Map map = new HashMap();
+		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("yhId", entity.getYhId());
 		map.put("goodsId", entity.getGoodsId());
-		TShPurchase pur = tShPurchaseManager.findUnique(" from TShPurchase where yhId=:yhId and goodsId=:goodsId", map);
+		TShPurchase pur = tShPurchaseManager.findUnique("from TShPurchase where yhId=:yhId and goodsId=:goodsId", map);
 		if(pur!=null){
 			pur.setNum(entity.getNum()+pur.getNum());
 			tShPurchaseManager.update(pur);

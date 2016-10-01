@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
+    xmlns:security="http://www.springframework.org/schema/security" 
+    xmlns:oauth2="http://www.springframework.org/schema/security/oauth2" 
+    xsi:schemaLocation="http://www.springframework.org/schema/beans   
+            http://www.springframework.org/schema/beans/spring-beans-3.2.xsd  
+            http://www.springframework.org/schema/security   
+            http://www.springframework.org/schema/security/spring-security-3.2.xsd
+            http://www.springframework.org/schema/security/oauth2 
+            http://www.springframework.org/schema/security/spring-security-oauth2-2.0.xsd"> 
+     
+     <!-- auth2 配置 --> 
+    <security:http pattern="/oauth/token" create-session="stateless" authentication-manager-ref="oauth2AuthenticationManager"
+          entry-point-ref="oauth2AuthenticationEntryPoint" use-expressions="true">
+       <!--  <security:intercept-url pattern="/oauth/token" access="IS_AUTHENTICATED_FULLY"/> -->
+        <security:anonymous enabled="false"/>
+        <security:http-basic entry-point-ref="oauth2AuthenticationEntryPoint"/>
+        <security:custom-filter ref="clientCredentialsTokenEndpointFilter" before="BASIC_AUTH_FILTER"/>
+        <security:access-denied-handler ref="oauth2AccessDeniedHandler"/>
+    </security:http>   
+    <!--mobile http configuration-->
+    <security:http pattern="/m/**" create-session="never" entry-point-ref="oauth2AuthenticationEntryPoint"
+          access-decision-manager-ref="oauth2AccessDecisionManager" use-expressions="true">
+        <security:anonymous enabled="false"/> 
+
+        <!-- <security:intercept-url pattern="/m/**" access="ROLE_MOBILE,SCOPE_READ"/>  -->
+        <security:custom-filter ref="filterSecurityInterceptor" before="FILTER_SECURITY_INTERCEPTOR"/>
+		<security:custom-filter ref="concurrencyFilter" position="CONCURRENT_SESSION_FILTER"/> 
+		
+        <security:custom-filter ref="mobileResourceServer" before="PRE_AUTH_FILTER"/>
+        <security:access-denied-handler ref="oauth2AccessDeniedHandler"/>
+    </security:http>
+    
+    <security:authentication-manager id="oauth2AuthenticationManager">
+        <security:authentication-provider user-service-ref="customUserDetailsService"/>
+    </security:authentication-manager> 
+    <!-- <bean id="oauth2ClientDetailsUserService"
+                class="org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService">
+        <constructor-arg ref="clientDetailsService"/>
+    </bean>   -->
+    <bean id="clientDetailsService" class="com.izhbg.typz.sso.auth2.service.CustomJdbcClientDetailsService">
+        <constructor-arg index="0" ref="dataSource"/>
+    </bean>
+    <bean id="oauth2AuthenticationEntryPoint"
+                class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint"/>
+                
+     <bean id="clientCredentialsTokenEndpointFilter"
+                class="org.springframework.security.oauth2.provider.client.ClientCredentialsTokenEndpointFilter">
+        <property name="authenticationManager" ref="oauth2AuthenticationManager"/>
+     </bean>
+     <bean id="oauth2AccessDeniedHandler"
+                class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler"/>
+     <bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.store.JdbcTokenStore">
+        <constructor-arg index="0" ref="dataSource"/>
+     </bean>
+     <bean id="tokenServices" class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
+        <property name="tokenStore" ref="tokenStore"/>
+        <property name="clientDetailsService" ref="clientDetailsService"/>
+        <property name="supportRefreshToken" value="true"/>
+     </bean>
+     <bean class="org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory"
+                id="oAuth2RequestFactory">
+        <constructor-arg name="clientDetailsService" ref="clientDetailsService"/>
+     </bean>
+     <bean id="oauthUserApprovalHandler" class="com.izhbg.typz.sso.auth2.OauthUserApprovalHandler">
+        <property name="tokenStore" ref="tokenStore"/>
+        <property name="clientDetailsService" ref="clientDetailsService"/>
+        <property name="requestFactory" ref="oAuth2RequestFactory"/>
+        <property name="oauthService" ref="oauthService"/>
+    </bean>
+    <bean id="jdbcAuthorizationCodeServices"
+                class="org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices">
+        <constructor-arg index="0" ref="dataSource"/>
+    </bean>
+    <bean id="oauth2AccessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased">
+        <constructor-arg>
+            <list>
+                <bean class="org.springframework.security.oauth2.provider.vote.ScopeVoter"/>
+                <bean class="org.springframework.security.access.vote.RoleVoter"/>
+                <bean class="org.springframework.security.access.vote.AuthenticatedVoter"/>
+            </list>
+        </constructor-arg>
+    </bean>
+     <oauth2:resource-server id="mobileResourceServer" resource-id="mobile-resource" token-services-ref="tokenServices"/>
+     <oauth2:authorization-server client-details-service-ref="clientDetailsService" token-services-ref="tokenServices"
+                                 user-approval-handler-ref="oauthUserApprovalHandler"
+                                 user-approval-page="oauth_approval"
+                                 error-page="oauth_error">
+        <oauth2:authorization-code authorization-code-services-ref="jdbcAuthorizationCodeServices"/>
+        <oauth2:implicit/>
+        <oauth2:refresh-token/>
+        <oauth2:client-credentials/>
+        <oauth2:password/>
+    </oauth2:authorization-server>
+    
+     
+    <!-- spring security 配置 -->   
+    <security:http auto-config="true" create-session="never" use-expressions="true" access-denied-page="/common/403.jsp" >  
+         <!-- 不要过滤图片等静态资源 -->    
+        <security:intercept-url pattern="/**/*.jpg" access="permitAll"/>
+        <security:intercept-url pattern="/**/*.png" access="permitAll"/>
+        <security:intercept-url pattern="/**/*.gif" access="permitAll"/>
+        <security:intercept-url pattern="/**/*.css" access="permitAll"/>
+        <security:intercept-url pattern="/**/*.js" access="permitAll"/>
+        
+        <security:intercept-url pattern="/common/401.jsp" access="permitAll"/>
+        <security:intercept-url pattern="/common/403.jsp" access="permitAll"/>
+        <security:intercept-url pattern="/common/404.jsp" access="permitAll"/>
+        <security:intercept-url pattern="/common/500.jsp" access="permitAll"/>
+        <!-- cms 相关不过滤 -->
+        <security:intercept-url pattern="/cms/**" access="permitAll"/>
+        <!-- 登录页面和忘记密码页面不过滤  -->  
+        <security:intercept-url pattern="/auth/login.izhbg" access="permitAll"/>  
+        <!-- 登录配置 -->   
+        <security:form-login  
+                login-page="/auth/login.izhbg"   
+                authentication-failure-url="/auth/login.izhbg?error=true"   
+                authentication-success-handler-ref="authenticationSuccessHandler"/>  
+        <!-- 退出配置 -->       
+        <security:logout   
+                invalidate-session="true"   
+                logout-success-url="/auth/login.izhbg"   
+                logout-url="/auth/logout.izhbg"/>  
+        
+       <!-- "记住我"功能，采用持久化策略（将用户的登录信息存放在数据库表中）  --> 
+       <security:remember-me data-source-ref="dataSource"
+       			 		     token-validity-seconds="1209600"
+       			 		     remember-me-parameter="remember-me" user-service-ref="customUserDetailsService"/>
+       
+       <!-- session处理 --> 
+       <security:session-management session-authentication-strategy-ref="concurrentSessionControlStrategy" invalid-session-url="/auth/login.izhbg" session-authentication-error-url="/auth/login.izhbg" />
+       
+       <!-- 增加一个自定义的filter，放在FILTER_SECURITY_INTERCEPTOR之前， 实现用户、角色、权限、资源的数据库管理。  -->
+       <security:custom-filter ref="filterSecurityInterceptor" before="FILTER_SECURITY_INTERCEPTOR"/>
+       
+       <security:custom-filter ref="concurrencyFilter" position="CONCURRENT_SESSION_FILTER"/>  
+         
+    </security:http>
+      
+    <bean id="authenticationSuccessHandler" class="com.izhbg.typz.sso.security.handler.SimpleLoginSuccessHandler">  
+	    <property name="defaultTargetUrl" value="/main/common.izhbg"></property>  
+	    <property name="forwardToDestination" value="false"></property>  
+	</bean>  
+    <!-- 一个自定义的filter，必须包含authenticationManager, accessDecisionManager,securityMetadataSource三个属性。  -->  
+    <bean id="filterSecurityInterceptor" class="com.izhbg.typz.sso.security.MyFilterSecurityInterceptor">
+    	<property name="authenticationManager" ref="authenticationManager"/>
+    	<property name="accessDecisionManager" ref="myAccessDecisionManager"/>
+    	<property name="securityMetadataSource" ref="mySecurityMetadataSource"/>
+    </bean>
+    <bean id="myAccessDecisionManager" class="com.izhbg.typz.sso.security.MyAccessDecisionManager"/>
+    <bean id="mySecurityMetadataSource" class="com.izhbg.typz.sso.security.service.MyInvocationSecurityMetadataSourceService"/>
+    
+    <!-- 指定一个自定义的authentication-manager :customUserDetailsService -->  
+    <security:authentication-manager alias="authenticationManager">  
+            <security:authentication-provider user-service-ref="customUserDetailsService">  
+                    <security:password-encoder ref="passwordEncoder">
+                    	<!-- <security:salt-source user-property="username"/> 盐值-->
+                    </security:password-encoder>  
+            </security:authentication-provider>  
+    </security:authentication-manager>  
+	<!-- 从数据库加载UserDetails的UserDetailsService -->
+    <bean id="customUserDetailsService" class="com.izhbg.typz.sso.security.service.CustomUserDetailsService">
+    	 <property name="userCache" ref="userCache"/>
+    </bean>
+    <!-- 密码加密器 -->
+	<bean id="passwordEncoder" class="com.izhbg.typz.sso.util.PasswordEncoderFactoryBean">
+		<property name="type" value="${security.passwordencoder.type}"/>
+		<property name="salt" value="${security.passwordencoder.salt}"/><!-- 盐值 -->
+	</bean>
+   <!-- 又一个密码加密器？ -->
+	<bean id="customPasswordEncoder" factory-bean="&amp;passwordEncoder" factory-method="getCustomPasswordEncoder"/>
+    
+    <!-- session 处理 -->
+    <bean id="concurrentSessionControlStrategy"  
+	    class="org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">  
+	    <constructor-arg name="sessionRegistry" ref="sessionRegistry" />  
+	    <property name="maximumSessions" value="1"></property>  
+	</bean>  
+	  
+	<bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
+	<bean id="concurrencyFilter" class="org.springframework.security.web.session.ConcurrentSessionFilter">  
+	    <constructor-arg name="sessionRegistry" ref="sessionRegistry" />  
+	    <constructor-arg name="expiredUrl" value="/sessionOut.jsp" />  
+	</bean>    
+	 <!-- 启用用户的缓存功能  -->
+	<bean id="userCache"
+		class="org.springframework.security.core.userdetails.cache.EhCacheBasedUserCache">
+		<property name="cache" ref="userEhCache" />
+	</bean>
+
+	<bean id="userEhCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+		<property name="cacheName" value="userCache" />
+		<property name="cacheManager" ref="cacheManager" />
+	</bean>
+
+	<bean id="cacheManager"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" />
+	
+	  <!-- spring security自带的与权限有关的数据读写Jdbc模板  -->  
+	 <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">  
+	  <property name="dataSource" ref="dataSource" />  
+	 </bean>
+      
+</beans>

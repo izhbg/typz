@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>typz</groupId>
+    <artifactId>typz</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <groupId>typz-web-im</groupId>
+  <artifactId>typz-web-im</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <name>typz-web-im Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+  
+  <dependencies>
+  	<!-- import base -->
+  	<dependency>
+  		<groupId>typz</groupId>
+  		<artifactId>typz-base</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<!-- import flyway -->
+  	<dependency>
+  		<groupId>typz</groupId>
+  		<artifactId>typz-flyway</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<!-- import sso -->
+  	<dependency>
+  		<groupId>typz</groupId>
+  		<artifactId>typz-sso</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<!-- import database -->
+  	<dependency>
+  		<groupId>typz</groupId>
+  		<artifactId>typz-database</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<!-- import mobile -->
+  	<dependency>
+  		<groupId>typz</groupId>
+  		<artifactId>typz-mobile</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<!-- import cms -->
+  	<dependency>
+  		<groupId>typz</groupId>
+  		<artifactId>typz-cms</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<!-- import shop -->
+  	<dependency>
+  		<groupId>typz</groupId>
+  		<artifactId>typz-shop</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  
+  
+  	<!-- servlet -->
+	<dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>javax.servlet-api</artifactId>
+        <version>${servlet.version}</version>
+        <scope>provided</scope>
+    </dependency>
+	<dependency>
+       <groupId>javax.servlet.jsp</groupId>
+       <artifactId>jsp-api</artifactId>
+       <version>${jsp.version}</version>
+       <scope>provided</scope>
+	</dependency>
+	
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <finalName>typz-web-im</finalName>
+  </build>
+</project>

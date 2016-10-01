@@ -237,6 +237,15 @@
 	    <artifactId>spring-data-redis</artifactId>    
 	    <version>${spring-data-redis.version}</version>    
 	</dependency> 
+	
+	<!-- junit test -->
+	<!-- https://mvnrepository.com/artifact/com.diva-e.parallel-test-runner/parallel-test-runner -->
+	<dependency>
+	    <groupId>com.diva-e.parallel-test-runner</groupId>
+	    <artifactId>parallel-test-runner</artifactId>
+	    <version>1.0.0</version>
+	</dependency>
+		
    </dependencies>
    <build>
        <plugins>

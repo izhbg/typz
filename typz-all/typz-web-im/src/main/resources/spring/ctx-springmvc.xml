@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+	<!--通知spring使用cglib而不是jdk的来生成代理方法 AOP可以拦截到Controller--> 
+   	<aop:aspectj-autoproxy proxy-target-class="true" />  
+	<!-- 自动扫描且只扫描@Controller -->
+	<context:component-scan base-package="com.izhbg.typz" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	 
+	<mvc:annotation-driven conversion-service="conversionService" >
+		<mvc:message-converters register-defaults="true">
+			<!-- 将StringHttpMessageConverter的默认编码设为UTF-8 -->
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+		    	<constructor-arg value="UTF-8" />
+			</bean>
+  		</mvc:message-converters>
+	</mvc:annotation-driven>
+	<!-- Freemarker配置 -->  
+	<bean id="freemarkerConfig"  
+	      class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">  
+	    <property name="templateLoaderPath" value="/cms/templates/" />  
+	    <property name="freemarkerSettings">  
+	        <props>  
+	            <prop key="template_update_delay">0</prop>  
+	            <prop key="default_encoding">UTF-8</prop>  
+	            <prop key="number_format">0.##########</prop>  
+	            <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>  
+	            <prop key="classic_compatible">true</prop>  
+	            <prop key="template_exception_handler">ignore</prop>  
+	        </props>  
+	    </property>  
+	</bean>  
+	
+	
+	<!-- 定义HTML文件的位置 -->
+	 <bean id="htmlviewResolver"  
+        class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
+        <property name="viewClass" value="com.izhbg.typz.common.springmvc.view.HtmlResourceView"/>
+        <property name="order" value="0" />
+        <property name="prefix" value="/cms/"/>
+        <property name="suffix" value=".html" />  
+        <property name="contentType" value="text/html;charset=UTF-8"></property>  
+    </bean>
+	<!-- 定义JSP文件的位置 -->
+	<bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="order" value="1" />
+		<property name="prefix" value="/views/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+
+
+	<!-- 容器默认的DefaultServletHandler处理 所有静态内容与无RequestMapping处理的URL-->
+	<mvc:default-servlet-handler/>
+
+	<!-- 定义无需Controller的url<->view直接映射 -->
+	<mvc:view-controller path="/" view-name="/cms/index.izhbg"/>
+
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="utf-8"/>
+		<property name="maxUploadSize" value="1000000"/>
+	</bean>
+
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+		<property name="converters">
+			<list>
+				<bean class="com.izhbg.typz.base.spring.DateConverter" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 处理springmvc的RedirectAttributes的工具类 -->
+	<bean id="messageHelper" class="com.izhbg.typz.base.spring.MessageHelper"/>
+
+</beans>

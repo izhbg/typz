@@ -13,7 +13,6 @@ import com.izhbg.typz.base.util.Constants;
 import com.izhbg.typz.base.util.StringHelper;
 import com.izhbg.typz.shop.store.dto.TShStoreAttachefile;
 import com.izhbg.typz.shop.store.manager.TShStoreAttachefileManager;
-import com.izhbg.typz.shop.store.manager.TShStoreManager;
 import com.izhbg.typz.shop.store.service.TShStoreAttacheFileService;
 
 public class TShStoreAttacheFileServiceImpl implements TShStoreAttacheFileService{
@@ -64,8 +63,8 @@ public class TShStoreAttacheFileServiceImpl implements TShStoreAttacheFileServic
 
 	@Override
 	public Page pageList(Page page) throws Exception {
-		Map map = new HashMap<String, Object>();
-		return tsAttachefileManager.pagedQuery(" from TShStoreAttachefile", page.getPageNo(), page.getPageSize(), map);
+		Map<String, Object> map = new HashMap<String, Object>();
+		return tsAttachefileManager.pagedQuery("from TShStoreAttachefile", page.getPageNo(), page.getPageSize(), map);
 	}
 
 	@Override
@@ -77,20 +76,20 @@ public class TShStoreAttacheFileServiceImpl implements TShStoreAttacheFileServic
 	public List<TShStoreAttachefile> getStoreAttacheFile(String storeId) throws Exception {
 		if(StringHelper.isEmpty(storeId))
 			throw new ServiceException("参数为空，获取附件失败");
-		Map map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("storeId", storeId);
 		map.put("state", Constants.ATTACHE_NORMAL);
-		return tsAttachefileManager.find(" from TShStoreAttachefile where storeId=:storeId and state=:state", map);
+		return tsAttachefileManager.find("from TShStoreAttachefile where storeId=:storeId and state=:state", map);
 	}
 
 	@Override
 	public TShStoreAttachefile getIndexAttacheFile(String storeId) throws Exception {
 		if(StringHelper.isEmpty(storeId))
 			throw new ServiceException("参数为空，获取头像失败");
-		Map map = new HashMap<String, Object>();
+		Map<String,Object> map = new HashMap<String, Object>();
 		map.put("storeId", storeId);
 		map.put("state", Constants.ATTACHE_INDEX);
-		return tsAttachefileManager.findUnique(" from TShStoreAttachefile where storeId=:storeId and state=:state", map);
+		return tsAttachefileManager.findUnique("from TShStoreAttachefile where storeId=:storeId and state=:state", map);
 	}
 
 }
