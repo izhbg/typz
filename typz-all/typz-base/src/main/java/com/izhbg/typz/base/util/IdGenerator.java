@@ -233,5 +233,13 @@ public class IdGenerator {
         public long getCurrentTime() {  
             return this.lastTime.incrementAndGet();  
         }  
-    }  
+    } 
+    /**
+	 *  生成一个 N位数的验证码
+	 * @param n
+	 * @return
+	 */
+	public static int generateCode(int n){
+		return (int)((Math.random()*9+1)*Math.pow(10, n));
+	} 
 }  

@@ -11,7 +11,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 
 @Component
-public class RedisUtil {
+public class RedisService {
 	@Autowired
 	private RedisTemplate<String, ?> redisTemplate;
 	
@@ -21,7 +21,7 @@ public class RedisUtil {
 	 * @param id  value ID
 	 * @param value  value
 	 */
-	public void add(String key,String id,Object value){
+	public void add(String key,String id,Object value) throws Exception{
 		redisTemplate.opsForHash().put(key, id, value);
 	}
 	
@@ -32,7 +32,7 @@ public class RedisUtil {
 	 * @param value
 	 * @param seconds
 	 */
-	public void add(String key,String id,Object value,int seconds){
+	public void add(String key,String id,Object value,int seconds) throws Exception{
 		redisTemplate.opsForHash().put(key, id, value);
 		redisTemplate.expire(key, seconds, TimeUnit.SECONDS);
 	}
@@ -42,7 +42,7 @@ public class RedisUtil {
 	 * @param key
 	 * @param seconds
 	 */
-	public void setExpireTime(String key,int seconds){
+	public void setExpireTime(String key,int seconds) throws Exception{
 		redisTemplate.expire(key, seconds, TimeUnit.SECONDS);
 	}
 	
@@ -51,7 +51,7 @@ public class RedisUtil {
 	 * @param key
 	 * @param id
 	 */
-	public void delete(String key,String id){
+	public void delete(String key,String id) throws Exception{
 		redisTemplate.opsForHash().delete(key, id);
 	}
 	/**
@@ -60,7 +60,7 @@ public class RedisUtil {
 	 * @param id
 	 * @return
 	 */
-	public String getStringById(String key ,String id){
+	public String getStringById(String key ,String id) throws Exception{
 		return (String) redisTemplate.boundHashOps(key).get(id);
 	}
 	/**
@@ -69,7 +69,7 @@ public class RedisUtil {
 	 * @param id
 	 * @return
 	 */
-	public <T> T getById(String key ,String id){
+	public <T> T getById(String key ,String id) throws Exception{
 		String configInfo = (String)redisTemplate.boundHashOps(key).get(id);
         T t_temp = JSON.parseObject(configInfo,new TypeReference<T>() {});
         return t_temp;

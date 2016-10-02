@@ -57,6 +57,12 @@
   		<artifactId>typz-shop</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
+  	<!-- import sms -->
+  	<dependency>
+  		<groupId>typz</groupId>
+  		<artifactId>typz-sms</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
   
   
   	<!-- servlet -->

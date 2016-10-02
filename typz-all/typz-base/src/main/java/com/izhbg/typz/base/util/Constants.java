@@ -34,6 +34,19 @@ public final class Constants {
 	public final static Integer ADDRESS_DEFAULT =1;//默认收货地址
 	public final static Integer ADDRESS_NOT_DEFAULT =0;//非默认收货地址
 	
+	//Redis cache 
+	public final static String SMS_CODE_CODEID ="sms_code_codeId";
+	public final static int SMS_TIMEOUT=120;//短信验证码失效时间
+	
+	public final static String LOGIN_TOKEN="login_token";
+	
+	//messages
+	public final static String SYSTEMMSG_EMPTYFILED="参数为空";
+	public final static String SYSTEMMSG_SUCCESS="操作成功";
+	public final static String SYSTEMMSG_FAILED="操作失败";
+	public final static String SYSTEMMSG_SMSCODE_FAILED="验证码错误";
+	
+	
 	
 	
 }

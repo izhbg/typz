@@ -90,6 +90,25 @@
 			<artifactId>log4j</artifactId>
 			<version>${log4j.version}</version>
 		</dependency>
+		<dependency>  
+		    <groupId>ch.qos.logback</groupId>  
+		    <artifactId>logback-core</artifactId>  
+		    <version>0.9.28</version>  
+		    <type>jar</type>  
+		</dependency>  
+		<dependency>  
+		    <groupId>ch.qos.logback</groupId>  
+		    <artifactId>logback-classic</artifactId>  
+		    <version>0.9.28</version>  
+		    <type>jar</type>  
+		</dependency> 
+		<!-- https://mvnrepository.com/artifact/org.codehaus.janino/janino -->
+		<dependency>
+		    <groupId>org.codehaus.janino</groupId>
+		    <artifactId>janino</artifactId>
+		    <version>3.0.6</version>
+		</dependency>
+				        
 		<!-- mysql连接 -->
 		<dependency>
 			<groupId>mysql</groupId>
