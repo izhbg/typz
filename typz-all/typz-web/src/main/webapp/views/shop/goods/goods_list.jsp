@@ -7,6 +7,35 @@
   <head>
 <%@include file="/common/meta.jsp"%>
 <%@include file="/common/snew.jsp"%>
+
+<style type="text/css">
+		.tagColorSpan
+		{
+			border-radius: 3px;
+			height: 12px;
+			width: 12px;
+			border: 1px solid #BEBABA;
+			margin: 3px 4px 0px 2px;
+			float: left;
+			line-height: 12px;
+		}
+		.titleTag
+		{
+			margin-left:4px;
+			cursor:Pointer;
+		}
+		
+		.tagColorSpan
+		{
+			border-radius: 3px;
+			height: 12px;
+			width: 12px;
+			border: 1px solid #BEBABA;
+			margin: 3px 4px 0px 2px;
+			float: left;
+			line-height: 12px;
+		}
+	</style>
 </head>
 
 <body class="page-header-fixed"> 
@@ -41,7 +70,7 @@
 					<div class="tab-content">
 						<div class="tab-pane active">
 							<a href="javascript:;" onclick="javascript:window.form1.submit()" class="btn btn-sm default" ><i class="fa fa-rotate-right"></i>刷新</a>
-							<a href="${ctx }/goods/goods_edit.izhbg" id="addDialog" class="btn btn-sm default"  ><i class="fa fa-plus-square"></i>新增</a>
+							<a href="${ctx }/goods/goods_edit.izhbg?random=1860010" id="addDialog" class="btn btn-sm default"  ><i class="fa fa-plus-square"></i>新增</a>
 							
 							<c:if test="${tShGoods.status==-1&&tShGoods.delStatus!=-1}">
 								<a href="javascript:GoodsList.delGoodsItem()" class="btn btn-sm red" ><span class="glyphicon glyphicon-calendar"></span>删除</a>
@@ -58,6 +87,19 @@
 							<c:if test="${tShGoods.delStatus==-1}">
 								<a class="btn btn-sm default"  type="button" onclick="GoodsList.recoverState();"><i class="fa fa-ban"></i>恢复</a>
 							</c:if>
+							
+							<div class="btn-group" style="margin-left:1px;">
+								<a class="btn default btn-sm dropdown-toggle" id="tagLinkTitle" data-toggle="dropdown" href="#">
+								    标记为
+								    <span class="caret"></span>
+							    </a>
+							    <ul id="ul-tag" class="dropdown-menu" style="min-width:150px;">
+							    	<li class="divider"></li>
+							    	<c:forEach items="${tags }" var="tag">
+							    		<li class="tag"><a href="#" onclick="GoodsList.setTag('${tag.id}')"><div class="tagColorSpan" style="background-color:${tag.color}">&nbsp;</div>${tag.name }</a></li>
+							    	</c:forEach>
+							    </ul>
+							</div>
 							
 							<a class="btn default btn-sm" href="#collapse-group" data-toggle="collapse" data-parent="#m-sidebar"><i class="m-icon-swapdown m-icon-blank"></i>查询</a>
 					
@@ -123,16 +165,7 @@
 									</th>
 									<th width="140">操作</th>
 									<th >名称</th>
-									<th >所属店铺</th>
-									<th >版本号</th>
-									<th >别名</th>
-									<th >型号</th>
-									<th >规格</th>
-									<th >单位</th>
-									<th >品牌</th>
-									<th >类型</th>
-									<th >厂家</th>
-									<th>备注</th>
+									<th width="200">所属店铺</th>
 								</tr>
 							</thead>
 							
@@ -143,20 +176,27 @@
 											<input type="checkbox" name="checkdel" class="selectedItem a-check"  value="${item.id}"/></td>
 										<td nowrap>
 											<c:if test="${tShGoods.status==-1&&tShGoods.delStatus!=-1}">
-												<a href="${ctx }/goods/goods_edit.izhbg?id=${item.id }">编辑</a>
+												<a href="${ctx }/goods/goods_edit.izhbg?id=${item.id }&random=1860010">编辑</a>
 											</c:if>
 										</td>
-										<td>${item.name}</td>
-										<td>${item.shopBasicId }</td>
-										<td>${item.version }</td>
-										<td>${item.aliasName }</td>  
-										<td>${item.brandId }</td>  
-										<td>${item.specificationsId }</td>  
-										<td>${item.modelId }</td>  
-										<td>${item.unit }</td>  
-										<td>${item.typeId }</td>  
-										<td>${item.vender }</td>  
-										<td>${item.other }</td>  
+										<td>
+										
+											<c:forEach items="${item.tShGoodsTags }" var="tg">
+												<div style="width:74px;top:3px; float:right; right:0px;position:relative;">
+													<span class="label lableTag titleTag" style="float:right;background-color:${tg.color}">
+														${tg.name }(${tg.xh })
+														<span class="label lableTag closeTag" onclick="delTag(${item.id},${tg.id })" style="padding: 0px 2px; margin-left: 2px; cursor: pointer; display: none; background-color: red;">
+																<b title="移出标签" >x</b>
+															</span>
+													</span>
+												</div>
+											</c:forEach>
+											
+											<div class="td-content-nowrap" >
+												${item.name}
+											</div>
+										</td>
+										<td>${item.storeId }</td>
 									</tr>
 								</c:forEach>
 							</tbody>

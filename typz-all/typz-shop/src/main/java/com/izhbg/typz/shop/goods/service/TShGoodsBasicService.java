@@ -44,6 +44,14 @@ public interface TShGoodsBasicService extends BaseService<TShGoodsBasic> {
 	 */
 	public Page pageList(Page page,TShGoods tShGoods) throws Exception;
 	/**
+	 * 店铺分页查询
+	 * @param page
+	 * @param tShGoods
+	 * @return
+	 * @throws Exception
+	 */
+	public Page pageStoreList(Page page,TShGoods tShGoods) throws Exception;
+	/**
 	 * 下架商品
 	 * @param goodsId
 	 * @throws Exception
@@ -73,4 +81,5 @@ public interface TShGoodsBasicService extends BaseService<TShGoodsBasic> {
 	 * @throws Exception
 	 */
 	public void recoverBatche(String[] ids) throws Exception;
+	
 }

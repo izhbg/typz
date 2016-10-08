@@ -31,7 +31,7 @@ public class SMSService {
 		if(StringHelper.isEmpty(phone))
 			throw new ServiceException("手机号为空，发送手机验证码失败");
 		
-		int code = IdGenerator.generateCode(6);
+		int code = IdGenerator.generateCode(5);
 		SMS sms = new SMS();
 		sms.setCode(code);
 		sms.setPhone(phone);
@@ -44,12 +44,12 @@ public class SMSService {
 			throw new ServiceException("短信入队失败");
 		}
 		//生成短信验证码ID
-		long codeId = IdGenerator.getInstance().getUniqTime();
+		String codeId = phone;
 		
 		try {
 			//存入redis
 			logger.info("短信验证码入redis phone="+phone+" codeId="+codeId+"  code="+code);
-			redisService.add(Constants.SMS_CODE_CODEID, codeId+"", code,Constants.SMS_TIMEOUT);
+			redisService.add(Constants.SMS_CODE_CODEID, codeId, code+"",Constants.SMS_TIMEOUT);
 		} catch (Exception e) {
 			logger.debug("短信验证码入 reids失败 验证码{}",code);
 			throw new ServiceException("短信验证码入 reids失败 验证码");

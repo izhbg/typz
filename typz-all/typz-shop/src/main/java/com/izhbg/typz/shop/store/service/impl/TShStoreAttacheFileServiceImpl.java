@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.izhbg.typz.base.mapper.BeanMapper;
 import com.izhbg.typz.base.page.Page;
@@ -14,7 +15,7 @@ import com.izhbg.typz.base.util.StringHelper;
 import com.izhbg.typz.shop.store.dto.TShStoreAttachefile;
 import com.izhbg.typz.shop.store.manager.TShStoreAttachefileManager;
 import com.izhbg.typz.shop.store.service.TShStoreAttacheFileService;
-
+@Service("tShStoreAttacheFileService")
 public class TShStoreAttacheFileServiceImpl implements TShStoreAttacheFileService{
 
 	@Autowired

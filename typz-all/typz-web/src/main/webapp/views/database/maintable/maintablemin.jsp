@@ -195,8 +195,6 @@
 </div>
 
 </body>
-<script type="text/javascript" src="${ctx}/s/guser/js/common.js"></script>  
-<script type="text/javascript" src="${ctx}/s/guser/js/ucenter.js"></script>  
 <script type="text/javascript">
 var config = {
 	    id: 'cal-infoGridForm',

@@ -56,7 +56,7 @@ public class TShGoodsDetailServiceImpl implements TShGoodsDetailService{
 	public TShGoodsDetail getById(String id) throws Exception {
 		if(StringHelper.isEmpty(id))
 			throw new ServiceException("参数为空,获取产品详细信息失败");
-		return tShGoodsDetailManager.findUniqueBy("id", id);
+		return tShGoodsDetailManager.findUniqueBy("goodsId", id);
 	}
 
 	public Page pageList(Page page) throws Exception {

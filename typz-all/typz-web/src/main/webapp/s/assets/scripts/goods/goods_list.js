@@ -192,6 +192,59 @@ var GoodsList = function(){
 			}
 		 });
 	};
+	var setTag=function(id){
+		if(confirmIsSelectItems()){
+			if($("#confirminfoxhinput")){
+				var str = '<div class="modal fade" id="confirminfoxhinput" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">'
+					+'<div class="modal-dialog">'
+					+'<div class="modal-content">'
+					+'<div class="modal-header">'
+					+'<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>'
+					+'<h4 class="modal-title">序号</h4>'
+					+'</div>'
+					+'<div class="modal-body">'
+					+'<div class="form-group">'
+					+' <label class="col-md-3 control-label">序号：</label>'
+					+' <div class="col-md-4">'
+					+' 	<input name="xg" id="xh" class="form-control"  maxlength=30 />'
+					+' 	<span class="help-block"></span>'
+					+' </div>'
+					+' </div>'
+					+'</div>'
+					+'<div class="modal-footer">'
+					+'<button type="button" class="btn blue" id="cconfirmxhinput" >确定</button>'
+					+'<button type="button" class="btn default" data-dismiss="modal">取消</button>'
+					+'</div>'
+					+'</div>'
+					+'</div>'
+					+'</div>';
+				
+				$("#form1").append(str);
+			}
+			
+			$("#cconfirmxhinput").click(function(){
+				
+				$.ajax({
+					type: "POST",
+				    url: $("#contentpath").val()+"/goods/goods-setTag.izhbg",
+				    data: $("input:checkbox[name=checkdel]:checked").serialize()+"&tagId="+id+"&xh="+$("#xh").val(),
+				    dataType:"html",
+					cache: false,
+					success: function(data){
+				    	$("#form1").submit();
+					}
+					});
+				
+			});
+			$("#confirminfoxhinput").modal({ 
+		        backdrop: 'static',  
+		        keyboard: false  
+		    }).modal('show');
+			
+			
+			
+		}
+	}
 	return {
 		delGoodsItem:function(){
 			delGoodsItem();
@@ -207,6 +260,9 @@ var GoodsList = function(){
 		},
 		downState:function(){
 			downState();
+		},
+		setTag:function(id){
+			setTag(id);
 		}
 	}
 	

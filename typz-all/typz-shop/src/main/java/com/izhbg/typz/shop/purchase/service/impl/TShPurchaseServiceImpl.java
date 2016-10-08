@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.izhbg.typz.base.common.service.ServiceException;
 import com.izhbg.typz.base.mapper.BeanMapper;
@@ -30,6 +31,7 @@ import com.izhbg.typz.shop.purchase.service.TShPurchaseService;
 import com.izhbg.typz.shop.store.dto.TShStore;
 import com.izhbg.typz.shop.store.manager.TShStoreManager;
 
+@Service("tShPurchaseService")
 public class TShPurchaseServiceImpl implements TShPurchaseService{
 
 	@Autowired
@@ -71,7 +73,7 @@ public class TShPurchaseServiceImpl implements TShPurchaseService{
 	public void update(TShPurchase entity) throws Exception {
 		TShPurchase tShPurchase = tShPurchaseManager.findUniqueBy("id", entity.getId());
 		beanMapper.copy(entity, tShPurchase);
-		tShPurchaseManager.update(entity);
+		tShPurchaseManager.update(tShPurchase);
 	}
 
 	@Override

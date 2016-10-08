@@ -35,7 +35,7 @@
 						</div>
 						<div class="panel-body">
 							<form id="goodsEditForm" name="goodsEditForm" action="${ctx}/goods/goods_save.izhbg" method="post" class="form-horizontal" >
-							
+							<input type="hidden" name="random" id="random" value="${tShGoodsBasic.random}">
 							<input type="hidden" name="basicId" id="basicId" value="${tShGoodsBasic.id}">
 							<input type="hidden" name="detailId" id="detailId" value="${tShGoodsBasic.tShGoodsDetail.id}">
 							<input type="hidden" name="typeId" id="typeId" value="${tShGoodsBasic.typeId}">

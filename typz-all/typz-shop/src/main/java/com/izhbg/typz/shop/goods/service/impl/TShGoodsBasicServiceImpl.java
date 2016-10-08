@@ -1,5 +1,6 @@
 package com.izhbg.typz.shop.goods.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -21,9 +22,13 @@ import com.izhbg.typz.shop.goods.dto.TShGoods;
 import com.izhbg.typz.shop.goods.dto.TShGoodsBasic;
 import com.izhbg.typz.shop.goods.dto.TShGoodsDetail;
 import com.izhbg.typz.shop.goods.dto.TShGoodsImage;
+import com.izhbg.typz.shop.goods.dto.TShGoodsTag;
+import com.izhbg.typz.shop.goods.dto.TShGoodsTags;
 import com.izhbg.typz.shop.goods.manager.TShGoodsBasicManager;
 import com.izhbg.typz.shop.goods.manager.TShGoodsDetailManager;
 import com.izhbg.typz.shop.goods.manager.TShGoodsImageManager;
+import com.izhbg.typz.shop.goods.manager.TShGoodsTagManager;
+import com.izhbg.typz.shop.goods.manager.TShGoodsTagsManager;
 import com.izhbg.typz.shop.goods.service.TShGoodsBasicService;
 import com.izhbg.typz.sso.util.SpringSecurityUtils;
 
@@ -37,6 +42,10 @@ public class TShGoodsBasicServiceImpl implements TShGoodsBasicService {
 	private TShGoodsDetailManager tShGoodsDetailManager;
 	@Autowired
 	private TShGoodsImageManager tShGoodsImageManager;
+	@Autowired
+	private TShGoodsTagsManager tShGoodsTagsManager;
+	@Autowired
+	private TShGoodsTagManager tShGoodsTagManager;
 	private BeanMapper beanMapper = new BeanMapper();
 	
 	public void add(TShGoodsBasic entity) throws Exception {
@@ -189,6 +198,10 @@ public class TShGoodsBasicServiceImpl implements TShGoodsBasicService {
 	 * @param tShGoods
 	 * @return
 	 */
+	/**
+	 * @param tShGoods
+	 * @return
+	 */
 	private TShGoodsBasic setValueTShGoodsBasic(TShGoods tShGoods){
 		if(tShGoods==null)
 			return null;
@@ -204,8 +217,8 @@ public class TShGoodsBasicServiceImpl implements TShGoodsBasicService {
 			tShGoodsBasic.setModelId(tShGoods.getModelId());
 		if(StringHelper.isNotEmpty(tShGoods.getName()))
 			tShGoodsBasic.setName(tShGoods.getName());
-		if(StringHelper.isNotEmpty(tShGoods.getShopBasicId()))
-			tShGoodsBasic.setShopBasicId(tShGoods.getShopBasicId());
+		if(StringHelper.isNotEmpty(tShGoods.getStoreId()))
+			tShGoodsBasic.setStoreId(tShGoods.getStoreId());
 		if(StringHelper.isNotEmpty(tShGoods.getSpecificationsId()))
 			tShGoodsBasic.setSpecificationsId(tShGoods.getSpecificationsId());
 		if(StringHelper.isNotEmpty(tShGoods.getTypeId()))
@@ -254,10 +267,23 @@ public class TShGoodsBasicServiceImpl implements TShGoodsBasicService {
 		page = tShGoodsBasicManager.pagedQuery(hql+getWhere(tShGoods), page.getPageNo(), page.getPageSize(), map);
 		List<TShGoodsBasic> tShGoodsBasics = (List<TShGoodsBasic>) page.getResult();
 		TShGoodsDetail tShGoodsDetail = null;
+		List<TShGoodsTags> tShGoodsTags = null;
+		TShGoodsTags tt = null;
+		List<TShGoodsTag> tags = null;
 		for(TShGoodsBasic tShGoodsBasic:tShGoodsBasics){
 			tShGoodsDetail = tShGoodsDetailManager.findUniqueBy("goodsId", tShGoodsBasic.getId());
 			if(tShGoodsDetail!=null)
 				tShGoodsBasic.settShGoodsDetail(tShGoodsDetail);
+			tags = tShGoodsTagManager.findBy("goodsId", tShGoodsBasic.getId());
+			tShGoodsTags = new ArrayList<>();
+			for(TShGoodsTag gt:tags){
+				tt = tShGoodsTagsManager.findUniqueBy("id", gt.getTagId());
+				if(tt!=null){
+					tt.setXh(gt.getXh());
+					tShGoodsTags.add(tt);
+				}
+			}
+			tShGoodsBasic.settShGoodsTags(tShGoodsTags);
 		}
 		page.setResult(tShGoodsBasics);
 		return page;
@@ -267,6 +293,32 @@ public class TShGoodsBasicServiceImpl implements TShGoodsBasicService {
 		if(tShGoods.getDelStatus()!=null)
 			sb.append(" and delStatus=:delStatus ");
 		return sb.toString();
+	}
+	@Override
+	public Page pageStoreList(Page page, TShGoods tShGoods) throws Exception {
+		Map<String,Object> map = new HashMap<String, Object>();
+		String hql = " from TShGoodsBasic where version=-1 and createUser=:createUser";
+		map.put("createUser", SpringSecurityUtils.getCurrentUserId());
+		if(tShGoods.getStatus()==null)
+			map.put("status", ConstantUtils.GOODS_ITEM_UP);
+		else
+			map.put("status", tShGoods.getStatus());
+		
+		if(tShGoods.getDelStatus()!=null)
+			map.put("delStatus", tShGoods.getDelStatus());
+		else
+			map.put("delStatus", ConstantUtils.ITEM_DELETE_UN);
+		
+		page = tShGoodsBasicManager.pagedQuery(hql+getWhere(tShGoods), page.getPageNo(), page.getPageSize(), map);
+		List<TShGoodsBasic> tShGoodsBasics = (List<TShGoodsBasic>) page.getResult();
+		TShGoodsDetail tShGoodsDetail = null;
+		for(TShGoodsBasic tShGoodsBasic:tShGoodsBasics){
+			tShGoodsDetail = tShGoodsDetailManager.findUniqueBy("goodsId", tShGoodsBasic.getId());
+			if(tShGoodsDetail!=null)
+				tShGoodsBasic.settShGoodsDetail(tShGoodsDetail);
+		}
+		page.setResult(tShGoodsBasics);
+		return page;
 	}
 	/**
 	 * 根据goodsId version获取商品基本信息
@@ -374,7 +426,4 @@ public class TShGoodsBasicServiceImpl implements TShGoodsBasicService {
 			recover(id);
 		}
 	}
-
-	
-	
 }

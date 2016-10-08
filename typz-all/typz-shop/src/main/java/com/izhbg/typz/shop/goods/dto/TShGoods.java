@@ -14,7 +14,7 @@ import javax.persistence.Column;
 public class TShGoods {
 
 	private String basicId;
-	private String shopBasicId;
+	private String storeId;
 	private String name;
 	private Integer basicVersion;
 	private String aliasName;
@@ -48,13 +48,11 @@ public class TShGoods {
 	
 	private Integer delStatus;//删除状态
 	private Integer status;//上下架状态
+	private String random;
 	
 	private String picIds;
 	public String getBasicId() {
 		return basicId;
-	}
-	public String getShopBasicId() {
-		return shopBasicId;
 	}
 	public String getName() {
 		return name;
@@ -145,9 +143,6 @@ public class TShGoods {
 	}
 	public void setBasicId(String basicId) {
 		this.basicId = basicId;
-	}
-	public void setShopBasicId(String shopBasicId) {
-		this.shopBasicId = shopBasicId;
 	}
 	public void setName(String name) {
 		this.name = name;
@@ -259,6 +254,18 @@ public class TShGoods {
 	}
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+	public String getStoreId() {
+		return storeId;
+	}
+	public void setStoreId(String storeId) {
+		this.storeId = storeId;
+	}
+	public String getRandom() {
+		return random;
+	}
+	public void setRandom(String random) {
+		this.random = random;
 	}
 	
 	

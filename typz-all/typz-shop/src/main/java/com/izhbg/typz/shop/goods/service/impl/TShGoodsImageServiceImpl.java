@@ -87,6 +87,18 @@ public class TShGoodsImageServiceImpl implements TShGoodsImageService {
 		return tShGoodsImages;
 	}
 
+	@Override
+	public TShGoodsImage getIndexImage(String goodsId,Integer version) throws Exception {
+		if(StringHelper.isEmpty(goodsId))
+			throw new ServiceException("参数为空，获取商品图片信息失败");
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("id", goodsId);
+		map.put("version", version);
+		String hql = " from TShGoodsImage where version=:version and goodsId=:id and isFace=1";
+		TShGoodsImage tShGoodsImage = tShGoodsImageManager.findUnique(hql, map);
+		return tShGoodsImage;
+	}
+
 	
 
 	

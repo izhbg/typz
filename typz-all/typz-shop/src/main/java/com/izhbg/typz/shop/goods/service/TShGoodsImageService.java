@@ -22,4 +22,12 @@ public interface TShGoodsImageService extends BaseService<TShGoodsImage>{
 	 * @throws Exception
 	 */
 	public List<TShGoodsImage> findByGoodsId(String goodsId) throws Exception;
+	
+	/**
+	 * 获取图片缩略图
+	 * @param goodsId
+	 * @return
+	 * @throws Exception
+	 */
+	public TShGoodsImage getIndexImage(String goodsId, Integer version) throws Exception;
 }

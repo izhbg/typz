@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	session="false" pageEncoding="UTF-8"%>
+	session="true" pageEncoding="UTF-8"%>
 <%@include file="/taglibs.jsp"%>
 <!doctype html>
 <html>

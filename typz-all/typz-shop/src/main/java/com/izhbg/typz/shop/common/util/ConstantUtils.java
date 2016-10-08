@@ -34,5 +34,20 @@ public class ConstantUtils {
 	 */
 	public static final int GOODS_INIT_VERSION = -1;
 	
+	/**
+	 * 店铺待审核
+	 */
+	public static final int STORE_ITEM_WAITE = 0;
+	
+	/**
+	 * 店铺审核通过
+	 */
+	public static final int STORE_ITEM_PASS=1;
+	
+	/**
+	 * 店铺审核未通过
+	 */
+	public static final int STORE_ITEM_NO_PASS=2;
+	
 	
 }

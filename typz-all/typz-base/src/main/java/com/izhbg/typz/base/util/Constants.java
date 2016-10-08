@@ -3,9 +3,9 @@ public final class Constants {
 	
 	public final static String APP_DEFAULT="5z96kevmj0lm0nf7vmj1";
 	/*****************restful 状态****************************/
-	public final static int RESULT_CODE_SUCCESS = 0;
-	public final static int RESULT_CODE_ERROR = 1;
-	public final static int RESULT_CODE_FAILED = 2;
+	public final static int RESULT_CODE_SUCCESS = 0;//操作成功
+	public final static int RESULT_CODE_ERROR = 1;//服务端异常
+	public final static int RESULT_CODE_FAILED = 2;//请求参数为空
 	public final static int RESULT_CODE_UPDATE = 2;
 	
 	//标志状态位
@@ -17,8 +17,8 @@ public final class Constants {
 	
 	//审核状态
 	public final static Integer VERIFY_WAIT = 0;//待审核
-	public final static Integer VERIFY_ERRORPASS = 0;//审核未通过
-	public final static Integer VERIFY_ONRPASS = 0;//审核通过
+	public final static Integer VERIFY_ONRPASS = 1;//审核通过
+	public final static Integer VERIFY_ERRORPASS = 2;//审核未通过
 	
 	//附件类型
 	public final static Integer ATTACHE_INDEX = 0;//缩略图
@@ -45,6 +45,10 @@ public final class Constants {
 	public final static String SYSTEMMSG_SUCCESS="操作成功";
 	public final static String SYSTEMMSG_FAILED="操作失败";
 	public final static String SYSTEMMSG_SMSCODE_FAILED="验证码错误";
+	
+	//店铺类型
+	public final static Integer STORE_DIANPU=1;
+	public final static Integer STORE_JINXIAOSHANG=2;
 	
 	
 	

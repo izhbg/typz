@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.izhbg.typz.base.mapper.BeanMapper;
@@ -23,10 +25,13 @@ import com.izhbg.typz.shop.goods.dto.TShGoods;
 import com.izhbg.typz.shop.goods.dto.TShGoodsBasic;
 import com.izhbg.typz.shop.goods.dto.TShGoodsDetail;
 import com.izhbg.typz.shop.goods.dto.TShGoodsImage;
+import com.izhbg.typz.shop.goods.dto.TShGoodsTags;
 import com.izhbg.typz.shop.goods.dto.TShGoodsType;
 import com.izhbg.typz.shop.goods.service.TShGoodsBasicService;
 import com.izhbg.typz.shop.goods.service.TShGoodsDetailService;
 import com.izhbg.typz.shop.goods.service.TShGoodsImageService;
+import com.izhbg.typz.shop.goods.service.TShGoodsTagService;
+import com.izhbg.typz.shop.goods.service.TShGoodsTagsService;
 import com.izhbg.typz.shop.goods.service.TShGoodsTypeService;
 import com.izhbg.typz.sso.util.SpringSecurityUtils;
 import com.mysql.jdbc.Messages;
@@ -35,7 +40,7 @@ import com.mysql.jdbc.Messages;
 * @ClassName: GoodsController 
 * @Description: 产品 管理相关
 * @author caixl 
-* @date 2016-6-27 上午10:46:14 
+* @date 2016-6-27 上午10:46:14  
 *
  */
 @Controller
@@ -46,10 +51,17 @@ public class GoodsController {
 	
 	@Autowired
 	private TShGoodsTypeService tShGoodsTypeService;
+	
 	@Autowired
 	private TShGoodsDetailService tShGoodsDetailService;
+	
 	@Autowired
 	private TShGoodsImageService tShGoodsImageService;
+	@Autowired
+	private TShGoodsTagsService tShGoodsTagsService;
+	@Autowired
+	private TShGoodsTagService tShGoodsTagService;
+	
 	private BeanMapper beanMapper = new BeanMapper();
 	
 	/**
@@ -65,10 +77,30 @@ public class GoodsController {
 	           		@ModelAttribute TShGoods tShGoods, Model model) throws Exception {
 		
 		Page page_ = tShGoodsBasicService.pageList(page,tShGoods);
+		List<TShGoodsTags> tags =  tShGoodsTagsService.getAll();
+		model.addAttribute("page", page_);
+		model.addAttribute("tShGoods", tShGoods);
+		model.addAttribute("tags", tags);
+		
+		return "shop/goods/goods_list";
+	}
+	/**
+	 * 店铺产品列表
+	 * @param page
+	 * @param tShGoods
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("goods_store_list")
+	public String StoreList(@ModelAttribute  Page page,
+			@ModelAttribute TShGoods tShGoods, Model model) throws Exception {
+		
+		Page page_ = tShGoodsBasicService.pageStoreList(page,tShGoods);
 		model.addAttribute("page", page_);
 		model.addAttribute("tShGoods", tShGoods);
 		
-		return "shop/goods/goods_list";
+		return "shop/goods/goods_store_list";
 	}
 	
 	/**
@@ -82,7 +114,9 @@ public class GoodsController {
 	public String edit(@ModelAttribute TShGoodsBasic tShGoodsBasic,Model model) throws Exception{
 		
 		if(tShGoodsBasic!=null&&StringHelper.isNotEmpty(tShGoodsBasic.getId())){
+			String randomId = tShGoodsBasic.getRandom();
 			tShGoodsBasic = tShGoodsBasicService.getById(tShGoodsBasic.getId());
+			tShGoodsBasic.setRandom(randomId);
 			TShGoodsDetail tShGoodsDetail = tShGoodsDetailService.queryByGoodsIdAndVersion(tShGoodsBasic.getId(), -1);
 			if(tShGoodsDetail!=null)
 				tShGoodsBasic.settShGoodsDetail(tShGoodsDetail);
@@ -183,9 +217,26 @@ public class GoodsController {
 	@RequestMapping("goods_save")
 	public String save(@ModelAttribute TShGoods tShGoods) throws Exception{
 		tShGoodsBasicService.addOrUpdateGoods(tShGoods);
-		return "redirect:/goods/goods_list.izhbg?status=-1";
+		if(StringHelper.isNotEmpty(tShGoods.getRandom())&&"1860010".equals(tShGoods.getRandom()))
+			return "redirect:/goods/goods_list.izhbg?status=-1";
+		else
+			return "redirect:/goods/goods_store_list.izhbg?status=-1";
 	}
-	
+	@RequestMapping(value = "goods-setTag", method = {RequestMethod.POST,RequestMethod.GET})
+	public @ResponseBody String setTag(@RequestParam(value = "tagId", required = true, defaultValue = "") String tagId,
+									   @RequestParam(value = "checkdel", required = true, defaultValue = "") String[] checkdel,
+									   @RequestParam(value = "xh", required = true, defaultValue = "0") Integer xh) {
+		String result = null;
+		if(StringHelper.isEmpty(tagId)||checkdel==null)
+			result = Ajax.JSONResult(Constants.RESULT_CODE_ERROR, Messages.getString("systemMsg.fieldEmpty"));	
+		try {
+			tShGoodsTagService.setTag(tagId, checkdel, xh);
+			result = Ajax.JSONResult(Constants.RESULT_CODE_SUCCESS, "设置成功");	
+		} catch (Exception e) {
+			result = Ajax.JSONResult(Constants.RESULT_CODE_FAILED, Messages.getString("systemMsg.fieldEmpty"));	
+		}
+		return result;
+	}
 	@Resource
 	public void settShGoodsBasicService(TShGoodsBasicService tShGoodsBasicService) {
 		this.tShGoodsBasicService = tShGoodsBasicService;

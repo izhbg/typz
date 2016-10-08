@@ -49,80 +49,85 @@ public class CacheAspect {
 	@Around("@annotation(com.izhbg.typz.base.common.redis.RedisCache)")
 	public Object RedisCache(final ProceedingJoinPoint jp)
 			throws Throwable {
-		Method method=getMethod(jp);
-		RedisCache cache = method.getAnnotation(RedisCache.class);
-		// 得到类名、方法名和参数
-		Object[] args = jp.getArgs();
-		
-		
-		// 根据类名，方法名和参数生成key
-		final String key = parseKey(cache.fieldKey(),method,jp.getArgs());
-		if (infoLog.isDebugEnabled()) {
-			infoLog.debug("生成key:" + key);
-		}
-
-		// 得到被代理的方法
-		//Method me = ((MethodSignature) jp.getSignature()).getMethod();
-		// 得到被代理的方法上的注解
-		Class modelType = method.getAnnotation(RedisCache.class).type();
-
-		// 检查redis中是否有缓存
-		String value = (String) redisTemplate.opsForHash().get(
-				modelType.getName(), key);
-
 		// result是方法的最终返回结果
-		Object result = null;
-		if (null == value) {
-			// 缓存未命中
+		Object result=null;
+		try {
+			Method method=getMethod(jp);
+			RedisCache cache = method.getAnnotation(RedisCache.class);
+			// 得到类名、方法名和参数
+			Object[] args = jp.getArgs();
+			
+			
+			// 根据类名，方法名和参数生成key
+			final String key = parseKey(cache.fieldKey(),method,jp.getArgs());
 			if (infoLog.isDebugEnabled()) {
-				infoLog.debug("缓存未命中");
+				infoLog.debug("生成key:" + key);
 			}
 
-			// 调用数据库查询方法
-			result = jp.proceed(args);
+			// 得到被代理的方法
+			//Method me = ((MethodSignature) jp.getSignature()).getMethod();
+			// 得到被代理的方法上的注解
+			Class modelType = method.getAnnotation(RedisCache.class).type();
 
-			// 序列化查询结果
-			final String  json = serialize(result);
-			final String hashName = modelType.getName();
-			final int expire = cache.expire();
-			// 序列化结果放入缓存
-			/*redisTemplate.execute(new RedisCallback<Object>() {
-                @Override
-                public Object doInRedis(RedisConnection redisConn) throws DataAccessException {
-                    // 配置文件中指定了这是一个String类型的连接
-                    // 所以这里向下强制转换一定是安全的
-                    StringRedisConnection conn = (StringRedisConnection) redisConn;
+			// 检查redis中是否有缓存
+			String value = (String) redisTemplate.opsForHash().get(
+					modelType.getName(), key);
 
-                    // 判断hash名是否存在
-                    // 如果不存在，创建该hash并设置过期时间
-                    if (false == conn.exists(hashName) ){
-                        conn.hSet(hashName, key, json);
-                        conn.expire(hashName, expire);
-                    } else {
-                        conn.hSet(hashName, key, json);
-                    }
+			result = null;
+			if (null == value) {
+				// 缓存未命中
+				if (infoLog.isDebugEnabled()) {
+					infoLog.debug("缓存未命中");
+				}
 
-                    return null;
-                }
-            });*/
-			// 序列化结果放入缓存
-			redisTemplate.opsForHash().put(modelType.getName(), key, json);
-		} else {
-			// 缓存命中
-			if (infoLog.isDebugEnabled()) {
-				infoLog.debug("缓存命中, value = " + value);
+				// 调用数据库查询方法
+				result = jp.proceed(args);
+
+				// 序列化查询结果
+				final String  json = serialize(result);
+				final String hashName = modelType.getName();
+				final int expire = cache.expire();
+				// 序列化结果放入缓存
+				/*redisTemplate.execute(new RedisCallback<Object>() {
+			        @Override
+			        public Object doInRedis(RedisConnection redisConn) throws DataAccessException {
+			            // 配置文件中指定了这是一个String类型的连接
+			            // 所以这里向下强制转换一定是安全的
+			            StringRedisConnection conn = (StringRedisConnection) redisConn;
+
+			            // 判断hash名是否存在
+			            // 如果不存在，创建该hash并设置过期时间
+			            if (false == conn.exists(hashName) ){
+			                conn.hSet(hashName, key, json);
+			                conn.expire(hashName, expire);
+			            } else {
+			                conn.hSet(hashName, key, json);
+			            }
+
+			            return null;
+			        }
+			    });*/
+				// 序列化结果放入缓存
+				redisTemplate.opsForHash().put(modelType.getName(), key, json);
+			} else {
+				// 缓存命中
+				if (infoLog.isDebugEnabled()) {
+					infoLog.debug("缓存命中, value = " + value);
+				}
+
+				// 得到被代理方法的返回值类型
+				Class returnType = ((MethodSignature) jp.getSignature())
+						.getReturnType();
+
+				// 反序列化从缓存中拿到的json
+				result = deserialize(value, returnType, modelType);
+
+				if (infoLog.isDebugEnabled()) {
+					infoLog.debug("反序列化结果 = {}" + result);
+				}
 			}
-
-			// 得到被代理方法的返回值类型
-			Class returnType = ((MethodSignature) jp.getSignature())
-					.getReturnType();
-
-			// 反序列化从缓存中拿到的json
-			result = deserialize(value, returnType, modelType);
-
-			if (infoLog.isDebugEnabled()) {
-				infoLog.debug("反序列化结果 = {}" + result);
-			}
+		} catch (Exception e) {
+			infoLog.debug("redis 链接失败");
 		}
 
 		return result;
@@ -147,7 +152,11 @@ public class CacheAspect {
 		}
 		// 清除对应缓存
 	/*	redisTemplate.opsForHash().delete(paramH, paramArrayOfObject);*/
-		redisTemplate.delete(modelType.getName());
+		try {
+			redisTemplate.delete(modelType.getName());
+		} catch (Exception e) {
+			infoLog.debug("redis 链接失败");
+		}
 
 		return jp.proceed(jp.getArgs());
 	}
