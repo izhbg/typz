@@ -1,6 +1,6 @@
 package com.izhbg.typz.im.purchase.response.entity;
 
-import com.izhbg.typz.shop.goods.dto.TShGoodsBasic;
+import com.izhbg.typz.im.goods.response.entity.TShGoodsBasic;
 
 public class PurchaseGoods {
 	private TShGoodsBasic goods;
