@@ -47,4 +47,17 @@ public class TShGoodsTagServiceImpl implements TShGoodsTagService{
 		}
 	}
 
+	@Override
+	public void delTag(String tagId, String goodsId) throws Exception {
+		if(StringHelper.isEmpty(tagId)||StringHelper.isEmpty(goodsId))
+			throw new ServiceException("参数为空,删除标签失败");
+		Map<String,Object> map = new HashMap<>();
+		map.put("goodsId", goodsId);
+		map.put("tagId", tagId);
+		TShGoodsTag goodsTag = tShGoodsTagManager.findUnique(" from TShGoodsTag where goodsId=:goodsId and tagId=:tagId ", map);
+		if(goodsTag!=null) {
+			tShGoodsTagManager.remove(goodsTag);
+		}
+	}
+
 }

@@ -1,7 +1,7 @@
 package com.izhbg.typz.shop.goods.service;
 
 import com.izhbg.typz.base.page.Page;
-import com.izhbg.typz.shop.common.service.BaseService;
+import com.izhbg.typz.shop.common.service.TShBaseService;
 import com.izhbg.typz.shop.goods.dto.TShGoods;
 import com.izhbg.typz.shop.goods.dto.TShGoodsBasic;
 
@@ -13,7 +13,7 @@ import com.izhbg.typz.shop.goods.dto.TShGoodsBasic;
 * @date 2016-6-16 上午9:49:30 
 *
  */
-public interface TShGoodsBasicService extends BaseService<TShGoodsBasic> {
+public interface TShGoodsBasicService extends TShBaseService<TShGoodsBasic> {
 	/**
 	 * 获取产品的最大版本号
 	 * @param goodsId
@@ -43,6 +43,7 @@ public interface TShGoodsBasicService extends BaseService<TShGoodsBasic> {
 	 * @throws Exception
 	 */
 	public Page pageList(Page page,TShGoods tShGoods) throws Exception;
+	
 	/**
 	 * 店铺分页查询
 	 * @param page
@@ -81,5 +82,26 @@ public interface TShGoodsBasicService extends BaseService<TShGoodsBasic> {
 	 * @throws Exception
 	 */
 	public void recoverBatche(String[] ids) throws Exception;
+	
+	/**
+	 * 给商品定销售价
+	 * @param goodsId
+	 * @throws Exception
+	 */
+	public void setSalePrice(String goodsId,double price) throws Exception;
+	/**
+	 * 设置推广价 和推广者获利比例
+	 * @param price
+	 * @param percent
+	 * @throws Exception
+	 */
+	public void setCostPrice(String goodsId,double price) throws Exception;
+	/**
+	 * 设置产品推广者获利比例
+	 * @param goodsId
+	 * @param percent
+	 * @throws Exception
+	 */
+	public void setPercent(String goodsId,String percent) throws Exception;
 	
 }

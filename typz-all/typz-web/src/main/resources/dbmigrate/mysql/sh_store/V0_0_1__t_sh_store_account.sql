@@ -7,7 +7,7 @@ CREATE TABLE `t_sh_store_account` (
   `is_selected` tinyint(4) DEFAULT NULL,
   `other` varchar(255) DEFAULT NULL,
   `change_time` datetime DEFAULT NULL,
-  `store_id` varchar(50) DEFAULT NULL,
+  `member_id` varchar(50) DEFAULT NULL,
   `sc_bj` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

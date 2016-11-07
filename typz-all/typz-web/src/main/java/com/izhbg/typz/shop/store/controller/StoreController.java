@@ -65,6 +65,7 @@ public class StoreController {
 			List<TShStoreAttachefile> tShStoreAttachefiles = tShStoreAttacheFileService.getStoreAttacheFile(tShStore.getId());
 			if(tShStoreAttachefiles!=null)
 				tShStore.settShStoreAttachefiles(tShStoreAttachefiles);
+			model.addAttribute("isUpdate", true);
 		}else{
 			tShStore = new TShStore();
 			tShStore.setId(IdGenerator.getInstance().getUniqTime()+"");

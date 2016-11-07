@@ -54,6 +54,13 @@ public class TShStore implements Serializable {
 	private TShStoreAttachefile  logoAttache;
 	@Transient
 	private List<TShStoreAttachefile> tShStoreAttachefiles;
+	@Transient
+	private String phone;//手机号
+	@Transient
+	private String codeId;//验证码ID
+	@Transient
+	private String code;//验证码
+	
 	public TShStore() {
 	}
 
@@ -201,6 +208,30 @@ public class TShStore implements Serializable {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getCodeId() {
+		return codeId;
+	}
+
+	public void setCodeId(String codeId) {
+		this.codeId = codeId;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 	
 	

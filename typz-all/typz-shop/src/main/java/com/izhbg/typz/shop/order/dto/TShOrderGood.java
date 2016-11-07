@@ -26,6 +26,9 @@ public class TShOrderGood implements Serializable {
 	private String orderId;
 
 	private double price;
+	
+	@Column(name="guid_price")
+	private double guidPrice;
 
 	@Column(name="store_id")
 	private String storeId;
@@ -79,6 +82,14 @@ public class TShOrderGood implements Serializable {
 
 	public void setStoreId(String storeId) {
 		this.storeId = storeId;
+	}
+
+	public double getGuidPrice() {
+		return guidPrice;
+	}
+
+	public void setGuidPrice(double guidPrice) {
+		this.guidPrice = guidPrice;
 	}
 	
 

@@ -2,7 +2,7 @@ package com.izhbg.typz.shop.goods.service;
 
 import java.util.List;
 
-import com.izhbg.typz.shop.common.service.BaseService;
+import com.izhbg.typz.shop.common.service.TShBaseService;
 import com.izhbg.typz.shop.goods.dto.TShGoodsType;
 /**
  * 
@@ -12,7 +12,7 @@ import com.izhbg.typz.shop.goods.dto.TShGoodsType;
 * @date 2016-6-29 上午11:14:57 
 *
  */
-public interface TShGoodsTypeService extends BaseService<TShGoodsType> {
+public interface TShGoodsTypeService extends TShBaseService<TShGoodsType> {
 	/**
 	 * 根据父级节点ID获取 类型列表
 	 * @param pid

@@ -15,7 +15,11 @@ import com.izhbg.typz.base.util.Constants;
 import com.izhbg.typz.base.util.IdGenerator;
 import com.izhbg.typz.base.util.StringHelper;
 import com.izhbg.typz.shop.goods.dto.TShGoodsBasic;
+import com.izhbg.typz.shop.goods.dto.TShGoodsImage;
+import com.izhbg.typz.shop.goods.dto.TShGoodsPrice;
 import com.izhbg.typz.shop.goods.manager.TShGoodsBasicManager;
+import com.izhbg.typz.shop.goods.service.TShGoodsImageService;
+import com.izhbg.typz.shop.goods.service.TShGoodsPriceService;
 import com.izhbg.typz.shop.order.dto.OrderAddress;
 import com.izhbg.typz.shop.order.dto.TShOrder;
 import com.izhbg.typz.shop.order.dto.TShOrderAddress;
@@ -26,8 +30,6 @@ import com.izhbg.typz.shop.order.manager.TShOrderManager;
 import com.izhbg.typz.shop.order.service.TShOrderService;
 import com.izhbg.typz.shop.person.dto.TShPersonAddress;
 import com.izhbg.typz.shop.person.manager.TShPersonAddressManager;
-import com.izhbg.typz.shop.purchase.dto.TShPurchase;
-import com.izhbg.typz.shop.purchase.manager.TShPurchaseManager;
 import com.izhbg.typz.shop.store.dto.TShStore;
 import com.izhbg.typz.shop.store.manager.TShStoreManager;
 @Service("tShOrderService")
@@ -38,7 +40,7 @@ public class TShOrderServiceImpl implements TShOrderService {
 	@Autowired
 	private TShOrderGoodManager tShOrderGoodsManager;
 	@Autowired
-	private TShPurchaseManager tShPurchaseManager;
+	private TShGoodsImageService tShGoodsImageService;
 	@Autowired
 	private TShOrderAddressManager tShOrderAddressManager;
 	@Autowired
@@ -47,6 +49,8 @@ public class TShOrderServiceImpl implements TShOrderService {
 	private TShGoodsBasicManager tShGoodsBasicManager;
 	@Autowired
 	private TShPersonAddressManager tShPersonAddressManager;
+	@Autowired
+	private TShGoodsPriceService tShGoodsPriceService;
 	private BeanMapper beanMapper = new BeanMapper();
 	
 	
@@ -60,15 +64,16 @@ public class TShOrderServiceImpl implements TShOrderService {
 	public void add(TShOrder entity) throws Exception {
 		if(entity==null||StringHelper.isEmpty(entity.getGoodsInfo()))
 			throw new ServiceException("参数为空，添加订单失败");
+		
 		tShOrdermanager.save(entity);
 		
 		String goodsInfo = entity.getGoodsInfo();
-		String[] goodsinfos = goodsInfo.split("#");
+		String[] goodsinfos = goodsInfo.split("\\$");
 		String goodsId = null;
 		String num = null;
 		String price = null;
 		TShOrderGood tsog = null;
-		TShPurchase tp = null;
+		TShGoodsPrice tsgp = null;
 		for(String gi:goodsinfos){
 			goodsId = gi.split(",")[0];
 			num = gi.split(",")[1];
@@ -80,6 +85,9 @@ public class TShOrderServiceImpl implements TShOrderService {
 			tsog.setOrderId(entity.getId());
 			tsog.setStoreId(entity.getStoreId());
 			tsog.setPrice(Double.parseDouble(price));
+			tsgp = tShGoodsPriceService.queryGuidByGoodsIdAndVersion(goodsId, Constants.GOODS_VERSION_DEFAULT);
+			if(tsgp!=null)
+			tsog.setGuidPrice(tsgp.getPrice());
 			tShOrderGoodsManager.save(tsog);
 			
 			//从购物车中移除
@@ -132,11 +140,22 @@ public class TShOrderServiceImpl implements TShOrderService {
 		List<TShOrderGood> tShOrderGoods = tShOrderGoodsManager.findBy("orderId", to.getId());
 		List<TShGoodsBasic> tShGoodsBasics = new ArrayList<>();
 		TShGoodsBasic tsgb = null;
+		TShGoodsImage tShGoodsImage = null;
+		TShGoodsPrice tShGoodsPrice = null;
 		if(tShOrderGoods!=null)
 			for(TShOrderGood tsog:tShOrderGoods){
 				tsgb = tShGoodsBasicManager.findUniqueBy("id", tsog.getGoodsId());
-				if(tsgb!=null)
+				if(tsgb!=null){
+					tShGoodsImage = tShGoodsImageService.getIndexImage(tsgb.getId(), tsgb.getVersion());
+					 if(tShGoodsImage!=null){
+						 tsgb.setIndexImage(tShGoodsImage);
+					 }
+					tsgb.setGoodsNum(tsog.getNum());
+					tShGoodsPrice = tShGoodsPriceService.querySaleByGoodsIdAndVersion(tsgb.getId(), tsgb.getVersion());
+					if(tShGoodsPrice!=null)
+						tsgb.setPrice(tShGoodsPrice.getPrice());
 					tShGoodsBasics.add(tsgb);
+				}
 			}
 		to.settShGoodsList(tShGoodsBasics);
 		return to;
@@ -146,29 +165,7 @@ public class TShOrderServiceImpl implements TShOrderService {
 	public Page pageList(Page page) throws Exception {
 		Map map = new HashMap<String, Object>();
 		page = tShOrdermanager.pagedQuery(" from TShOrder", page.getPageNo(), page.getPageSize(), map);
-		List<TShOrder> tShOrders = (List<TShOrder>) page.getResult();
-		TShStore tss = null;
-		List<TShOrderGood> tShOrderGoods = null;
-		List<TShGoodsBasic> tShGoodsBasics = null;
-		for(TShOrder to:tShOrders){
-			//获取订单店铺
-			tss = tShStoreManager.findUniqueBy("id", to.getStoreId());
-			if(tss!=null)
-				to.settShStore(tss);
-			//获取订单产品
-			tShOrderGoods = tShOrderGoodsManager.findBy("orderId", to.getId());
-			tShGoodsBasics = new ArrayList<>();
-			TShGoodsBasic tsgb = null;
-			if(tShOrderGoods!=null)
-				for(TShOrderGood tsog:tShOrderGoods){
-					tsgb = tShGoodsBasicManager.findUniqueBy("id", tsog.getGoodsId());
-					if(tsgb!=null)
-						tShGoodsBasics.add(tsgb);
-				}
-			to.settShGoodsList(tShGoodsBasics);
-		}
-		page.setResult(tShOrders);
-		return page;
+		return this.mapPage(page);
 	}
 
 	@Override
@@ -218,6 +215,100 @@ public class TShOrderServiceImpl implements TShOrderService {
 			//update
 			tShOrderAddressManager.update(tsoa);
 		}
+	}
+	/**
+	 * 订单确认
+	 */
+	@Override
+	public List<TShOrder> orderConfirm(String[] orderIds) throws Exception {
+		if(orderIds==null)
+			throw new ServiceException("参数为空，确认订单失败");
+		List<TShOrder> orders = new ArrayList<>();
+		TShOrder order = null;
+		for(String orderId:orderIds){
+			order = this.getById(orderId);
+			if(order!=null)
+				orders.add(order);
+		}
+		return orders;
+	}
+	
+	@Override
+	public Page getMemberOrder(Page page, String memberId, Integer status) throws Exception {
+		if(StringHelper.isEmpty(memberId))
+			throw new ServiceException("参数为空，操作失败");
+		Map<String,Object> map = new HashMap<String, Object>();
+		String hql = " from TShOrder ";
+		if(StringHelper.isNotEmpty(memberId)){
+			hql = hql+" where yhId=:yhId and scBj=:scBj";
+			map.put("scBj", Constants.UN_DELETE_STATE);
+			map.put("yhId", memberId);
+		}
+		if(status!=null){
+			hql = hql+" and status=:status";
+			map.put("status", status);
+		}
+		page = tShOrdermanager.pagedQuery(hql, page.getPageNo(), page.getPageSize(), map);
+		return this.mapPage(page);
+	}
+	
+	@Override
+	public Page getStoreOrder(Page page, String storeId, Integer status) throws Exception {
+		if(StringHelper.isEmpty(storeId))
+			throw new ServiceException("参数为空，操作失败");
+		Map<String,Object> map = new HashMap<String, Object>();
+		String hql = " from TShOrder ";
+		if(StringHelper.isNotEmpty(storeId)){
+			hql = hql+" where storeId=:storeId";
+			map.put("storeId", storeId);
+		}
+		if(status!=null){
+			hql = hql+" and status=:status";
+			map.put("status", status);
+		}
+		page = tShOrdermanager.pagedQuery(hql, page.getPageNo(), page.getPageSize(), map);
+		return this.mapPage(page);
+	}
+	
+	@Override
+	public void setOrderStatus(String orderId, Integer status) throws Exception {
+		if(StringHelper.isEmpty(orderId))
+			throw new ServiceException("参数为空，操作失败");
+		TShOrder order = tShOrdermanager.findUniqueBy("id", orderId);
+		if(order==null)
+			throw new ServiceException("参数有误，操作失败");
+		order.setStatus(status);
+		tShOrdermanager.update(order);
+	}
+	/**
+	 * 
+	 * @param page
+	 * @return
+	 */
+	private Page mapPage(Page page){
+		List<TShOrder> tShOrders = (List<TShOrder>) page.getResult();
+		TShStore tss = null;
+		List<TShOrderGood> tShOrderGoods = null;
+		List<TShGoodsBasic> tShGoodsBasics = null;
+		for(TShOrder to:tShOrders){
+			//获取订单店铺
+			tss = tShStoreManager.findUniqueBy("id", to.getStoreId());
+			if(tss!=null)
+				to.settShStore(tss);
+			//获取订单产品
+			tShOrderGoods = tShOrderGoodsManager.findBy("orderId", to.getId());
+			tShGoodsBasics = new ArrayList<>();
+			TShGoodsBasic tsgb = null;
+			if(tShOrderGoods!=null)
+				for(TShOrderGood tsog:tShOrderGoods){
+					tsgb = tShGoodsBasicManager.findUniqueBy("id", tsog.getGoodsId());
+					if(tsgb!=null)
+						tShGoodsBasics.add(tsgb);
+				}
+			to.settShGoodsList(tShGoodsBasics);
+		}
+		page.setResult(tShOrders);
+		return page;
 	}
 
 }

@@ -2,10 +2,10 @@ package com.izhbg.typz.shop.goods.service;
 
 import java.util.List;
 
-import com.izhbg.typz.shop.common.service.BaseService;
+import com.izhbg.typz.shop.common.service.TShBaseService;
 import com.izhbg.typz.shop.goods.dto.TShGoodsImage;
 
-public interface TShGoodsImageService extends BaseService<TShGoodsImage>{
+public interface TShGoodsImageService extends TShBaseService<TShGoodsImage>{
 	
 	/**
 	 * 获取商品信息

@@ -16,17 +16,19 @@ import org.springframework.stereotype.Service;
 import com.izhbg.typz.base.common.service.ServiceException;
 import com.izhbg.typz.base.mapper.BeanMapper;
 import com.izhbg.typz.base.page.Page;
+import com.izhbg.typz.base.util.Constants;
 import com.izhbg.typz.base.util.IdGenerator;
-import com.izhbg.typz.shop.common.util.ConstantUtils;
 import com.izhbg.typz.shop.goods.dto.TShGoods;
 import com.izhbg.typz.shop.goods.dto.TShGoodsBasic;
 import com.izhbg.typz.shop.goods.dto.TShGoodsDetail;
 import com.izhbg.typz.shop.goods.dto.TShGoodsImage;
+import com.izhbg.typz.shop.goods.dto.TShGoodsPrice;
 import com.izhbg.typz.shop.goods.dto.TShGoodsTag;
 import com.izhbg.typz.shop.goods.dto.TShGoodsTags;
 import com.izhbg.typz.shop.goods.manager.TShGoodsBasicManager;
 import com.izhbg.typz.shop.goods.manager.TShGoodsDetailManager;
 import com.izhbg.typz.shop.goods.manager.TShGoodsImageManager;
+import com.izhbg.typz.shop.goods.manager.TShGoodsPriceManager;
 import com.izhbg.typz.shop.goods.manager.TShGoodsTagManager;
 import com.izhbg.typz.shop.goods.manager.TShGoodsTagsManager;
 import com.izhbg.typz.shop.goods.service.TShGoodsBasicService;
@@ -46,6 +48,8 @@ public class TShGoodsBasicServiceImpl implements TShGoodsBasicService {
 	private TShGoodsTagsManager tShGoodsTagsManager;
 	@Autowired
 	private TShGoodsTagManager tShGoodsTagManager;
+	@Autowired
+	private TShGoodsPriceManager tShGoodsPriceManager;
 	private BeanMapper beanMapper = new BeanMapper();
 	
 	public void add(TShGoodsBasic entity) throws Exception {
@@ -117,32 +121,47 @@ public class TShGoodsBasicServiceImpl implements TShGoodsBasicService {
 			throw new ServiceException("参数为空，保存或更新商品失败");
 		TShGoodsBasic tShGoodsBasic = setValueTShGoodsBasic(tShGoods);
 		TShGoodsDetail tShGoodsDetail = setValueTShGoodsDetail(tShGoods);
+		TShGoodsPrice tsGoodsPrice = setValueTShGoodsPrice(tShGoods);
 		//基本信息
 		if(StringHelper.isEmpty(tShGoodsBasic.getId())){
 			//新增 goodsbasic
 			tShGoodsBasic.setId(IdGenerator.getInstance().getUniqTime()+"");
 			tShGoodsBasic.setCreateUser(SpringSecurityUtils.getCurrentUserId());
 			tShGoodsBasic.setCreateTime(new Date());
-			tShGoodsBasic.setDelStatus(1);
-			tShGoodsBasic.setVersion(-1);
+			tShGoodsBasic.setDelStatus(Constants.UN_DELETE_STATE);
+			tShGoodsBasic.setVersion(Constants.GOODS_VERSION_DEFAULT);
 			tShGoodsBasic.setStatus(-1);
 			tShGoodsBasicManager.save(tShGoodsBasic);
 			//新增 goodsdetail
 			tShGoodsDetail.setGoodsId(tShGoodsBasic.getId());
-			tShGoodsDetail.setVersion(-1);
-			tShGoodsDetail.setDelStatus(0);
+			tShGoodsDetail.setVersion(Constants.GOODS_VERSION_DEFAULT);
+			tShGoodsDetail.setDelStatus(Constants.UN_DELETE_STATE);
 			tShGoodsDetail.setId(IdGenerator.getInstance().getUniqTime()+"");
 			tShGoodsDetailManager.save(tShGoodsDetail);
+			//新增建议价格
+			tsGoodsPrice.setId(IdGenerator.getInstance().getUniqTime()+"");
+			tsGoodsPrice.setGoodsId(tShGoodsBasic.getId());
+			tsGoodsPrice.setCreateTime(new Date());
+			tsGoodsPrice.setCreateUser(SpringSecurityUtils.getCurrentUserId());
+			tsGoodsPrice.setDelStatus(Constants.UN_DELETE_STATE);
+			tsGoodsPrice.setVersion(Constants.GOODS_VERSION_DEFAULT);
+			tShGoodsPriceManager.save(tsGoodsPrice);
 			//图片
 			if(StringHelper.isNotEmpty(tShGoods.getPicIds())){
 				String[] picIds = tShGoods.getPicIds().split(",");
 				TShGoodsImage tShGoodsImage = null;
+				int i=1;
 				for(String picId:picIds){
 					if(StringHelper.isNotEmpty(picId)){
 						tShGoodsImage = tShGoodsImageManager.findUniqueBy("id", picId);
 						tShGoodsImage.setGoodsId(tShGoodsBasic.getId());
 						tShGoodsImage.setCreateUser(SpringSecurityUtils.getCurrentUserId());
 						tShGoodsImage.setCreateTime(new Date());
+						if(i==1)
+							tShGoodsImage.setIsFace(Constants.GOODS_IS_FACE);
+						else
+							tShGoodsImage.setIsFace(Constants.ATTACHE_NORMAL);
+						i++;
 						tShGoodsImageManager.update(tShGoodsImage);
 					}
 				}
@@ -151,7 +170,7 @@ public class TShGoodsBasicServiceImpl implements TShGoodsBasicService {
 			//更新
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("id", tShGoodsBasic.getId());
-			map.put("version", ConstantUtils.GOODS_INIT_VERSION);
+			map.put("version", Constants.GOODS_VERSION_DEFAULT);
 			TShGoodsBasic tShGoodsBasic_ = tShGoodsBasicManager.findUnique(" from TShGoodsBasic where id=:id and version=:version",map);
 			beanMapper.copy(tShGoodsBasic, tShGoodsBasic_);
 			tShGoodsBasic_.setUpdateUser(SpringSecurityUtils.getCurrentUserId());
@@ -162,19 +181,43 @@ public class TShGoodsBasicServiceImpl implements TShGoodsBasicService {
 			TShGoodsDetail tShGoodsDetail_= tShGoodsDetailManager.findUniqueBy("id",tShGoodsDetail.getId());
 			beanMapper.copy(tShGoodsDetail, tShGoodsDetail_);
 			tShGoodsDetailManager.update(tShGoodsDetail_);
-			
+			//建议价格更新
+			map.clear();
+			map.put("goodsId", tShGoodsBasic.getId());
+			map.put("priceType", Constants.GOODS_PRICE_GUIDE);
+			TShGoodsPrice tsGoodsPrice_ = tShGoodsPriceManager.findUnique(" from TShGoodsPrice where goodsId=:goodsId and priceType=:priceType", map);
+			if(tsGoodsPrice_==null){
+				tsGoodsPrice.setId(IdGenerator.getInstance().getUniqTime()+"");
+				tsGoodsPrice.setGoodsId(tShGoodsBasic.getId());
+				tsGoodsPrice.setCreateTime(new Date());
+				tsGoodsPrice.setCreateUser(SpringSecurityUtils.getCurrentUserId());
+				tsGoodsPrice.setDelStatus(Constants.UN_DELETE_STATE);
+				tsGoodsPrice.setVersion(Constants.GOODS_VERSION_DEFAULT);
+				tShGoodsPriceManager.save(tsGoodsPrice);
+			}else if(tsGoodsPrice.getPrice()!=tsGoodsPrice_.getPrice()){
+				tsGoodsPrice_.setPrice(tsGoodsPrice.getPrice());
+				tsGoodsPrice_.setUpdateTime(new Date());
+				tsGoodsPrice_.setUpdateUser(SpringSecurityUtils.getCurrentUserId());
+				tShGoodsPriceManager.update(tsGoodsPrice_);
+			}
 			//图片
 			if(StringHelper.isNotEmpty(tShGoods.getPicIds())){
 				String[] picIds = tShGoods.getPicIds().split(",");
 				TShGoodsImage tShGoodsImage = null;
 				//清除 关联的图片信息
 				//新增 修改后的图片关系信息
+				int i = 0;
 				for(String picId:picIds){
 					if(StringHelper.isNotEmpty(picId)){
 						map.clear();
 						map.put("id", picId);
-						map.put("version", ConstantUtils.GOODS_INIT_VERSION);
+						map.put("version", Constants.GOODS_VERSION_DEFAULT);
 						tShGoodsImage = tShGoodsImageManager.findUnique(" from TShGoodsImage where id=:id and version=:version", map);
+						if(i==1)
+							tShGoodsImage.setIsFace(Constants.GOODS_IS_FACE);
+						else
+							tShGoodsImage.setIsFace(Constants.ATTACHE_NORMAL);
+						i++;
 						if(StringHelper.isNotEmpty(tShGoodsImage.getGoodsId()))
 						{
 							tShGoodsImage.setCreateUser(SpringSecurityUtils.getCurrentUserId());
@@ -250,19 +293,34 @@ public class TShGoodsBasicServiceImpl implements TShGoodsBasicService {
 			tShGoodsDetail.setStockStatus(tShGoods.getStockStatus());
 		return tShGoodsDetail;
 	}
+	/**
+	 * 保存商品价格
+	 * @param tShGoods
+	 * @return
+	 */
+	private TShGoodsPrice setValueTShGoodsPrice(TShGoods tShGoods){
+		if(tShGoods==null)
+			return null;
+		TShGoodsPrice tsGoodsPrice = new TShGoodsPrice();
+		if(tShGoods.getDefaultPrice()!=null){
+			tsGoodsPrice.setPrice(tShGoods.getDefaultPrice());
+			tsGoodsPrice.setPriceType(Constants.GOODS_PRICE_GUIDE);
+		}
+		return tsGoodsPrice;
+	}
 	@Override
 	public Page pageList(Page page, TShGoods tShGoods) throws Exception {
 		Map<String,Object> map = new HashMap<String, Object>();
 		String hql = " from TShGoodsBasic where version=-1";
 		if(tShGoods.getStatus()==null)
-			map.put("status", ConstantUtils.GOODS_ITEM_UP);
+			map.put("status", Constants.GOODS_STATUS_SALE);
 		else
 			map.put("status", tShGoods.getStatus());
 		
 		if(tShGoods.getDelStatus()!=null)
 			map.put("delStatus", tShGoods.getDelStatus());
 		else
-			map.put("delStatus", ConstantUtils.ITEM_DELETE_UN);
+			map.put("delStatus", Constants.UN_DELETE_STATE);
 		
 		page = tShGoodsBasicManager.pagedQuery(hql+getWhere(tShGoods), page.getPageNo(), page.getPageSize(), map);
 		List<TShGoodsBasic> tShGoodsBasics = (List<TShGoodsBasic>) page.getResult();
@@ -270,10 +328,29 @@ public class TShGoodsBasicServiceImpl implements TShGoodsBasicService {
 		List<TShGoodsTags> tShGoodsTags = null;
 		TShGoodsTags tt = null;
 		List<TShGoodsTag> tags = null;
+		TShGoodsPrice tShGoodsPrice = null;
+		List<TShGoodsPrice> tShGoodsPrices = null;
 		for(TShGoodsBasic tShGoodsBasic:tShGoodsBasics){
 			tShGoodsDetail = tShGoodsDetailManager.findUniqueBy("goodsId", tShGoodsBasic.getId());
 			if(tShGoodsDetail!=null)
 				tShGoodsBasic.settShGoodsDetail(tShGoodsDetail);
+			map.clear();
+			map.put("goodsId", tShGoodsBasic.getId());
+			map.put("priceType1", Constants.GOODS_PRICE_ORIGINAL);
+			map.put("priceType2", Constants.GOODS_PRICE_GUIDE);
+			map.put("priceType3", Constants.GOODS_PRICE_COST);
+			tShGoodsPrices = tShGoodsPriceManager.find(" from TShGoodsPrice where goodsId=:goodsId and ( priceType=:priceType1 or priceType=:priceType2 or priceType=:priceType3)", map);
+			if(tShGoodsPrices!=null)
+				for(TShGoodsPrice price:tShGoodsPrices){
+					if(price.getPriceType()==Constants.GOODS_PRICE_GUIDE)
+						tShGoodsBasic.setGuidPrice(price.getPrice());
+					else if(price.getPriceType()==Constants.GOODS_PRICE_ORIGINAL)
+						tShGoodsBasic.setSalePrice(price.getPrice());
+					else if(price.getPriceType()== Constants.GOODS_PRICE_COST){
+						tShGoodsBasic.setCostPrice(price.getPrice());
+						tShGoodsBasic.setPercent(price.getPercent());
+					}
+				}
 			tags = tShGoodsTagManager.findBy("goodsId", tShGoodsBasic.getId());
 			tShGoodsTags = new ArrayList<>();
 			for(TShGoodsTag gt:tags){
@@ -300,14 +377,14 @@ public class TShGoodsBasicServiceImpl implements TShGoodsBasicService {
 		String hql = " from TShGoodsBasic where version=-1 and createUser=:createUser";
 		map.put("createUser", SpringSecurityUtils.getCurrentUserId());
 		if(tShGoods.getStatus()==null)
-			map.put("status", ConstantUtils.GOODS_ITEM_UP);
+			map.put("status", Constants.GOODS_STATUS_SALE);
 		else
 			map.put("status", tShGoods.getStatus());
 		
 		if(tShGoods.getDelStatus()!=null)
 			map.put("delStatus", tShGoods.getDelStatus());
 		else
-			map.put("delStatus", ConstantUtils.ITEM_DELETE_UN);
+			map.put("delStatus", Constants.UN_DELETE_STATE);
 		
 		page = tShGoodsBasicManager.pagedQuery(hql+getWhere(tShGoods), page.getPageNo(), page.getPageSize(), map);
 		List<TShGoodsBasic> tShGoodsBasics = (List<TShGoodsBasic>) page.getResult();
@@ -344,14 +421,14 @@ public class TShGoodsBasicServiceImpl implements TShGoodsBasicService {
 		if(version!=null){
 			TShGoodsBasic tShGoodsBasic = this.queryByGoodsIdAndVersion(goodsId, version);
 			if(tShGoodsBasic!=null){
-				tShGoodsBasic.setStatus(ConstantUtils.GOODS_ITEM_UNDER);
+				tShGoodsBasic.setStatus(Constants.GOODS_STATUS_UN_SALE);
 				tShGoodsBasicManager.update(tShGoodsBasic);
 			}
 		}
 		
-		TShGoodsBasic tShGoodsBasic = this.queryByGoodsIdAndVersion(goodsId, ConstantUtils.GOODS_INIT_VERSION);
+		TShGoodsBasic tShGoodsBasic = this.queryByGoodsIdAndVersion(goodsId, Constants.GOODS_VERSION_DEFAULT);
 		if(tShGoodsBasic!=null){
-			tShGoodsBasic.setStatus(ConstantUtils.GOODS_ITEM_UNDER);
+			tShGoodsBasic.setStatus(Constants.GOODS_STATUS_UN_SALE);
 			tShGoodsBasicManager.update(tShGoodsBasic);
 		}
 	}
@@ -376,14 +453,14 @@ public class TShGoodsBasicServiceImpl implements TShGoodsBasicService {
 		if(version!=null){
 			TShGoodsBasic tShGoodsBasic = this.queryByGoodsIdAndVersion(goodsId, version);
 			if(tShGoodsBasic!=null){
-				tShGoodsBasic.setStatus(ConstantUtils.GOODS_ITEM_UP);
+				tShGoodsBasic.setStatus(Constants.GOODS_STATUS_SALE);
 				tShGoodsBasicManager.update(tShGoodsBasic);
 			}
 		}
 		
-		TShGoodsBasic tShGoodsBasic = this.queryByGoodsIdAndVersion(goodsId, ConstantUtils.GOODS_INIT_VERSION);
+		TShGoodsBasic tShGoodsBasic = this.queryByGoodsIdAndVersion(goodsId, Constants.GOODS_VERSION_DEFAULT);
 		if(tShGoodsBasic!=null){
-			tShGoodsBasic.setStatus(ConstantUtils.GOODS_ITEM_UP);
+			tShGoodsBasic.setStatus(Constants.GOODS_STATUS_SALE);
 			tShGoodsBasicManager.update(tShGoodsBasic);
 		}
 	}
@@ -425,5 +502,95 @@ public class TShGoodsBasicServiceImpl implements TShGoodsBasicService {
 		for(String id:ids){
 			recover(id);
 		}
+	}
+	/**
+	 * 设置销售价格
+	 */
+	@Override
+	public void setSalePrice(String goodsId,double price) throws Exception {
+		if(StringHelper.isEmpty(goodsId))
+			throw new ServiceException("参数为空，操作失败");
+		Map<String, Object> map = new HashMap<>();
+		map.put("goodsId", goodsId);
+		map.put("priceType", Constants.GOODS_PRICE_ORIGINAL);
+		TShGoodsPrice tsGoodsPrice = tShGoodsPriceManager.findUnique(" from TShGoodsPrice where goodsId=:goodsId and priceType=:priceType", map);
+		if(tsGoodsPrice==null){
+			tsGoodsPrice = new TShGoodsPrice();
+			tsGoodsPrice.setId(IdGenerator.getInstance().getUniqTime()+"");
+			tsGoodsPrice.setGoodsId(goodsId);
+			tsGoodsPrice.setCreateTime(new Date());
+			tsGoodsPrice.setCreateUser(SpringSecurityUtils.getCurrentUserId());
+			tsGoodsPrice.setDelStatus(Constants.UN_DELETE_STATE);
+			tsGoodsPrice.setVersion(Constants.GOODS_VERSION_DEFAULT);
+			tsGoodsPrice.setPrice(price);
+			tsGoodsPrice.setPriceType(Constants.GOODS_PRICE_ORIGINAL);
+			tShGoodsPriceManager.save(tsGoodsPrice);
+		}else{
+			tsGoodsPrice.setPrice(price);
+			tsGoodsPrice.setUpdateTime(new Date());
+			tsGoodsPrice.setUpdateUser(SpringSecurityUtils.getCurrentUserId());
+			tShGoodsPriceManager.update(tsGoodsPrice);
+		}
+		
+	}
+	/**
+	 * 设置推广价格
+	 */
+	@Override
+	public void setCostPrice(String goodsId,double price) throws Exception {
+		if(StringHelper.isEmpty(goodsId))
+			throw new ServiceException("参数为空，操作失败");
+		Map<String, Object> map = new HashMap<>();
+		map.put("goodsId", goodsId);
+		map.put("priceType", Constants.GOODS_PRICE_COST);
+		TShGoodsPrice tsGoodsPrice = tShGoodsPriceManager.findUnique(" from TShGoodsPrice where goodsId=:goodsId and priceType=:priceType", map);
+		if(tsGoodsPrice==null){
+			tsGoodsPrice = new TShGoodsPrice();
+			tsGoodsPrice.setId(IdGenerator.getInstance().getUniqTime()+"");
+			tsGoodsPrice.setGoodsId(goodsId);
+			tsGoodsPrice.setCreateTime(new Date());
+			tsGoodsPrice.setCreateUser(SpringSecurityUtils.getCurrentUserId());
+			tsGoodsPrice.setDelStatus(Constants.UN_DELETE_STATE);
+			tsGoodsPrice.setVersion(Constants.GOODS_VERSION_DEFAULT);
+			tsGoodsPrice.setPrice(price);
+			tsGoodsPrice.setPriceType(Constants.GOODS_PRICE_COST);
+			tShGoodsPriceManager.save(tsGoodsPrice);
+		}else{
+			tsGoodsPrice.setPrice(price);
+			tsGoodsPrice.setUpdateTime(new Date());
+			tsGoodsPrice.setUpdateUser(SpringSecurityUtils.getCurrentUserId());
+			tShGoodsPriceManager.update(tsGoodsPrice);
+		}
+		
+	}
+	/**
+	 * 设置 推广者获利比例
+	 */
+	@Override
+	public void setPercent(String goodsId, String percent) throws Exception {
+		if(StringHelper.isEmpty(goodsId))
+			throw new ServiceException("参数为空，操作失败");
+		Map<String, Object> map = new HashMap<>();
+		map.put("goodsId", goodsId);
+		map.put("priceType", Constants.GOODS_PRICE_COST);
+		TShGoodsPrice tsGoodsPrice = tShGoodsPriceManager.findUnique(" from TShGoodsPrice where goodsId=:goodsId and priceType=:priceType", map);
+		if(tsGoodsPrice==null){
+			tsGoodsPrice = new TShGoodsPrice();
+			tsGoodsPrice.setId(IdGenerator.getInstance().getUniqTime()+"");
+			tsGoodsPrice.setGoodsId(goodsId);
+			tsGoodsPrice.setCreateTime(new Date());
+			tsGoodsPrice.setCreateUser(SpringSecurityUtils.getCurrentUserId());
+			tsGoodsPrice.setDelStatus(Constants.UN_DELETE_STATE);
+			tsGoodsPrice.setVersion(Constants.GOODS_VERSION_DEFAULT);
+			tsGoodsPrice.setPriceType(Constants.GOODS_PRICE_COST);
+			tsGoodsPrice.setPercent(percent);
+			tShGoodsPriceManager.save(tsGoodsPrice);
+		}else{
+			tsGoodsPrice.setPercent(percent);
+			tsGoodsPrice.setUpdateTime(new Date());
+			tsGoodsPrice.setUpdateUser(SpringSecurityUtils.getCurrentUserId());
+			tShGoodsPriceManager.update(tsGoodsPrice);
+		}
+		
 	}
 }

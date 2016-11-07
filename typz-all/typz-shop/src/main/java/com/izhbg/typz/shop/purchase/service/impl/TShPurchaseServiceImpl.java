@@ -13,6 +13,7 @@ import com.izhbg.typz.base.common.service.ServiceException;
 import com.izhbg.typz.base.mapper.BeanMapper;
 import com.izhbg.typz.base.page.Page;
 import com.izhbg.typz.base.util.Constants;
+import com.izhbg.typz.base.util.IdGenerator;
 import com.izhbg.typz.base.util.StringHelper;
 import com.izhbg.typz.shop.goods.dto.TShGoodsBasic;
 import com.izhbg.typz.shop.goods.dto.TShGoodsDelivery;
@@ -64,6 +65,7 @@ public class TShPurchaseServiceImpl implements TShPurchaseService{
 			pur.setNum(entity.getNum()+pur.getNum());
 			tShPurchaseManager.update(pur);
 		}else{
+			entity.setId(IdGenerator.getInstance().getUniqTime()+"");
 			entity.setAddTime(new Date());
 			tShPurchaseManager.save(entity);
 		}
@@ -87,6 +89,8 @@ public class TShPurchaseServiceImpl implements TShPurchaseService{
 	public void deleteBatche(String[] ids) throws Exception {
 		if(ids==null||ids.length<=0)
 			throw new ServiceException("参数为空,批量删除购物车信息失败");
+		for(String id:ids)
+			this.delete(id);
 	}
 
 	@Override
@@ -110,7 +114,7 @@ public class TShPurchaseServiceImpl implements TShPurchaseService{
 	@Override
 	public Purchase getPurchaseByYhId(String yhId) throws Exception {
 		
-		List<Map<String,String>> list = tShPurchaseManager.find(" select DISTINCT(store_id) from t_sh_purchase where yh_id='"+yhId+"' ");
+		List<Map<String,Object>> list = tShPurchaseManager.getJdbcTemplate().queryForList(" select DISTINCT(store_id) from t_sh_purchase where yh_id='"+yhId+"' ");
 		Purchase purchase = new Purchase();
 		if(list==null||list.size()==0) 
 			return null;
@@ -136,7 +140,7 @@ public class TShPurchaseServiceImpl implements TShPurchaseService{
 			TShGoodsImage goodsImage = null;
 			TShGoodsDelivery goodsDelivery = null;
 			TShGoodsPrice tShGoodsprice = null;
-			for(Map<String,String> map:list) {
+			for(Map<String,Object> map:list) {
 				storeId = map.get("store_id")+"";
 				store = tsShStoreManager.findUniqueBy("id", storeId);
 				if(store!=null) {
@@ -153,14 +157,14 @@ public class TShPurchaseServiceImpl implements TShPurchaseService{
 							if(goods!=null) {
 								//缩略图
 								map_temp.clear();
-								map_temp.put("type", Constants.ATTACHE_INDEX);
+								map_temp.put("isFace", Constants.ATTACHE_INDEX);
 								map_temp.put("goodsId", goods.getId());
-								goodsImage = tShGoodsImageManager.findUnique("from TShGoodsImage type=:type and goodsId=:goodsId", map_temp);
+								goodsImage = tShGoodsImageManager.findUnique("from TShGoodsImage where isFace=:isFace and goodsId=:goodsId", map_temp);
 								goods.setIndexImage(goodsImage);
 								
 								//价格
 								map_temp.clear();
-								map_temp.put("priceType", Constants.PRICE_DSCUT);
+								map_temp.put("priceType", Constants.GOODS_PRICE_ORIGINAL);
 								map_temp.put("goodsId", goods.getId());
 								tShGoodsprice = tShGoodsPriceManager.findUnique(" from TShGoodsPrice where goodsId=:goodsId and priceType=:priceType", map_temp);
 								if(tShGoodsprice!=null)
@@ -173,6 +177,7 @@ public class TShPurchaseServiceImpl implements TShPurchaseService{
 								purchaseGoods = new PurchaseGoods();
 								purchaseGoods.setGoods(goods);
 								purchaseGoods.setNum(pu.getNum());
+								purchaseGoods.setPurchaseId(pu.getId());
 								totalGoodsNum = totalGoodsNum+pu.getNum();
 								purchaseGoodsList.add(purchaseGoods);
 								
@@ -194,6 +199,39 @@ public class TShPurchaseServiceImpl implements TShPurchaseService{
 			purchase.setTotalShopGoodsNum(totalShopGoodsNum);
 		}
 		return purchase;
+	}
+
+	@Override
+	public int getPersonPurchaseNum(String yhId) throws Exception {
+		if(StringHelper.isEmpty(yhId))
+			throw new ServiceException("参数为空，获取购物车信息shibai ");
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("yhId", yhId);
+		List<TShPurchase> purs = tShPurchaseManager.find("from TShPurchase where yhId=:yhId ", map);
+		int totalNum = 0;
+		for(TShPurchase pur:purs){
+			totalNum = totalNum+pur.getNum();
+		}
+		return totalNum;
+	}
+
+	@Override
+	public int reduce(String yhId, String goodsId) throws Exception {
+		if(StringHelper.isEmpty(yhId)||StringHelper.isEmpty(goodsId))
+			throw new ServiceException("参数为空，操作购物车信息失败");
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("yhId", yhId);
+		map.put("goodsId", goodsId);
+		TShPurchase pur = tShPurchaseManager.findUnique("from TShPurchase where yhId=:yhId and goodsId=:goodsId", map);
+		int num = 0;
+		if(pur!=null){
+			if(pur.getNum()>=2){
+				pur.setNum(pur.getNum()-1);
+				tShPurchaseManager.update(pur);
+				num = pur.getNum()-1;
+			}
+		}
+		return num;
 	}
 
 }

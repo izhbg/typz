@@ -25,7 +25,7 @@ public class TShStoreAccount implements Serializable {
 	private String accountNo;
 
 	@Column(name="account_type_id")
-	private String accountTypeId;
+	private String accountTypeId;//1 支付宝  2 银行卡
 
 	@Column(name="bank_id")
 	private String bankId;
@@ -39,11 +39,13 @@ public class TShStoreAccount implements Serializable {
 
 	private String other;
 
-	@Column(name="store_id")
-	private String storeId;
+	@Column(name="member_id")
+	private String memberId;
 
 	@Column(name="sc_bj")
 	private Integer scBj;
+	@Transient
+	private String bankName;
 	
 	public TShStoreAccount() {
 	}
@@ -112,12 +114,13 @@ public class TShStoreAccount implements Serializable {
 		this.other = other;
 	}
 
-	public String getStoreId() {
-		return this.storeId;
+
+	public String getMemberId() {
+		return memberId;
 	}
 
-	public void setStoreId(String storeId) {
-		this.storeId = storeId;
+	public void setMemberId(String memberId) {
+		this.memberId = memberId;
 	}
 
 	public Integer getScBj() {
@@ -128,4 +131,12 @@ public class TShStoreAccount implements Serializable {
 		this.scBj = scBj;
 	}
 
+	public String getBankName() {
+		return bankName;
+	}
+
+	public void setBankName(String bankName) {
+		this.bankName = bankName;
+	}
+	
 }

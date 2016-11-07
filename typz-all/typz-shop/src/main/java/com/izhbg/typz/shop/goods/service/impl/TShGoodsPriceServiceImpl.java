@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.izhbg.typz.base.common.service.ServiceException;
 import com.izhbg.typz.base.mapper.BeanMapper;
 import com.izhbg.typz.base.page.Page;
+import com.izhbg.typz.base.util.Constants;
 import com.izhbg.typz.shop.goods.dto.TShGoodsImage;
 import com.izhbg.typz.shop.goods.dto.TShGoodsPrice;
 import com.izhbg.typz.shop.goods.manager.TShGoodsPriceManager;
@@ -74,14 +75,28 @@ public class TShGoodsPriceServiceImpl implements TShGoodsPriceService{
 	}
 
 	@Override
-	public TShGoodsPrice queryByGoodsIdAndVersion(String id, Integer version)
+	public TShGoodsPrice querySaleByGoodsIdAndVersion(String id, Integer version)
 			throws Exception {
 		if(StringHelper.isEmpty(id)||version==null)
 			throw new ServiceException("参数为空，获取商品价格信息失败");
 		Map<String,Object> map = new HashMap<String, Object>();
 		map.put("id", id);
 		map.put("version", version);
-		String hql = " from TShGoodsPrice where version=:version and goodsId=:id";
+		map.put("priceType", Constants.GOODS_PRICE_ORIGINAL);
+		String hql = " from TShGoodsPrice where version=:version and goodsId=:id and priceType=:priceType";
+		TShGoodsPrice tShGoodsPrice = tShGoodsPriceManager.findUnique(hql, map);
+		return tShGoodsPrice;
+	}
+
+	@Override
+	public TShGoodsPrice queryGuidByGoodsIdAndVersion(String id, Integer version) throws Exception {
+		if(StringHelper.isEmpty(id)||version==null)
+			throw new ServiceException("参数为空，获取商品价格信息失败");
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("id", id);
+		map.put("version", version);
+		map.put("priceType", Constants.GOODS_PRICE_GUIDE);
+		String hql = " from TShGoodsPrice where version=:version and goodsId=:id and priceType=:priceType";
 		TShGoodsPrice tShGoodsPrice = tShGoodsPriceManager.findUnique(hql, map);
 		return tShGoodsPrice;
 	}

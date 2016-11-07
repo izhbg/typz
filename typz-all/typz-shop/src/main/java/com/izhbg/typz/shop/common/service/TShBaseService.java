@@ -12,7 +12,7 @@ import com.izhbg.typz.base.page.Page;
 * 
 * @param <T>
  */
-public interface BaseService<T> {
+public interface TShBaseService<T> {
 	/**
 	 * 添加
 	 * @param entityClass

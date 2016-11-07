@@ -20,6 +20,8 @@ INSERT INTO `t_xt_gnjs_zy` VALUES ('1', 'lmgl', '1466992727356', '1', '1', '1', 
 INSERT INTO `t_xt_gnjs_zy` VALUES ('1', 'splb', '1466992727364', '1', '1', '1', '1', '0');
 INSERT INTO `t_xt_gnjs_zy` VALUES ('1', 'dpsplb', '1475648473888', '1', '1', '1', '1', '0');
 INSERT INTO `t_xt_gnjs_zy` VALUES ('1', 'spbq', '1475651810986', '1', '1', '1', '1', '0');
+INSERT INTO `t_xt_gnjs_zy` VALUES ('1', 'firstpage', '1477965733563', '1', '1', '1', '1', '0');
+INSERT INTO `t_xt_gnjs_zy` VALUES ('1', 'dpsplb', '1477965733564', '1', '1', '1', '1', '0');
 
 INSERT INTO `t_xt_gnzy` VALUES ('spgl', '商品管理', '1', 'c78657w5m0vg781mw5m1', null, '5', '1', '1', null, 'red', 'fa-retweet', '', '1');
 INSERT INTO `t_xt_gnzy` VALUES ('lmgl', '类目管理', '1', 'spgl', null, '1', '1', '1', null, 'red', 'fa-retweet', 'maintabledata/maintabledata_pagelist.izhbg?tableName=t_sh_goods_type', '1');

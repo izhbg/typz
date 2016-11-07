@@ -279,9 +279,9 @@
 <script type="text/javascript" src="${ctx}/s/assets/plugins/jcrop/jquery.Jcrop.min.js"></script>
 <script type="text/javascript" src="${ctx}/s/assets/plugins/Sortable.js"></script>
 <script type="text/javascript" src="${ctx}/s/assets/plugins/ajaxupload/ajaxfileupload.js"></script>
-<script type="text/javascript" src="${ctx}/s/assets/scripts/goods/goods_edit.js"></script>
 <script type="text/javascript" src="${ctx}/s/assets/plugins/simditor-1.0.5/scripts/js/simditor-all.js">
 </script>
+<script type="text/javascript" src="${ctx}/s/assets/scripts/goods/goods_edit.js"></script>
 <script type="text/javascript">
 	$(function(){
 		Goods.init(); 

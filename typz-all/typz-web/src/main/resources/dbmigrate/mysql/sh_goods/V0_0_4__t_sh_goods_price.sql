@@ -9,8 +9,6 @@ CREATE TABLE `t_sh_goods_price` (
   `create_user` varchar(50) DEFAULT NULL,
   `update_time` datetime DEFAULT NULL,
   `update_user` varchar(50) DEFAULT NULL,
+  `percent` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-

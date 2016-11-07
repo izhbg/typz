@@ -37,7 +37,9 @@ public class TShOrder implements Serializable {
 
 	@Column(name="total_price")
 	private double totalPrice;
-
+	private Integer status; //订单状态
+						     //状态  0：已下单    待付款                     1：已支付/到付  待发货
+							  //   2：待收货   已发货                    3：已收货   完成 
 	private double yf;
 	@Column(name="yh_id")
 	private String yhId;
@@ -51,6 +53,7 @@ public class TShOrder implements Serializable {
 	private List<TShGoodsBasic> tShGoodsList;
 	@Transient
 	private TShStore tShStore;
+	private String other;
 	
 	public TShOrder() {
 	}
@@ -158,6 +161,22 @@ public class TShOrder implements Serializable {
 
 	public void settShStore(TShStore tShStore) {
 		this.tShStore = tShStore;
+	}
+
+	public String getOther() {
+		return other;
+	}
+
+	public void setOther(String other) {
+		this.other = other;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 	
 	

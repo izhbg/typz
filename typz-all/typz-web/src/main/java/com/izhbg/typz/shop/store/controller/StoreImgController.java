@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import com.izhbg.typz.base.util.Ajax;
 import com.izhbg.typz.base.util.IdGenerator;
 import com.izhbg.typz.base.util.PropertiesCommonUtil;
 import com.izhbg.typz.shop.common.util.AjaxResponseUtils;
@@ -216,6 +217,23 @@ public class StoreImgController {
 	          .size(selectorW, selectorH)
 	              .toFile(newFile);
 	    }
+	  }
+	  /**
+	   * 删除附件
+	   * @param imageId
+	   */
+	  @RequestMapping("delImage")
+	  @ResponseBody
+	  private String delImage(@RequestParam(value="imageId",required = true)String imageId){
+		  String result = null;
+		  try {
+			  tShStoreAttacheFileService.delete(imageId);
+			result = Ajax.JSONResult(1, "操作成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = Ajax.JSONResult(0, "操作失败");
+		}
+		  return result;
 	  }
 	  private int getInt(Double d) {
 	    if (d == null) {

@@ -1,9 +1,9 @@
 package com.izhbg.typz.shop.goods.service;
 
-import com.izhbg.typz.shop.common.service.BaseService;
+import com.izhbg.typz.shop.common.service.TShBaseService;
 import com.izhbg.typz.shop.goods.dto.TShGoodsDetail;
 
-public interface TShGoodsDetailService extends BaseService<TShGoodsDetail> {
+public interface TShGoodsDetailService extends TShBaseService<TShGoodsDetail> {
 	/**
 	 * 获取商品详情
 	 * @param name

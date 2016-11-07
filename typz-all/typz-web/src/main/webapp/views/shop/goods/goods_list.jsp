@@ -7,7 +7,7 @@
   <head>
 <%@include file="/common/meta.jsp"%>
 <%@include file="/common/snew.jsp"%>
-
+<link href="${ctx}/s/assets/plugins/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet"/>
 <style type="text/css">
 		.tagColorSpan
 		{
@@ -165,6 +165,10 @@
 									</th>
 									<th width="140">操作</th>
 									<th >名称</th>
+									<th width="100">指导价格</th>
+									<th width="100">销售价格</th>
+									<th width="100">推广额度</th>
+									<th width="150">推广者等级比例</th>
 									<th width="200">所属店铺</th>
 								</tr>
 							</thead>
@@ -185,17 +189,21 @@
 												<div style="width:74px;top:3px; float:right; right:0px;position:relative;">
 													<span class="label lableTag titleTag" style="float:right;background-color:${tg.color}">
 														${tg.name }(${tg.xh })
-														<span class="label lableTag closeTag" onclick="delTag(${item.id},${tg.id })" style="padding: 0px 2px; margin-left: 2px; cursor: pointer; display: none; background-color: red;">
+														<span class="label lableTag closeTag" onclick="GoodsList.delTag('${tg.id }','${item.id}')" style="padding: 0px 2px; margin-left: 2px; cursor: pointer; display: none; background-color: red;">
 																<b title="移出标签" >x</b>
 															</span>
 													</span>
 												</div>
 											</c:forEach>
 											
-											<div class="td-content-nowrap" >
+											<div class="td-content-nowrap" > 
 												${item.name}
 											</div>
 										</td>
+										<td>${item.guidPrice }</td>
+										<td><a href="#" class="editable editable-click salePrice" data-type="text" id="price" data-pk="${item.id}"  data-url="${ctx}/goods/goods-setSalePrice.izhbg">${item.salePrice }</a></td>
+										<td><a href="#" class="editable editable-click costPrice" data-type="text" id="price" data-pk="${item.id}" data-url="${ctx}/goods/goods-setCostPrice.izhbg">${item.costPrice }</a></td>
+										<td><a href="#" class="editable editable-click percent" data-type="text" id="percent" data-pk="${item.id}" data-url="${ctx}/goods/goods-setPercent.izhbg">${item.percent }</a></td>
 										<td>${item.storeId }</td>
 									</tr>
 								</c:forEach>
@@ -230,6 +238,7 @@
 	</div>
 <jsp:include page="/common/footer.jsp"></jsp:include>
 </body>
+<script type="text/javascript" src="${ctx}/s/assets/plugins/bootstrap-editable/js/bootstrap-editable.min.js"></script>
 <script type="text/javascript" src="${ctx}/s/assets/plugins/guser/js/common.js"></script>  
 <script type="text/javascript" src="${ctx}/s/assets/plugins/guser/js/ucenter.js"></script>
 <script type="text/javascript" src="${ctx}/s/assets/scripts/goods/goods_list.js"></script>
@@ -260,6 +269,17 @@ $(function() {
     table.configPagination('.dataTables_paginate');
     table.configPageInfo('.dataTables_info'); 
     table.configPageSize('.m-wrap'); 
+    //初始化编辑 销售价
+    GoodsList.initEditSalePrice();
+    GoodsList.initEditCostPrice();
+    GoodsList.initEditPercent();
+    
+    $(".titleTag").mouseover(
+            function() {
+                $(".closeTag",$(this)).show();
+            });
+    
+    $(".titleTag").mouseleave(function() { $(".closeTag",$(this)).hide(); });
 });
 
 function clearForm(){

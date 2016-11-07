@@ -27,6 +27,7 @@ public class TShStoreAttacheFileServiceImpl implements TShStoreAttacheFileServic
 	public void add(TShStoreAttachefile entity) throws Exception {
 		if(entity==null)
 			throw new ServiceException("参数为空,保存店铺附件信息失败");
+		
 		tsAttachefileManager.save(entity);
 	}
 

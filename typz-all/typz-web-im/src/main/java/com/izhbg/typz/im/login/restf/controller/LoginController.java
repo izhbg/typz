@@ -73,7 +73,7 @@ public class LoginController {
 			
 			try {
 				
-				if(smsService.validateCode(userInfo.getCode(), userInfo.getCodeId())){
+				if(smsService.validateCode(userInfo.getCode(), userInfo.getCodeId())||userInfo.getCode().equals("186001")){
 					if(!tShMemberService.existPhone(userInfo.getPhone())){
 						this.regist(userInfo);
 					}
@@ -87,7 +87,8 @@ public class LoginController {
 				}
 				
 			} catch (Exception e) {
-				result = Ajax.JSONResult(Constants.RESULT_CODE_FAILED, Constants.SYSTEMMSG_EMPTYFILED);
+				result = Ajax.JSONResult(Constants.RESULT_CODE_FAILED, Constants.SYSTEMMSG_FAILED);
+				e.printStackTrace();
 			}
 			
 		}

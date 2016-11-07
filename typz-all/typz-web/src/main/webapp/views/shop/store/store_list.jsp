@@ -127,6 +127,8 @@
 											<input type="checkbox" name="checkdel" class="selectedItem a-check"  value="${item.id}"/></td>
 										<td nowrap>
 											<a href="${ctx }/store/store_edit.izhbg?id=${item.id }">编辑</a>
+											<a href="${ctx }/store/goods-sale-list.izhbg?storeId=${item.id }">授权销售产品</a>
+											<a href="${ctx }/store/goods-buyer-list.izhbg?storeId=${item.id }">授权进货产品</a>
 										</td>
 										<td>${item.title}</td>
 										<td><c:if test="${item.type eq 1 }">厂家</c:if><c:if test="${item.type eq 2 }">加盟商</c:if></td>

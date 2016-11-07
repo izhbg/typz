@@ -109,11 +109,20 @@ public class TShPersonAddressServiceImpl implements TShPersonAddressService{
 		if(tpa!=null&&!id.equals(tpa.getId())){
 			tpa.setIsEnable(Constants.ADDRESS_NOT_DEFAULT);
 			tShPersonAddressManager.update(tpa);
-		}else{
-			tpa = tShPersonAddressManager.findUniqueBy("id", id);
-			tpa.setIsEnable(Constants.ADDRESS_DEFAULT);
-			tShPersonAddressManager.update(tpa);
 		}
+		tpa = tShPersonAddressManager.findUniqueBy("id", id);
+		tpa.setIsEnable(Constants.ADDRESS_DEFAULT);
+		tShPersonAddressManager.update(tpa);
+		
+	}
+	@Override
+	public TShPersonAddress getDefaultAddress(String yhId) throws Exception {
+		if(StringHelper.isEmpty(yhId))
+			throw new ServiceException("参数为空，获取默认收货地址信息失败");
+		Map<String, Object> map = new HashMap<>();
+		map.put("yhId", yhId);
+		map.put("isEnable", Constants.ADDRESS_DEFAULT);
+		return tShPersonAddressManager.findUnique(" from TShPersonAddress where yhId=:yhId and isEnable=:isEnable ", map);
 	}
 
 }

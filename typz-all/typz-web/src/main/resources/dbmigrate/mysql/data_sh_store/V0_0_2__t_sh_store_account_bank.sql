@@ -1,0 +1,17 @@
+INSERT INTO `t_sh_store_account_bank` VALUES ('1', '工商银行', null, '1', null);
+INSERT INTO `t_sh_store_account_bank` VALUES ('10', '光大银行', null, '10', null);
+INSERT INTO `t_sh_store_account_bank` VALUES ('11', '兴业银行', null, '11', null);
+INSERT INTO `t_sh_store_account_bank` VALUES ('12', '民生银行', null, '12', null);
+INSERT INTO `t_sh_store_account_bank` VALUES ('13', '平安银行', null, '13', null);
+INSERT INTO `t_sh_store_account_bank` VALUES ('14', '杭州银行', null, '14', null);
+INSERT INTO `t_sh_store_account_bank` VALUES ('15', '邮政储蓄银行', null, '15', null);
+INSERT INTO `t_sh_store_account_bank` VALUES ('16', '宁波银行', null, '16', null);
+INSERT INTO `t_sh_store_account_bank` VALUES ('17', '支付宝', null, '17', null);
+INSERT INTO `t_sh_store_account_bank` VALUES ('2', '招商银行', null, '2', null);
+INSERT INTO `t_sh_store_account_bank` VALUES ('3', '建设银行', null, '3', null);
+INSERT INTO `t_sh_store_account_bank` VALUES ('4', '中国银行', null, '4', null);
+INSERT INTO `t_sh_store_account_bank` VALUES ('5', '农业银行', null, '5', null);
+INSERT INTO `t_sh_store_account_bank` VALUES ('6', '交通银行', null, '6', null);
+INSERT INTO `t_sh_store_account_bank` VALUES ('7', '浦发银行', null, '7', null);
+INSERT INTO `t_sh_store_account_bank` VALUES ('8', '广发银行', null, '8', null);
+INSERT INTO `t_sh_store_account_bank` VALUES ('9', '中信银行', null, '9', null);

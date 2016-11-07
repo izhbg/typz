@@ -427,7 +427,24 @@ var Goods = function(){
 		        }
 		    });
 		});
-	};
+		$("body").on("click",".add-del",function(){
+			var $ele = $(this);
+		    $.ajax({
+		        url: $("#contextpath").val()+"/goodsImg/delImage.izhbg",
+		        type: "get",
+		        data:"imageId="+ $ele.parent().prev().find("input:first").val(),
+		        
+		        dataType: "json",
+		        success: function (data) {
+		        	$ele.parent().parent().attr("class","no-imgs");
+		        	$ele.parent().parent().html("");
+		        },
+		        error: function () {
+
+		        }
+		    });
+		});
+	}
 	var initJcrop = function() {
         $('#element_id').Jcrop({
             onChange: showCoords,

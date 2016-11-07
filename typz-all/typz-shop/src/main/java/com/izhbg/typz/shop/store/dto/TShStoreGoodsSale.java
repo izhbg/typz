@@ -5,11 +5,14 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.izhbg.typz.shop.goods.dto.TShGoodsBasic;
 
 @Entity
-@Table(name="t_sh_store_goods")
-@NamedQuery(name="TShStoreGoods.findAll", query="SELECT t FROM TShStoreGoods t")
-public class TShStoreGoods {
+@Table(name="t_sh_store_goods_sale")
+@NamedQuery(name="TShStoreGoodsSale.findAll", query="SELECT t FROM TShStoreGoodsSale t")
+public class TShStoreGoodsSale {
 	
 	@Id
 	private String id;
@@ -17,6 +20,8 @@ public class TShStoreGoods {
 	private String goodsId;
 	@Column(name="store_id")
 	private String storeId;
+	@Transient
+	private TShGoodsBasic tShGoodsBasic;
 	public String getId() {
 		return id;
 	}
@@ -34,6 +39,12 @@ public class TShStoreGoods {
 	}
 	public void setStoreId(String storeId) {
 		this.storeId = storeId;
+	}
+	public TShGoodsBasic gettShGoodsBasic() {
+		return tShGoodsBasic;
+	}
+	public void settShGoodsBasic(TShGoodsBasic tShGoodsBasic) {
+		this.tShGoodsBasic = tShGoodsBasic;
 	}
 	
 	

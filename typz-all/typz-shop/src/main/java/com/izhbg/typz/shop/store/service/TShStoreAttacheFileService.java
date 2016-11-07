@@ -2,10 +2,10 @@ package com.izhbg.typz.shop.store.service;
 
 import java.util.List;
 
-import com.izhbg.typz.shop.common.service.BaseService;
+import com.izhbg.typz.shop.common.service.TShBaseService;
 import com.izhbg.typz.shop.store.dto.TShStoreAttachefile;
 
-public interface TShStoreAttacheFileService extends BaseService<TShStoreAttachefile>{
+public interface TShStoreAttacheFileService extends TShBaseService<TShStoreAttachefile>{
 	
 	/**
 	 * 店铺其他附件

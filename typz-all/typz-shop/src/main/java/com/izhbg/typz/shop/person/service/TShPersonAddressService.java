@@ -2,7 +2,7 @@ package com.izhbg.typz.shop.person.service;
 
 import java.util.List;
 
-import com.izhbg.typz.shop.common.service.BaseService;
+import com.izhbg.typz.shop.common.service.TShBaseService;
 import com.izhbg.typz.shop.person.dto.TShPersonAddress;
 /**
  * 
@@ -10,7 +10,7 @@ import com.izhbg.typz.shop.person.dto.TShPersonAddress;
 * @date 2016年9月26日 下午5:17:39 
 * @version V1.0
  */
-public interface TShPersonAddressService extends BaseService<TShPersonAddress>{
+public interface TShPersonAddressService extends TShBaseService<TShPersonAddress>{
 	/**
 	 * 获取用户收货地址列表
 	 * @param id
@@ -24,5 +24,13 @@ public interface TShPersonAddressService extends BaseService<TShPersonAddress>{
 	 * @throws Exception
 	 */
 	public void setDefalutAddress(String id,String yhId) throws Exception;
+	/**
+	 * 获取默认收货地址
+	 * @param yhId
+	 * @return
+	 * @throws Exception
+	 */
+	public TShPersonAddress getDefaultAddress(String yhId) throws Exception;
+	
 	
 }

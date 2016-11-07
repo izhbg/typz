@@ -4,19 +4,24 @@ import java.util.List;
 
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.izhbg.typz.base.mapper.BeanMapper;
 import com.izhbg.typz.base.page.Page;
 import com.izhbg.typz.base.util.Constants;
 import com.izhbg.typz.base.util.StringHelper;
 import com.izhbg.typz.shop.store.dto.TShStoreAccount;
+import com.izhbg.typz.shop.store.dto.TShStoreAccountBank;
+import com.izhbg.typz.shop.store.manager.TShStoreAccountBankManager;
 import com.izhbg.typz.shop.store.manager.TShStoreAccountManager;
 import com.izhbg.typz.shop.store.service.TShStoreAccountService;
-
+@Service
 public class TShStoreAccountServiceImpl implements TShStoreAccountService{
 
 	@Autowired
 	private TShStoreAccountManager tShStoreAccoutManager;
+	@Autowired
+	private TShStoreAccountBankManager tShStoreAccountBankManager;
 	
 	private BeanMapper BeanMapper = new BeanMapper();
 	
@@ -74,6 +79,19 @@ public class TShStoreAccountServiceImpl implements TShStoreAccountService{
 	public List<TShStoreAccount> getStoreAccounts(String storeId) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public TShStoreAccount getByMemberId(String memberId) throws Exception {
+		if(StringHelper.isEmpty(memberId))
+			throw new ServiceException("参数为空，操作失败");
+		TShStoreAccount tShStoreAccount = tShStoreAccoutManager.findUniqueBy("memberId", memberId);
+		if(tShStoreAccount!=null&&StringHelper.isNotEmpty(tShStoreAccount.getBankId())){
+			TShStoreAccountBank tShStoreAccountBank = tShStoreAccountBankManager.findUniqueBy("id",tShStoreAccount.getBankId());
+			if(tShStoreAccountBank!=null)
+				tShStoreAccount.setBankName(tShStoreAccountBank.getName());
+		}
+		return tShStoreAccount;
 	}
 
 

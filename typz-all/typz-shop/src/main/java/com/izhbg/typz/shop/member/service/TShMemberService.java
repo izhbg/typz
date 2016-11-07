@@ -1,9 +1,9 @@
 package com.izhbg.typz.shop.member.service;
 
-import com.izhbg.typz.shop.common.service.BaseService;
+import com.izhbg.typz.shop.common.service.TShBaseService;
 import com.izhbg.typz.shop.member.dto.TShMember;
 
-public interface TShMemberService extends BaseService<TShMember>{
+public interface TShMemberService extends TShBaseService<TShMember>{
 	/**
 	 * 是否已存在
 	 * @param phone

@@ -46,4 +46,8 @@ public class IndexController {
            return "/html/"+(indexfileList[0]).split("\\.")[0];
         }  
 	}
+	@RequestMapping("enter")
+	public String enter(Model model,HttpServletRequest request) {
+		return "/html/enter";
+	}
 }

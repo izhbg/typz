@@ -7,6 +7,8 @@ CREATE TABLE `t_sh_order` (
   `time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '下单时间',
   `store_id` varchar(50) DEFAULT NULL COMMENT '店铺标石',
   `yh_id` varchar(50) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `other` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

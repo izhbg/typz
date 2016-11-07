@@ -26,7 +26,7 @@
 					<ul class="dropdown-menu">
 		         	 	<li><a href="${ctx}/user/profile-list.izhbg"><i class="fa fa-user"></i>个人信息</a></li>
 		          	 	<li class="divider"></li>
-		          	 	<li><a href="${ctx}/typz-web/auth/logout.izhbg"><i class="fa fa-key"></i> 退出</a></li>
+		          	 	<li><a href="${ctx}/auth/logout.izhbg"><i class="fa fa-key"></i> 退出</a></li>
 						<li class="divider"></li>
 						<!--<li><a href="javascript:;" id="trigger_fullscreen"><i class="fa fa-move"></i>全屏</a></li>
 						--><li><a href="${ctx}/user/profile-sysconfig.izhbg"><i class="fa fa-lock"></i>系统配置</a></li>

@@ -222,6 +222,13 @@ public class GoodsController {
 		else
 			return "redirect:/goods/goods_store_list.izhbg?status=-1";
 	}
+	/**
+	 * 产品标签
+	 * @param tagId
+	 * @param checkdel
+	 * @param xh
+	 * @return
+	 */
 	@RequestMapping(value = "goods-setTag", method = {RequestMethod.POST,RequestMethod.GET})
 	public @ResponseBody String setTag(@RequestParam(value = "tagId", required = true, defaultValue = "") String tagId,
 									   @RequestParam(value = "checkdel", required = true, defaultValue = "") String[] checkdel,
@@ -237,6 +244,77 @@ public class GoodsController {
 		}
 		return result;
 	}
+	/**
+	 * 产品标签
+	 * @param tagId
+	 * @param checkdel
+	 * @param xh
+	 * @return
+	 */
+	@RequestMapping(value = "goods-delTag", method = {RequestMethod.POST,RequestMethod.GET})
+	public @ResponseBody String delTag(@RequestParam(value = "tagId", required = true) String tagId,
+									   @RequestParam(value = "goodsId", required = true) String goodsId) {
+		String result = null;
+		if(StringHelper.isEmpty(tagId))
+			result = Ajax.JSONResult(Constants.RESULT_CODE_ERROR, Messages.getString("systemMsg.fieldEmpty"));	
+		try {
+			tShGoodsTagService.delTag(tagId, goodsId);
+			result = Ajax.JSONResult(Constants.RESULT_CODE_SUCCESS, "设置成功");	
+		} catch (Exception e) {
+			result = Ajax.JSONResult(Constants.RESULT_CODE_FAILED, Messages.getString("systemMsg.fieldEmpty"));	
+		}
+		return result;
+	}
+	/**
+	 * 设置产品销售价格
+	 * @param goodsId
+	 * @param price
+	 * @return
+	 */
+	@RequestMapping(value = "goods-setSalePrice", method = {RequestMethod.POST,RequestMethod.GET})
+	public @ResponseBody String setSalePrice(@RequestParam(value = "pk", required = true) String goodsId,
+									   @RequestParam(value = "value", required = true) double price) {
+		String result = null;
+		if(StringHelper.isEmpty(goodsId)||goodsId==null)
+			result = Ajax.JSONResult(Constants.RESULT_CODE_ERROR, Messages.getString("systemMsg.fieldEmpty"));	
+		try {
+			tShGoodsBasicService.setSalePrice(goodsId, price);
+			result = Ajax.JSONResult(Constants.RESULT_CODE_SUCCESS, "设置成功");	
+		} catch (Exception e) {
+			result = Ajax.JSONResult(Constants.RESULT_CODE_FAILED, Messages.getString("systemMsg.fieldEmpty"));	
+		}
+		return result;
+	} 
+	
+	@RequestMapping(value = "goods-setCostPrice", method = {RequestMethod.POST,RequestMethod.GET})
+	public @ResponseBody String setCostPrice(@RequestParam(value = "pk", required = true) String goodsId,
+									   @RequestParam(value = "value", required = true) double price) {
+		String result = null;
+		if(StringHelper.isEmpty(goodsId)||goodsId==null)
+			result = Ajax.JSONResult(Constants.RESULT_CODE_ERROR, Messages.getString("systemMsg.fieldEmpty"));	
+		try {
+			tShGoodsBasicService.setCostPrice(goodsId, price);
+			result = Ajax.JSONResult(Constants.RESULT_CODE_SUCCESS, "设置成功");	
+		} catch (Exception e) {
+			result = Ajax.JSONResult(Constants.RESULT_CODE_FAILED, Messages.getString("systemMsg.fieldEmpty"));	
+		}
+		return result;
+	} 
+	
+	@RequestMapping(value = "goods-setPercent", method = {RequestMethod.POST,RequestMethod.GET})
+	public @ResponseBody String setPercent(@RequestParam(value = "pk", required = true) String goodsId,
+									   @RequestParam(value = "value", required = true) String percent) {
+		String result = null;
+		if(StringHelper.isEmpty(goodsId)||goodsId==null)
+			result = Ajax.JSONResult(Constants.RESULT_CODE_ERROR, Messages.getString("systemMsg.fieldEmpty"));	
+		try {
+			tShGoodsBasicService.setPercent(goodsId, percent);
+			result = Ajax.JSONResult(Constants.RESULT_CODE_SUCCESS, "设置成功");	
+		} catch (Exception e) {
+			result = Ajax.JSONResult(Constants.RESULT_CODE_FAILED, Messages.getString("systemMsg.fieldEmpty"));	
+		}
+		return result;
+	} 
 	@Resource
 	public void settShGoodsBasicService(TShGoodsBasicService tShGoodsBasicService) {
 		this.tShGoodsBasicService = tShGoodsBasicService;

@@ -33,6 +33,7 @@ public class TShMember implements Serializable {
 	private Date time;
 
 	private String username;
+	private Integer type;
 
 	public TShMember() {
 	}
@@ -101,4 +102,12 @@ public class TShMember implements Serializable {
 		this.username = username;
 	}
 
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+	
 }

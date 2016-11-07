@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.izhbg.typz.base.mapper.BeanMapper;
 import com.izhbg.typz.base.util.Ajax;
 import com.izhbg.typz.base.util.Constants;
 import com.izhbg.typz.shop.goods.dto.TShGoodsBasic;
 import com.izhbg.typz.shop.goods.dto.TShGoodsDetail;
 import com.izhbg.typz.shop.goods.dto.TShGoodsImage;
+import com.izhbg.typz.shop.goods.dto.TShGoodsTags;
 import com.izhbg.typz.shop.goods.service.TShGoodsBasicService;
 import com.izhbg.typz.shop.goods.service.TShGoodsDetailService;
 import com.izhbg.typz.shop.goods.service.TShGoodsImageService;
@@ -54,9 +56,9 @@ public class GoodsController {
 		try {
 			TShGoodsBasic tShGoodsBasic = tShGoodsBasicService.getById(goodsId);
 			if(tShGoodsBasic!=null){
-				TShGoodsDetail tShGoodsDetail = tShGoodsDetailService.getById(tShGoodsBasic.getId());
+				/*TShGoodsDetail tShGoodsDetail = tShGoodsDetailService.getById(tShGoodsBasic.getId());
 				if(tShGoodsDetail!=null)
-					tShGoodsBasic.settShGoodsDetail(tShGoodsDetail);
+					tShGoodsBasic.settShGoodsDetail(tShGoodsDetail);*/
 				List<TShGoodsImage> tShGoodsImages = tShGoodsImageService.findByGoodsId(tShGoodsBasic.getId());
 				if(tShGoodsImages!=null)
 					tShGoodsBasic.settShGoodsImages(tShGoodsImages);
@@ -67,7 +69,33 @@ public class GoodsController {
 						ts.setLogoAttache(tssa);
 					tShGoodsBasic.setTsShStore(ts);
 				}
-				result = Ajax.JSONResult(Constants.RESULT_CODE_SUCCESS, Constants.SYSTEMMSG_SUCCESS,tShGoodsBasic);
+				BeanMapper beanMapper = new BeanMapper();
+				com.izhbg.typz.im.goods.response.entity.TShGoodsBasic tShGoodsBasic_ = new com.izhbg.typz.im.goods.response.entity.TShGoodsBasic();
+				beanMapper.copy(tShGoodsBasic_, tShGoodsBasic);
+				result = Ajax.JSONResult(Constants.RESULT_CODE_SUCCESS, Constants.SYSTEMMSG_SUCCESS,tShGoodsBasic_);
+			}else{
+				result = Ajax.JSONResult(Constants.RESULT_CODE_FAILED, Constants.SYSTEMMSG_EMPTYFILED);
+			}
+		} catch (Exception e) {
+			result = Ajax.JSONResult(Constants.RESULT_CODE_ERROR, Constants.SYSTEMMSG_FAILED);
+		}
+		return result;
+	}
+	
+	@RequestMapping("goodsDscription")
+	@ResponseBody
+	public String goodsDscription(@RequestParam(value = "goodsId", required = true, defaultValue = "") String goodsId){
+		String result = null;
+		try {
+			TShGoodsBasic tShGoodsBasic = tShGoodsBasicService.getById(goodsId);
+			if(tShGoodsBasic!=null){
+				TShGoodsDetail tShGoodsDetail = tShGoodsDetailService.getById(goodsId);
+				if(tShGoodsDetail!=null)
+					tShGoodsDetail.setGoodsName(tShGoodsBasic.getName());
+				com.izhbg.typz.im.goods.response.entity.TShGoodsDetail tShGoodsDetail_ = new com.izhbg.typz.im.goods.response.entity.TShGoodsDetail();
+				BeanMapper beanMapper = new BeanMapper();
+				beanMapper.copy(tShGoodsDetail_, tShGoodsDetail);
+				result = Ajax.JSONResult(Constants.RESULT_CODE_SUCCESS, Constants.SYSTEMMSG_SUCCESS,tShGoodsDetail_);
 			}else{
 				result = Ajax.JSONResult(Constants.RESULT_CODE_FAILED, Constants.SYSTEMMSG_EMPTYFILED);
 			}

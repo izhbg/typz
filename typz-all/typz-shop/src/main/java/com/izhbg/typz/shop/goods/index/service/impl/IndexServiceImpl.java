@@ -1,6 +1,7 @@
 package com.izhbg.typz.shop.goods.index.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,14 +9,18 @@ import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.izhbg.typz.base.util.Constants;
 import com.izhbg.typz.shop.goods.dto.TShGoodsBasic;
 import com.izhbg.typz.shop.goods.dto.TShGoodsImage;
+import com.izhbg.typz.shop.goods.dto.TShGoodsPrice;
 import com.izhbg.typz.shop.goods.dto.TShGoodsTags;
 import com.izhbg.typz.shop.goods.index.service.IndexService;
+import com.izhbg.typz.shop.goods.manager.TShGoodsPriceManager;
 import com.izhbg.typz.shop.goods.manager.TShGoodsTagManager;
 import com.izhbg.typz.shop.goods.manager.TShGoodsTagsManager;
 import com.izhbg.typz.shop.goods.service.TShGoodsBasicService;
 import com.izhbg.typz.shop.goods.service.TShGoodsImageService;
+import com.izhbg.typz.shop.goods.service.TShGoodsPriceService;
 
 @Service("indexService")
 public class IndexServiceImpl implements IndexService{
@@ -28,6 +33,8 @@ public class IndexServiceImpl implements IndexService{
 	private TShGoodsBasicService tShGoodsBasicService;
 	@Autowired
 	private TShGoodsImageService tShGoodsImageService;
+	@Autowired
+	private TShGoodsPriceService tShGoodsPriceService;
 	
 	/**
 	 * 获取首页数据
@@ -53,7 +60,7 @@ public class IndexServiceImpl implements IndexService{
 	 */
 	private TShGoodsTags getTShGoodsTags(TShGoodsTags tt,double la,double lo) throws Exception{
 		String sql = " SELECT " + 
-				"	tsgb.id," + 
+				"	tssgs.goods_id," + 
 				"	ROUND(" + 
 				"		6378.138 * 2 * ASIN(" + 
 				"			SQRT(" + 
@@ -76,8 +83,8 @@ public class IndexServiceImpl implements IndexService{
 				"		) * 1000" + 
 				"	) AS juli" + 
 				" FROM" + 
-				"	t_sh_goods_tag tst,t_sh_goods_basic tsgb,t_sh_store tss " + 
-				" where tag_id='"+tt.getId()+"' and tst.goods_id=tsgb.id and tsgb.create_user=tss.yh_id " + 
+				"	t_sh_store_goods_sale tssgs,t_sh_store tss,t_sh_goods_tag tsgt,t_sh_goods_basic tsgb " + 
+				" where tsgt.tag_id='"+tt.getId()+"' and tss.id=tssgs.store_id and tsgt.goods_id=tssgs.goods_id and tsgb.id=tssgs.goods_id and tsgb.del_status="+Constants.UN_DELETE_STATE+" and status=1 " + 
 				" ORDER BY" + 
 				" juli desc";
 		  sql+= "  limit 0,3";
@@ -87,13 +94,21 @@ public class IndexServiceImpl implements IndexService{
 		 
 		 TShGoodsBasic tShGoodsBasic = null;
 		 TShGoodsImage tShGoodsImage = null;
+		 TShGoodsPrice tShGoodsPrice = null;
+		 Map<String, Object> map = new HashMap<>();
 		 for(Map<String, Object> map_temp:list){
-			 tShGoodsBasic = tShGoodsBasicService.getById(map_temp.get("id").toString());
+			 tShGoodsBasic = tShGoodsBasicService.getById(map_temp.get("goods_id").toString());
 			 if(tShGoodsBasic!=null){
 				 tShGoodsImage = tShGoodsImageService.getIndexImage(tShGoodsBasic.getId(), tShGoodsBasic.getVersion());
 				 if(tShGoodsImage!=null){
 					 tShGoodsBasic.setIndexImage(tShGoodsImage);
 				 }
+				map.clear();
+				map.put("goodsId", tShGoodsBasic.getId());
+				map.put("priceType1", Constants.GOODS_PRICE_ORIGINAL);
+				tShGoodsPrice = tShGoodsPriceService.querySaleByGoodsIdAndVersion(tShGoodsBasic.getId(),Constants.GOODS_VERSION_DEFAULT);
+				if(tShGoodsPrice!=null)
+					tShGoodsBasic.setPrice(tShGoodsPrice.getPrice());
 				 goodsList.add(tShGoodsBasic);
 			 }
 			 tt.setTsGoodsBasics(goodsList);

@@ -57,6 +57,35 @@
 									</div>
 								</div>
 							</div>
+							<c:if test="${empty isUpdate}">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label class="control-label col-md-2" >* 手机号：</label>
+											<div class="col-md-6">
+												<div class="input-group">
+													<input name="phone" id="phone"  class="form-control input-placeholder required" tag="手机号码，绑定用户账户" type="text"   />
+													<span class="input-group-addon" onclick="javascript:Store.getYzm(this)"><i class="fa fa-link" style="cursor: pointer;">发送短信</i></span>
+												</div>
+												
+											</div>
+										</div>
+									</div>
+									
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label class="control-label col-md-2" >* 手机验证码：</label>
+											<div class="col-md-6">
+												<input name="codeId" id="codeId" type="hidden"/>
+												<input name="code" id="code"  class="form-control input-placeholder required" tag="手机短信验证码" type="text"   />
+											</div>
+										</div>
+									</div>
+									
+								</div>
+							</c:if>
 							<div class="row">
 								<div class="col-md-12">
 									<div class="form-group">
@@ -196,22 +225,6 @@
 			</div>
 		</div>
 	</div>
-	<div class="modal fade" id="msgDialog" tabindex="-1" style="display: none;">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-hidden="true"></button>
-					<h4 class="modal-title">确认信息</h4>
-				</div>
-				<div class="modal-body"></div>
-				<div class="modal-footer">
-					<button type="button" class="btn blue" data-dismiss="modal">确定</button>
-					<button type="button" class="btn default" data-dismiss="modal">取消</button>
-				</div>
-			</div>
-		</div>
-	</div>
 	<div class="modal fade" id="mapDialog" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -233,12 +246,14 @@
 <script type="text/javascript" src="${ctx}/s/assets/plugins/jcrop/jquery.Jcrop.min.js"></script>
 <script type="text/javascript" src="${ctx}/s/assets/plugins/Sortable.js"></script>
 <script type="text/javascript" src="${ctx}/s/assets/plugins/ajaxupload/ajaxfileupload.js"></script>
-<script type="text/javascript" src="${ctx}/s/assets/scripts/store/store_edit.js"></script>
+
 
 <script src="http://cache.amap.com/lbs/static/es5.min.js"></script> 
 <script src="http://webapi.amap.com/maps?v=1.3&key=646c64b1cfee1ccda3c138daf1f44a4d"></script>
-<script type="text/javascript" src="${ctx}/s/assets/scripts/store/map.js"></script>
 <script type="text/javascript" src="${ctx}/s/assets/plugins/simditor-1.0.5/scripts/js/simditor-all.js"></script>
+
+<script type="text/javascript" src="${ctx}/s/assets/scripts/store/map.js"></script>
+<script type="text/javascript" src="${ctx}/s/assets/scripts/store/store_edit.js"></script>
 <script type="text/javascript">
 	$(function(){
 		Store.init(); 

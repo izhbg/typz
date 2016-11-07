@@ -7,5 +7,7 @@ CREATE TABLE `t_sh_member` (
   `time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `la` double DEFAULT NULL,
   `lo` double DEFAULT NULL,
+  `type` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

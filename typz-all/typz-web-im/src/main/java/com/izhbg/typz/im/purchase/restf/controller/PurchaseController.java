@@ -1,7 +1,5 @@
 package com.izhbg.typz.im.purchase.restf.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -9,11 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.izhbg.typz.base.mapper.BeanMapper;
 import com.izhbg.typz.base.util.Ajax;
 import com.izhbg.typz.base.util.Constants;
 import com.izhbg.typz.shop.goods.dto.TShGoodsBasic;
-import com.izhbg.typz.shop.goods.dto.TShGoodsDetail;
-import com.izhbg.typz.shop.goods.dto.TShGoodsImage;
 import com.izhbg.typz.shop.goods.service.TShGoodsBasicService;
 import com.izhbg.typz.shop.purchase.dto.Purchase;
 import com.izhbg.typz.shop.purchase.dto.TShPurchase;
@@ -27,7 +24,7 @@ public class PurchaseController {
 	private TShPurchaseService tShPurchaseService;
 	@Autowired
 	private TShGoodsBasicService tShGoodsBasicService;
-	
+	private BeanMapper beanMapper = new BeanMapper();
 	/**
 	 * 添加购物车
 	 * @param goodsId
@@ -99,10 +96,50 @@ public class PurchaseController {
 		String result = null;
 		try {
 			Purchase purchase = tShPurchaseService.getPurchaseByYhId(yhId);
-			result = Ajax.JSONResult(Constants.RESULT_CODE_SUCCESS, Constants.SYSTEMMSG_SUCCESS,purchase);
+			com.izhbg.typz.im.purchase.response.entity.Purchase purchase_ = new com.izhbg.typz.im.purchase.response.entity.Purchase();
+			beanMapper.copy(purchase_, purchase);
+			result = Ajax.JSONResult(Constants.RESULT_CODE_SUCCESS, Constants.SYSTEMMSG_SUCCESS,purchase_);
 		} catch (Exception e) {
 			result = Ajax.JSONResult(Constants.RESULT_CODE_ERROR, Constants.SYSTEMMSG_FAILED);
 		}
 		return result;
 	}
+	/**
+	 * 获取个人购物车数量
+	 * @param yhId
+	 * @return
+	 */
+	@RequestMapping("getPurchaseNum")
+	@ResponseBody
+	public String getPurchaseNum(@RequestParam(value = "yhId", required = true, defaultValue = "") String yhId){
+		String result = null;
+		try {
+			int num = tShPurchaseService.getPersonPurchaseNum(yhId);
+			result = Ajax.JSONResult(Constants.RESULT_CODE_SUCCESS, Constants.SYSTEMMSG_SUCCESS,num);
+		} catch (Exception e) {
+			result = Ajax.JSONResult(Constants.RESULT_CODE_ERROR, Constants.SYSTEMMSG_FAILED);
+		}
+		return result;
+	}
+	/**
+	 * 减购物车数量
+	 * @param yhId
+	 * @param goodsId
+	 * @return
+	 */
+	@RequestMapping("reduce")
+	@ResponseBody
+	public String reduce(@RequestParam(value = "yhId", required = true, defaultValue = "") String yhId,
+						 @RequestParam(value = "goodsId", required = true, defaultValue = "") String goodsId){
+		String result = null;
+		try {
+			int num = tShPurchaseService.reduce(yhId, goodsId);
+			result = Ajax.JSONResult(Constants.RESULT_CODE_SUCCESS, Constants.SYSTEMMSG_SUCCESS,num);
+		} catch (Exception e) {
+			result = Ajax.JSONResult(Constants.RESULT_CODE_ERROR, Constants.SYSTEMMSG_FAILED);
+		}
+		return result;
+	}
+	
+	
 }

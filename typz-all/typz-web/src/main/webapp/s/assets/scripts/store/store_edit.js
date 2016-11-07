@@ -329,7 +329,7 @@ var Store = function(){
         });
 	};
 	var initImgCut = function(){
-		$("#SortContaint").children("div").each(function(i,o){
+		$(".sortable").children("div").each(function(i,o){
 	        if(i==0){
 	            $(o).addClass("add-main-img");
 	        }
@@ -349,7 +349,7 @@ var Store = function(){
 		}, 'div');
 		$("body").on("click", ".add-cut", function () {
             var parent = $(this).closest("div");
-            var idx = $("#SortContaint div").index(parent);
+            var idx = $(this).parent().parent().parent().index(parent);
             $("#idx").val(idx);
             var $src = $(this).parent().prev().find('img:last').attr('src');
             var $id = $(this).parent().prev().find('img:last').attr('id');
@@ -408,8 +408,25 @@ var Store = function(){
 		        },
 		        dataType: "json",
 		        success: function (data) {
-		            addShouImg($("#contextpath").val()+"/goodsImg/downloaImgdFile.izhbg?attachId="+data.url+"&r="+Math.random(),$("#idx").val(),data.url);
+		            addShouImg($("#contextpath").val()+"/storeImg/downloaImgdFile.izhbg?attachId="+data.url+"&r="+Math.random(),$("#idx").val(),data.url);
 		            $(".shut_btn").click();
+		        },
+		        error: function () {
+
+		        }
+		    });
+		});
+		$("body").on("click",".add-del",function(){
+			var $ele = $(this);
+		    $.ajax({
+		        url: $("#contextpath").val()+"/storeImg/delImage.izhbg",
+		        type: "get",
+		        data:"imageId="+ $ele.parent().prev().find("input:first").val(),
+		        
+		        dataType: "json",
+		        success: function (data) {
+		        	$ele.parent().parent().attr("class","no-imgs");
+		        	$ele.parent().parent().html("");
 		        },
 		        error: function () {
 
@@ -491,7 +508,47 @@ var Store = function(){
 			});
 		$(".simditor-toolbar").css("width","100%");
 		$(".simditor .simditor-toolbar > ul > li > .toolbar-item").css("padding-top","0px");
-	}
+	};
+	var getYzm = function(codeInput){
+		 var validCode=true;
+		 var time=120;
+         var phone = $("#mobile").val();
+         var telReg = !!phone.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/);
+         if(phone==""){
+             alert('手机号不能为空');
+         }else if(telReg == false){
+             alert("请输入正确手机号");
+         }else{
+             if (validCode) {
+                 validCode=false;
+                 var t=setInterval(function  () {
+                     time--;
+                     codeInput.html(time+"秒");
+                     if (time==0) {
+                         clearInterval(t);
+                         codeInput.html("重新获取");
+                         validCode=true;
+                     }
+                 },1000);
+
+                 var thisurl='im/login/smsRequest.izhbg?phone='+phone;
+                 //jsonAjax3('json', thisurl,callBack);
+               /*  function callBack(data){
+                     console.log(JSON.stringify(data));
+                     if(data!=null){
+                         var result = data.result;
+                         if(result==0){
+                             codeId = data.info;
+                             showTip(data.msg);
+
+                         }else{
+                             showTip(data.msg);
+                         }
+                     }
+                 }*/
+             }
+         }
+	};
 	return{
 		init:function(){
 			initDiv();
@@ -519,6 +576,9 @@ var Store = function(){
 		},
 		initTextArea:function(id){
 			initTextArea(id);
+		},
+		getYzm:function(codeInput){
+			getYzm(codeInput);
 		}
 	}
 	

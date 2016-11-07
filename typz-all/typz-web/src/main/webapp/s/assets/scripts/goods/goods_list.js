@@ -244,6 +244,60 @@ var GoodsList = function(){
 			
 			
 		}
+	};
+	var delTag = function(tagId,goodsId){
+		$.ajax({
+			type: "POST",
+		    url: $("#contentpath").val()+"/goods/goods-delTag.izhbg",
+		    data: "tagId="+tagId+"&goodsId="+goodsId,
+		    dataType:"html",
+			cache: false,
+			success: function(data){
+		    	$("#form1").submit();
+			}
+			});
+	};
+	var initEditSalePrice = function(){
+		var $elems = $('.salePrice');
+		$elems.editable({
+			title:'设置销售价格',
+			type:  'text',
+	        emptytext:'未设置',
+	        inputclass:'span2',
+	        placement:'left',
+	        success: function(data) {
+	        	var dataObj=eval("("+data+")");
+	        	$("#"+dataObj.elementid+"1").editable('option', 'pk', dataObj.id); //store pk
+	    	}
+	     });
+	};
+	var initEditCostPrice = function(){
+		var $elems = $('.costPrice');
+		$elems.editable({
+			title:'设置推广价格',
+			type:  'text',
+	        emptytext:'未设置',
+	        inputclass:'span2',
+	        placement:'left',
+	        success: function(data) {
+	        	var dataObj=eval("("+data+")");
+	        	$("#"+dataObj.elementid+"1").editable('option', 'pk', dataObj.id); //store pk
+	    	}
+	     });
+	};
+	var initEditPercent = function(){
+		var $elems = $('.percent');
+		$elems.editable({
+			title:'设置推广者获利百分比',
+			type:  'text',
+	        emptytext:'未设置',
+	        inputclass:'span2',
+	        placement:'left',
+	        success: function(data) {
+	        	var dataObj=eval("("+data+")");
+	        	$("#"+dataObj.elementid+"1").editable('option', 'pk', dataObj.id); //store pk
+	    	}
+	     });
 	}
 	return {
 		delGoodsItem:function(){
@@ -263,6 +317,18 @@ var GoodsList = function(){
 		},
 		setTag:function(id){
 			setTag(id);
+		},
+		delTag:function(tagId,goodsId){
+			delTag(tagId,goodsId);
+		},
+		initEditSalePrice:function(){
+			initEditSalePrice();
+		},
+		initEditCostPrice:function(){
+			initEditCostPrice();
+		},
+		initEditPercent:function(){
+			initEditPercent();
 		}
 	}
 	
