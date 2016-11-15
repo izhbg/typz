@@ -1,11 +1,17 @@
 package com.izhbg.typz.im.goods.response.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
+import com.izhbg.typz.im.store.response.entity.TShStore;
 import com.izhbg.typz.shop.goods.dto.TShGoodsDelivery;
-import com.izhbg.typz.shop.store.dto.TShStore;
 
-public class TShGoodsBasic {
+
+public class TShGoodsBasic implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String id;
 	/**  店铺ID**/
 	private String storeId;
@@ -13,6 +19,7 @@ public class TShGoodsBasic {
 	private String name;
 	/**  单位**/
 	private String unit;
+	private String specificationsId;
 	/**  **/
 	private String vender;
 	private TShGoodsDetail tShGoodsDetail;
@@ -23,6 +30,7 @@ public class TShGoodsBasic {
 	private double salePrice;//销售价格
 	private double price;
 	private TShStore tsShStore;
+	private int goodsNum;//购买产品数量
 	public String getId() {
 		return id;
 	}
@@ -101,4 +109,17 @@ public class TShGoodsBasic {
 	public void setTsShStore(TShStore tsShStore) {
 		this.tsShStore = tsShStore;
 	}
+	public int getGoodsNum() {
+		return goodsNum;
+	}
+	public void setGoodsNum(int goodsNum) {
+		this.goodsNum = goodsNum;
+	}
+	public String getSpecificationsId() {
+		return specificationsId;
+	}
+	public void setSpecificationsId(String specificationsId) {
+		this.specificationsId = specificationsId;
+	}
+	
 }

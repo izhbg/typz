@@ -47,15 +47,15 @@ var GoodsList = function(){
 	var changePage = function(type){
 		if(type==1){
 			$("#form1").find("#status").val(1);
-			$("#form1").find("#delStatus").val(1);
+			$("#form1").find("#delStatus").val(2);
 			$("#form1").submit();
 		}else if(type==2){
 			$("#form1").find("#status").val(-1);
-			$("#form1").find("#delStatus").val(1);
+			$("#form1").find("#delStatus").val(2);
 			$("#form1").submit();
 		}else{
 			$("#form1").find("#status").val(-1);
-			$("#form1").find("#delStatus").val(-1);
+			$("#form1").find("#delStatus").val(1);
 			$("#form1").submit();
 		}
 			

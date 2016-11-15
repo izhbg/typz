@@ -1,5 +1,6 @@
 package com.izhbg.typz.im.order.restf.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,9 +72,10 @@ public class OrderController {
 		}else
 			try {
 				TShOrder order = tShOrderService.getById(orderId);
-				com.izhbg.typz.im.order.reponse.entity.TShOrder order_ = new com.izhbg.typz.im.order.reponse.entity.TShOrder();
-				beanMapper.copy(order_, order);
-				result = Ajax.JSONResult(Constants.RESULT_CODE_SUCCESS, Constants.SYSTEMMSG_SUCCESS,order_);
+				List<TShOrder> tShOrders = new ArrayList<>();
+				tShOrders.add(order);
+				List<com.izhbg.typz.im.order.reponse.entity.TShOrder> tShOrders_ = beanMapper.copyList(tShOrders, com.izhbg.typz.im.order.reponse.entity.TShOrder.class);
+				result = Ajax.JSONResult(Constants.RESULT_CODE_SUCCESS, Constants.SYSTEMMSG_SUCCESS,tShOrders_==null?null:tShOrders_.get(0));
 			} catch (Exception e) {
 				e.printStackTrace();
 				result = Ajax.JSONResult(Constants.RESULT_CODE_ERROR, Constants.SYSTEMMSG_FAILED);

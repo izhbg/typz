@@ -32,6 +32,9 @@ import com.izhbg.typz.shop.goods.manager.TShGoodsPriceManager;
 import com.izhbg.typz.shop.goods.manager.TShGoodsTagManager;
 import com.izhbg.typz.shop.goods.manager.TShGoodsTagsManager;
 import com.izhbg.typz.shop.goods.service.TShGoodsBasicService;
+import com.izhbg.typz.shop.store.dto.TShStore;
+import com.izhbg.typz.shop.store.manager.TShStoreManager;
+import com.izhbg.typz.shop.store.service.TShStoreService;
 import com.izhbg.typz.sso.util.SpringSecurityUtils;
 
 @Service("tShGoodsBasicService")
@@ -50,6 +53,9 @@ public class TShGoodsBasicServiceImpl implements TShGoodsBasicService {
 	private TShGoodsTagManager tShGoodsTagManager;
 	@Autowired
 	private TShGoodsPriceManager tShGoodsPriceManager;
+	@Autowired
+	private TShStoreService tShStoreService;
+	
 	private BeanMapper beanMapper = new BeanMapper();
 	
 	public void add(TShGoodsBasic entity) throws Exception {
@@ -128,6 +134,13 @@ public class TShGoodsBasicServiceImpl implements TShGoodsBasicService {
 			tShGoodsBasic.setId(IdGenerator.getInstance().getUniqTime()+"");
 			tShGoodsBasic.setCreateUser(SpringSecurityUtils.getCurrentUserId());
 			tShGoodsBasic.setCreateTime(new Date());
+			TShStore tShStore = tShStoreService.getByMemberId(SpringSecurityUtils.getCurrentUserId());
+			
+			if(tShStore!=null)
+				tShGoodsBasic.setStoreId(tShStore.getId());
+			else
+				tShGoodsBasic.setStoreId("admin");
+			
 			tShGoodsBasic.setDelStatus(Constants.UN_DELETE_STATE);
 			tShGoodsBasic.setVersion(Constants.GOODS_VERSION_DEFAULT);
 			tShGoodsBasic.setStatus(-1);

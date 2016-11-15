@@ -2,6 +2,7 @@ package com.izhbg.typz.shop.goods.index.service;
 
 import java.util.List;
 
+import com.izhbg.typz.base.page.Page;
 import com.izhbg.typz.shop.goods.dto.TShGoodsTags;
 /**
  * 
@@ -25,5 +26,5 @@ public interface IndexService {
 	 * @return
 	 * @throws Exception
 	 */
-	public TShGoodsTags secondPage(String tagId,double la, double lo) throws Exception;
+	public TShGoodsTags secondPage(String tagId,double la, double lo,Page page) throws Exception;
 }

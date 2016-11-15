@@ -64,7 +64,7 @@ public class TShOrderServiceImpl implements TShOrderService {
 	public void add(TShOrder entity) throws Exception {
 		if(entity==null||StringHelper.isEmpty(entity.getGoodsInfo()))
 			throw new ServiceException("参数为空，添加订单失败");
-		
+		entity.setScBj(Constants.UN_DELETE_STATE);
 		tShOrdermanager.save(entity);
 		
 		String goodsInfo = entity.getGoodsInfo();
@@ -249,7 +249,8 @@ public class TShOrderServiceImpl implements TShOrderService {
 			map.put("status", status);
 		}
 		page = tShOrdermanager.pagedQuery(hql, page.getPageNo(), page.getPageSize(), map);
-		return this.mapPage(page);
+		page = initOrderInfo(page);
+		return page;
 	}
 	
 	@Override
@@ -267,9 +268,49 @@ public class TShOrderServiceImpl implements TShOrderService {
 			map.put("status", status);
 		}
 		page = tShOrdermanager.pagedQuery(hql, page.getPageNo(), page.getPageSize(), map);
-		return this.mapPage(page);
+		page = initOrderInfo(page);
+		return page;
 	}
 	
+	/**
+	 * 初始化订单
+	 * @param page
+	 * @return
+	 */
+	private Page initOrderInfo(Page page) throws Exception{
+		List<TShOrder> tShOrders = (List<TShOrder>) page.getResult();
+		
+		List<TShOrderGood> tShOrderGoods = null;
+		TShGoodsBasic tShGoodsBasic;
+		TShStore tss = null;
+		List<TShGoodsBasic> tShGoodsList = null;
+		if(tShOrders!=null)
+			for(TShOrder tor:tShOrders){
+				//获取订单店铺
+				tss = tShStoreManager.findUniqueBy("id", tor.getStoreId());
+				if(tss!=null)
+					tor.settShStore(tss);
+				tShOrderGoods = tShOrderGoodsManager.findBy("orderId", tor.getId());
+				if(tShOrderGoods!=null){
+					tShGoodsList = new ArrayList<>();
+					for(TShOrderGood tog:tShOrderGoods){
+						
+						tShGoodsBasic = tShGoodsBasicManager.findUniqueBy("id", tog.getGoodsId());
+						if(tShGoodsBasic!=null){
+							tShGoodsBasic.setPrice(tog.getPrice());
+							TShGoodsImage tShGoodsImage = tShGoodsImageService.getIndexImage(tog.getGoodsId(), Constants.GOODS_VERSION_DEFAULT);
+							if(tShGoodsImage!=null)
+								tShGoodsBasic.setIndexImage(tShGoodsImage);
+							tShGoodsBasic.setGoodsNum(tog.getNum());
+						}
+						tShGoodsList.add(tShGoodsBasic);
+					}
+					tor.settShGoodsList(tShGoodsList);
+				}
+			}
+		page.setResult(tShOrders);
+		return page;
+	}
 	@Override
 	public void setOrderStatus(String orderId, Integer status) throws Exception {
 		if(StringHelper.isEmpty(orderId))

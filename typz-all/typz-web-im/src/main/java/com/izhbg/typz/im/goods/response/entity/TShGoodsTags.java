@@ -1,10 +1,15 @@
 package com.izhbg.typz.im.goods.response.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 
-public class TShGoodsTags {
+public class TShGoodsTags implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String id;
 	private String name;
 	private String color;

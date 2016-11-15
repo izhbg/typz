@@ -24,7 +24,6 @@ public class BeanMapper {
         // 如果属性是Object，就只复制引用，不复制值，可以避免循环复制
         mapperFactory.getConverterFactory().registerConverter(
                 new PassThroughConverter(Object.class));
-
         mapper = mapperFactory.getMapperFacade();
     }
 

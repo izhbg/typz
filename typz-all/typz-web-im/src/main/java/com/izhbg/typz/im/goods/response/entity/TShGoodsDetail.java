@@ -1,11 +1,26 @@
 package com.izhbg.typz.im.goods.response.entity;
 
-public class TShGoodsDetail {
+import java.io.Serializable;
+
+public class TShGoodsDetail implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String id;
 	/** 商品详情 **/
 	private String content;
+	private String goodsName;
 	
 	
+	public String getGoodsName() {
+		return goodsName;
+	}
+
+	public void setGoodsName(String goodsName) {
+		this.goodsName = goodsName;
+	}
+
 	public String getId() {
 		return id;
 	}

@@ -12,8 +12,10 @@
 <link rel="stylesheet" type="text/css" href="${ctx}/s/assets/plugins/simditor-1.0.5/styles/font-awesome.css" />
 <link rel="stylesheet" type="text/css" href="${ctx}/s/assets/plugins/simditor-1.0.5/styles/simditor.css" />
 
-<link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
-
+ <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+ <style type="text/css">
+ 	.amap-sug-result{z-index: 99999;}
+ </style>
 </head>
 
 <body class="page-header-fixed"> 
@@ -226,14 +228,28 @@
 		</div>
 	</div>
 	<div class="modal fade" id="mapDialog" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
-		<div class="modal-dialog">
+		<div class="modal-dialog" style="width: 900px;">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title">确认信息</h4>
+					<h4 class="modal-title">确认信息  </h4>
 				</div>
-			<div class="modal-body" style="width: 570px;height: 400px;">
-				<div  id="container" style="width: 100%;height: 100%;" ></div>
+			<div class="modal-body" style="width: 870px;height: 400px;">
+				<div  id="container"></div>
+				<div id="myPageTop">
+				    <table>
+				        <tr>
+				            <td>
+				                <label>请输入关键字：</label>
+				            </td>
+				        </tr>
+				        <tr>
+				            <td>
+				                <input id="tipinput"/>
+				            </td>
+				        </tr>
+				    </table>
+				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn blue" id="cconfirmMap" >确定</button>

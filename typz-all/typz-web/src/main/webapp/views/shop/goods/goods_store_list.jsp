@@ -31,10 +31,10 @@
 						<li  id="tab_1_1_" <c:if test="${tShGoods.status==1||(tShGoods.status==null&&tShGoods.delStatus==null)}">class="active"</c:if> > 
 							<a href="#this" onclick="GoodsList.changePage(1)" data-toggle="tab">已上架商品 &nbsp;&nbsp;&nbsp;</a>
 						</li>
-						<li id="tab_1_2_" <c:if test="${tShGoods.status==-1&&tShGoods.delStatus!=-1}">class="active"</c:if>>
+						<li id="tab_1_2_" <c:if test="${tShGoods.status==-1&&tShGoods.delStatus!=1}">class="active"</c:if>>
 							<a href="#this" onclick="GoodsList.changePage(2)" data-toggle="tab" >未上架商品  &nbsp;&nbsp;&nbsp;</a>
 						</li>
-						<li id="tab_1_2_" <c:if test="${tShGoods.delStatus==-1}">class="active"</c:if> >
+						<li id="tab_1_2_" <c:if test="${tShGoods.delStatus==1}">class="active"</c:if> >
 							<a href="#this" onclick="GoodsList.changePage(3)" data-toggle="tab" >已删除  &nbsp;&nbsp;&nbsp;</a>
 						</li>
 					</ul>

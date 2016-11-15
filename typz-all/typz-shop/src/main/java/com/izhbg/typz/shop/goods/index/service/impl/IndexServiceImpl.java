@@ -9,6 +9,7 @@ import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.izhbg.typz.base.page.Page;
 import com.izhbg.typz.base.util.Constants;
 import com.izhbg.typz.shop.goods.dto.TShGoodsBasic;
 import com.izhbg.typz.shop.goods.dto.TShGoodsImage;
@@ -44,9 +45,11 @@ public class IndexServiceImpl implements IndexService{
 		if(la==0.0&&lo==0.0)
 			throw new ServiceException("参数为空,操作失败");
 		List<TShGoodsTags> tsGoodsTags = tShGoodsTagsManager.getAll();
+		Page page = new Page();
+		page.setPageSize(3);
 		for(TShGoodsTags tt:tsGoodsTags){
 			//获取每个分类下面 距离最新的 3个产品
-			tt = this.getTShGoodsTags(tt, la, lo);
+			tt = this.getTShGoodsTags(tt, la, lo,page);
 		}
 		return tsGoodsTags;
 	}
@@ -58,9 +61,9 @@ public class IndexServiceImpl implements IndexService{
 	 * @return
 	 * @throws Exception
 	 */
-	private TShGoodsTags getTShGoodsTags(TShGoodsTags tt,double la,double lo) throws Exception{
+	private TShGoodsTags getTShGoodsTags(TShGoodsTags tt,double la,double lo,Page page) throws Exception{
 		String sql = " SELECT " + 
-				"	tssgs.goods_id," + 
+				"	tssgs.goods_id,tss.id store_id," + 
 				"	ROUND(" + 
 				"		6378.138 * 2 * ASIN(" + 
 				"			SQRT(" + 
@@ -87,7 +90,7 @@ public class IndexServiceImpl implements IndexService{
 				" where tsgt.tag_id='"+tt.getId()+"' and tss.id=tssgs.store_id and tsgt.goods_id=tssgs.goods_id and tsgb.id=tssgs.goods_id and tsgb.del_status="+Constants.UN_DELETE_STATE+" and status=1 " + 
 				" ORDER BY" + 
 				" juli desc";
-		  sql+= "  limit 0,3";
+		  sql+= "  limit "+page.getStart()+","+page.getPageSize();
 		 List<Map<String,Object>> list = tShGoodsTagManager.getJdbcTemplate().queryForList(sql);
 		 
 		 List<TShGoodsBasic> goodsList = new ArrayList<TShGoodsBasic>();
@@ -99,6 +102,7 @@ public class IndexServiceImpl implements IndexService{
 		 for(Map<String, Object> map_temp:list){
 			 tShGoodsBasic = tShGoodsBasicService.getById(map_temp.get("goods_id").toString());
 			 if(tShGoodsBasic!=null){
+				 tShGoodsBasic.setStoreId(map_temp.get("store_id").toString());
 				 tShGoodsImage = tShGoodsImageService.getIndexImage(tShGoodsBasic.getId(), tShGoodsBasic.getVersion());
 				 if(tShGoodsImage!=null){
 					 tShGoodsBasic.setIndexImage(tShGoodsImage);
@@ -119,9 +123,9 @@ public class IndexServiceImpl implements IndexService{
 	 * 二级页面
 	 */
 	@Override
-	public TShGoodsTags secondPage(String tagId,double la, double lo) throws Exception {
+	public TShGoodsTags secondPage(String tagId,double la, double lo,Page page) throws Exception {
 		TShGoodsTags tt = tShGoodsTagsManager.findUniqueBy("id", tagId);
-		return this.getTShGoodsTags(tt, la, lo);
+		return this.getTShGoodsTags(tt, la, lo,page);
 	}
 
 }

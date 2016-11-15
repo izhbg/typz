@@ -1,5 +1,8 @@
 package com.izhbg.typz.im.purchase.restf.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -34,14 +37,15 @@ public class PurchaseController {
 	@RequestMapping("add")
 	@ResponseBody
 	public String add(@RequestParam(value = "goodsId", required = true, defaultValue = "") String goodsId,
+					  @RequestParam(value = "storeId", required = true, defaultValue = "") String storeId,
 					  @RequestParam(value = "yhId", required = true, defaultValue = "") String yhId){
 		String result = null;
 		try {
-			TShGoodsBasic tsb = tShGoodsBasicService.getById(goodsId);
+			/*TShGoodsBasic tsb = tShGoodsBasicService.getById(goodsId);*/
 			TShPurchase tsp = new TShPurchase();
 			tsp.setGoodsId(goodsId);
 			tsp.setYhId(yhId);
-			tsp.setStoreId(tsb.getStoreId());
+			tsp.setStoreId(storeId);
 			tsp.setNum(1);
 			tShPurchaseService.add(tsp);
 			result = Ajax.JSONResult(Constants.RESULT_CODE_SUCCESS, Constants.SYSTEMMSG_SUCCESS);
@@ -96,8 +100,9 @@ public class PurchaseController {
 		String result = null;
 		try {
 			Purchase purchase = tShPurchaseService.getPurchaseByYhId(yhId);
-			com.izhbg.typz.im.purchase.response.entity.Purchase purchase_ = new com.izhbg.typz.im.purchase.response.entity.Purchase();
-			beanMapper.copy(purchase_, purchase);
+			List<Purchase> purchases = new ArrayList<>();
+			purchases.add(purchase);
+			List<com.izhbg.typz.im.purchase.response.entity.Purchase> purchase_ = beanMapper.copyList(purchases, com.izhbg.typz.im.purchase.response.entity.Purchase.class);
 			result = Ajax.JSONResult(Constants.RESULT_CODE_SUCCESS, Constants.SYSTEMMSG_SUCCESS,purchase_);
 		} catch (Exception e) {
 			result = Ajax.JSONResult(Constants.RESULT_CODE_ERROR, Constants.SYSTEMMSG_FAILED);
