@@ -18,3 +18,15 @@ INSERT INTO `t_xt_gnzy` VALUES ('shenjirizhi2', '审计日志', '1', 'shenjirizh
 INSERT INTO `t_xt_gnzy` VALUES ('biaodanguanli', '表单管理', '1', 'c78657w5m0vg781mw5m1', null, '2', '1', '1', null, '', ' fa-file-text-o', '', '1');
 INSERT INTO `t_xt_gnzy` VALUES ('biaodanpeizhi', '表单配置', '1', 'biaodanguanli', null, '2', '1', '2', null, 'red', ' fa-file-text-o', 'maintable/maintable_list.izhbg', '1');
 
+INSERT INTO `t_xt_gnzy` VALUES ('dpgl', '店铺管理', '1', 'c78657w5m0vg781mw5m1', null, '2', '1', '1', null, 'red', 'fa-retweet', '', '1');
+INSERT INTO `t_xt_gnzy` VALUES ('dplb', '店铺列表', '1', 'dpgl', null, null, '1', '1', null, '', '', 'store/store_list.izhbg', '1');
+INSERT INTO `t_xt_gnzy` VALUES ('txgl', '提现管理', '1', 'c78657w5m0vg781mw5m1', null, '3', '1', '1', null, 'red', 'fa-cogs', '', '1');
+INSERT INTO `t_xt_gnzy` VALUES ('dtx', '待提现', '1', 'txgl', null, '1', '1', '1', null, '', '', 'storeWithdraw/store-withdraw-waite-list.izhbg', '1');
+INSERT INTO `t_xt_gnzy` VALUES ('ytx', '已提现', '1', 'txgl', null, '2', '1', '1', null, '', '', 'storeWithdraw/store-withdraw-history-list.izhbg', '1');
+INSERT INTO `t_xt_gnzy` VALUES ('ddgl', '订单列表', '1', 'dpgl', null, '2', '1', '1', null, 'red', '', 'store/store_order_list.izhbg', '1');
+
+INSERT INTO `t_xt_gnzy` VALUES ('spgl', '商品管理', '1', 'c78657w5m0vg781mw5m1', null, '5', '1', '1', null, 'red', 'fa-retweet', '', '1');
+INSERT INTO `t_xt_gnzy` VALUES ('lmgl', '类目管理', '1', 'spgl', null, '1', '1', '1', null, 'red', 'fa-retweet', 'maintabledata/maintabledata_pagelist.izhbg?tableName=t_sh_goods_type', '1');
+INSERT INTO `t_xt_gnzy` VALUES ('splb', '商品列表', '1', 'spgl', null, '2', '1', '1', null, 'red', 'fa-retweet', 'goods/goods_list.izhbg', '1');
+INSERT INTO `t_xt_gnzy` VALUES ('dpsplb', '我的商品', '1', 'spgl', null, '2', '1', '1', null, 'red', 'fa-retweet', 'goods/goods_store_list.izhbg', '1');
+INSERT INTO `t_xt_gnzy` VALUES ('spbq', '商品标签', '1', 'spgl', null, '4', '1', '1', null, 'red', 'fa-retweet', 'maintabledata/maintabledata_pagelist.izhbg?tableName=t_sh_goods_tags', '1');
