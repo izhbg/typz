@@ -24,7 +24,7 @@
 <body class="login">
 
 	<div class="logo">
-		<img src="${ctx}/s/assets/img/logo.jpg" >
+		<%-- <img src="${ctx}/s/assets/img/logo.jpg" > --%>
 	</div>
 	<div class="content">
 		<!-- BEGIN LOGIN FORM -->
