@@ -89,7 +89,7 @@ public class SMSConsumer implements Runnable{
                 stringBuffer.append("SignName=" +  this.singName);
                 stringBuffer.append("&TemplateCode=" +  this.templateCode );
                 stringBuffer.append("&RecNum=" + sms.getPhone());
-                stringBuffer.append("&ParamString=${'code':'"+sms.getCode()+"'}");
+                stringBuffer.append("&ParamString=${'code':'"+sms.getCode()+"','product':'优否尚品'}");
                 Request request =  new Request(Method.GET, "http://" + this.host + stringBuffer.toString(), this.appKey, this.AppSecret, Constants.DEFAULT_TIMEOUT);
                 try {
                     HttpResponse response = Client.execute(request);
