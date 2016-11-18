@@ -92,6 +92,7 @@ public class SMSConsumer implements Runnable{
                 stringBuffer.append("&ParamString=${'code':'"+sms.getCode()+"','product':'优否尚品'}");
                 Request request =  new Request(Method.GET, "http://" + this.host + stringBuffer.toString(), this.appKey, this.AppSecret, Constants.DEFAULT_TIMEOUT);
                 try {
+                	logger.info("发送短信验证码 phone={} code={}",sms.getPhone(),sms.getCode());
                     HttpResponse response = Client.execute(request);
                     HttpEntity entity = response.getEntity();
                     System.out.println(EntityUtils.toString(entity, "UTF-8"));
