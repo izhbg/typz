@@ -38,7 +38,7 @@ public class StoreController {
 	 * @param memberId
 	 * @return
 	 */
-	@RequestMapping("getStore")
+	@RequestMapping("getStore") 
 	@ResponseBody
 	public String getStore(@RequestParam(name="memberId",required=true) String memberId){
 		String result = null;
